@@ -13,6 +13,7 @@ from langgraph.prebuilt import ToolNode
 from tablegpt.chains.data_normalizer import (
     get_data_normalize_chain,
     get_table_reformat_chain,
+    wrap_normalize_code,
 )
 from tablegpt.errors import NoAttachmentsError
 from tablegpt.tools import IPythonTool, markdown_console_template
@@ -109,16 +110,7 @@ def create_file_reading_workflow(
             }
         )
         # Add try-except block to catch any errors that may occur during normalization.
-        return f"""# Normalize the data
-try:
-    df = {var_name}.copy()
-
-    {"\n    ".join(normalization_code.splitlines())}
-    # reassign {var_name} with the formatted DataFrame
-    {var_name} = final_df
-except Exception as e:
-    # Unable to apply formatting to the original DataFrame. proceeding with the unformatted DataFrame.
-    print(f"Reformat failed with error {{e}}, use the original DataFrame.")"""
+        return wrap_normalize_code(var_name, normalization_code)
 
     async def get_df_info(state: AgentState) -> dict:
         if attachments := state["entry_message"].additional_kwargs.get("attachments"):

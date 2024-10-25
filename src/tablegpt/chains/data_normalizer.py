@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import ast
 import re
+import textwrap
 from operator import itemgetter
 from re import Pattern
 from typing import TYPE_CHECKING, Any
@@ -286,3 +287,44 @@ def get_data_normalize_chain(llm: BaseLanguageModel) -> Runnable:
         | llm
         | CodeOutputParser()
     )
+
+
+def wrap_normalize_code(var_name: str, normalization_code: str) -> str:
+    """Wraps normalization code in a try-except block for data normalization.
+
+    This function takes a variable name and a string containing normalization code,
+    and wraps it in a structured format that includes error handling. The resulting
+    code block will attempt to create a copy of the specified DataFrame, apply the
+    normalization code, and reassign the original variable. If an exception occurs,
+    it will print an error message and allow the program to proceed with the original
+    DataFrame.
+
+    Parameters:
+    ----------
+    var_name : str
+        The name of the variable representing the DataFrame to be normalized.
+
+    normalization_code : str
+        The normalization code to be applied to the DataFrame, formatted as a string.
+
+    Returns:
+    -------
+    str
+        A formatted string containing the wrapped normalization code, including
+        error handling.
+
+    Notes:
+    -----
+    - The resulting code is intended to be executed in a Python environment where
+      the specified DataFrame variable exists.
+    """
+    return f"""# Normalize the data
+try:
+    df = {var_name}.copy()
+
+{textwrap.indent(normalization_code, '    ')}
+    # reassign {var_name} with the formatted DataFrame
+    {var_name} = final_df
+except Exception as e:
+    # Unable to apply formatting to the original DataFrame. proceeding with the unformatted DataFrame.
+    print(f"Reformat failed with error {{e}}, use the original DataFrame.")"""

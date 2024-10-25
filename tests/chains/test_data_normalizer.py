@@ -6,6 +6,7 @@ from tablegpt.chains.data_normalizer import (
     CodeOutputParser,
     ListListOutputParser,
     ListTupleOutputParser,
+    wrap_normalize_code,
 )
 
 
@@ -291,6 +292,60 @@ final_df = blah
 print("hello")
 ```"""
             )
+
+
+class TestWrapNormalizeCode(unittest.TestCase):
+    def test_wrap_normalize_code_basic(self):
+        var_name = "data_frame"
+        normalization_code = "final_df = df.dropna()"
+        expected_output = """\
+# Normalize the data
+try:
+    df = data_frame.copy()
+
+    final_df = df.dropna()
+    # reassign data_frame with the formatted DataFrame
+    data_frame = final_df
+except Exception as e:
+    # Unable to apply formatting to the original DataFrame. proceeding with the unformatted DataFrame.
+    print(f"Reformat failed with error {e}, use the original DataFrame.")"""
+
+        assert wrap_normalize_code(var_name, normalization_code).strip() == expected_output.strip()
+
+    def test_wrap_empty_normalize_code(self):
+        var_name = "data_frame"
+        normalization_code = ""
+        expected_output = """\
+# Normalize the data
+try:
+    df = data_frame.copy()
+
+
+    # reassign data_frame with the formatted DataFrame
+    data_frame = final_df
+except Exception as e:
+    # Unable to apply formatting to the original DataFrame. proceeding with the unformatted DataFrame.
+    print(f"Reformat failed with error {e}, use the original DataFrame.")"""
+
+        assert wrap_normalize_code(var_name, normalization_code).strip() == expected_output.strip()
+
+    def test_wrap_multi_line_normalize_code(self):
+        var_name = "my_data_frame"
+        normalization_code = "foo = 1\nbar = 2"
+        expected_output = """\
+# Normalize the data
+try:
+    df = my_data_frame.copy()
+
+    foo = 1
+    bar = 2
+    # reassign my_data_frame with the formatted DataFrame
+    my_data_frame = final_df
+except Exception as e:
+    # Unable to apply formatting to the original DataFrame. proceeding with the unformatted DataFrame.
+    print(f"Reformat failed with error {e}, use the original DataFrame.")"""
+
+        assert wrap_normalize_code(var_name, normalization_code).strip() == expected_output.strip()
 
 
 if __name__ == "__main__":
