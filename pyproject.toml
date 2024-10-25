@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "table-gpt"
+name = "tablegpt-agent"
 dynamic = ["version"]
 description = ''
 readme = "README.md"
