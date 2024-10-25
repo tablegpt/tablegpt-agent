@@ -1,7 +1,6 @@
 import unittest
 
 from langchain_core.exceptions import OutputParserException
-
 from tablegpt.chains.data_normalizer import (
     CodeOutputParser,
     ListListOutputParser,
