@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import itertools
+from sys import version_info
 from typing import override
 from urllib.parse import urljoin
 
@@ -9,6 +10,13 @@ import aiohttp
 import requests
 from langchain_core.embeddings import Embeddings
 from pydantic import BaseModel
+
+if version_info >= (3, 12):
+    from typing import override
+else:
+
+    def override(func):
+        return func
 
 
 class HuggingfaceTEIEmbeddings(BaseModel, Embeddings):

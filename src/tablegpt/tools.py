@@ -2,11 +2,20 @@ from __future__ import annotations
 
 import mimetypes
 import re
-from typing import TYPE_CHECKING, Literal, Pattern, override
+from sys import version_info
+from typing import TYPE_CHECKING, Literal, Pattern
 
 from langchain_core.tools import BaseTool
 from pydantic import BaseModel, DirectoryPath, field_validator, model_validator
 from typing_extensions import Self
+
+if version_info >= (3, 12):
+    from typing import override
+else:
+
+    def override(func):
+        return func
+
 
 if TYPE_CHECKING:
     from pathlib import Path
@@ -52,7 +61,7 @@ class IPythonTool(BaseTool):
     def _run(
         self,
         query: str,
-        run_manager: CallbackManagerForToolRun | None = None,
+        run_manager: CallbackManagerForToolRun | None = None,  # noqa: ARG002
     ) -> tuple[list[str | dict], list[Artifact]]:
         kwargs = {"cwd": str(self.cwd)} if self.cwd is not None else {}
         box = self.pybox_manager.start(kernel_id=self.session_id, **kwargs)
@@ -93,7 +102,7 @@ class IPythonTool(BaseTool):
     async def _arun(
         self,
         query: str,
-        run_manager: CallbackManagerForToolRun | None = None,
+        run_manager: CallbackManagerForToolRun | None = None,  # noqa: ARG002
     ) -> tuple[list[str | dict], list[Artifact]]:
         kwargs = {"cwd": str(self.cwd)} if self.cwd is not None else {}
         box = await self.pybox_manager.astart(kernel_id=self.session_id, **kwargs)

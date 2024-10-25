@@ -1,11 +1,19 @@
 from __future__ import annotations
 
 import logging
-from typing import Any, Iterable, Sequence, override
+from sys import version_info
+from typing import Any, Iterable, Sequence
 
 from langchain_qdrant import Qdrant
 
 logger = logging.getLogger(__name__)
+
+if version_info >= (3, 12):
+    from typing import override
+else:
+
+    def override(func):
+        return func
 
 
 class FallbackQdrant(Qdrant):

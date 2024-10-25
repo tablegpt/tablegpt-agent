@@ -1,9 +1,18 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Sequence, override
+from sys import version_info
+from typing import TYPE_CHECKING, Sequence
 
 from langchain_core.documents import Document
 from langchain_core.documents.compressor import BaseDocumentCompressor
+
+if version_info >= (3, 12):
+    from typing import override
+else:
+
+    def override(func):
+        return func
+
 
 if TYPE_CHECKING:
     from langchain_core.callbacks import Callbacks
@@ -14,8 +23,8 @@ class ColumnDocCompressor(BaseDocumentCompressor):
     def compress_documents(
         self,
         documents: Sequence[Document],
-        query: str,
-        callbacks: Callbacks | None = None,
+        query: str,  # noqa: ARG002
+        callbacks: Callbacks | None = None,  # noqa: ARG002
     ) -> Sequence[Document]:
         # column name -> document
         # TODO: we can perform a map-reduce here.

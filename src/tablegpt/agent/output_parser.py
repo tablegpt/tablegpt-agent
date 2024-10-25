@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import logging
 import re
-from typing import Pattern, override
+from sys import version_info
+from typing import Pattern
 from uuid import uuid4
 
 from langchain.agents.agent import AgentOutputParser
@@ -12,6 +13,13 @@ from langchain_core.messages import AIMessage
 from tablegpt.errors import SimpleOutputParserException
 
 logger = logging.getLogger(__name__)
+
+if version_info >= (3, 12):
+    from typing import override
+else:
+
+    def override(func):
+        return func
 
 
 class MarkdownOutputParser(AgentOutputParser):

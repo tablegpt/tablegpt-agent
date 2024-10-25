@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Sequence, override
+from sys import version_info
+from typing import TYPE_CHECKING, Sequence
 from urllib.parse import urljoin
 
 import aiohttp
@@ -8,6 +9,14 @@ import requests
 from langchain_core.documents import Document
 from langchain_core.documents.compressor import BaseDocumentCompressor
 from pydantic import BaseModel
+
+if version_info >= (3, 12):
+    from typing import override
+else:
+
+    def override(func):
+        return func
+
 
 if TYPE_CHECKING:
     from langchain_core.callbacks import Callbacks
@@ -33,7 +42,7 @@ class HuggingfaceTEIReranker(BaseDocumentCompressor):
         self,
         documents: Sequence[Document],
         query: str,
-        callbacks: Callbacks | None = None,
+        callbacks: Callbacks | None = None,  # noqa: ARG002
     ) -> Sequence[Document]:
         docs_chunks = self._split_documents(documents)
         responses = []
@@ -58,7 +67,7 @@ class HuggingfaceTEIReranker(BaseDocumentCompressor):
         self,
         documents: Sequence[Document],
         query: str,
-        callbacks: Callbacks | None = None,
+        callbacks: Callbacks | None = None,  # noqa: ARG002
     ) -> Sequence[Document]:
         docs_chunks = self._split_documents(documents)
         responses = []
