@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "tablegpt"
+name = "table-gpt"
 dynamic = ["version"]
 description = ''
 readme = "README.md"
@@ -35,6 +35,9 @@ dependencies = [
 Documentation = "https://github.com/tablegpt/tablegpt/blob/main/README.md"
 Issues = "https://github.com/tablegpt/tablegpt/issues"
 Source = "https://github.com/tablegpt/tablegpt"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tablegpt"]
 
 [tool.hatch.version]
 path = "src/tablegpt/__about__.py"
