@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from langchain_core.documents import Document
 from langchain_core.messages import BaseMessage
+
 from tablegpt.utils import (
     filter_content,
     format_columns,
