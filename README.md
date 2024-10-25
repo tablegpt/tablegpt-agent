@@ -1,7 +1,7 @@
 # TableGPT
 
-[![PyPI - Version](https://img.shields.io/pypi/v/pppybox.svg)](https://pypi.org/project/pppybox)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pppybox.svg)](https://pypi.org/project/pppybox)
+[![PyPI - Version](https://img.shields.io/pypi/v/tablegpt-agent.svg)](https://pypi.org/project/tablegpt-agent)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/tablegpt-agent.svg)](https://pypi.org/project/tablegpt-agent)
 
 -----
 
