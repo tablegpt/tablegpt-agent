@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import mimetypes
 import re
+from re import Pattern
 from sys import version_info
-from typing import TYPE_CHECKING, Literal, Pattern
+from typing import TYPE_CHECKING, Literal
 
 from langchain_core.tools import BaseTool
 from pydantic import BaseModel, DirectoryPath, field_validator, model_validator

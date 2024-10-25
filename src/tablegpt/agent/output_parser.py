@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import logging
 import re
+from re import Pattern
 from sys import version_info
-from typing import Pattern
 from uuid import uuid4
 
 from langchain.agents.agent import AgentOutputParser

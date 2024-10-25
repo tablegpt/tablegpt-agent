@@ -6,7 +6,7 @@ import os
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
-from typing import TYPE_CHECKING, Any, NamedTuple, Sequence, cast
+from typing import TYPE_CHECKING, Any, NamedTuple, cast
 
 import numpy as np
 import pandas as pd
@@ -20,6 +20,8 @@ from tablegpt.errors import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from langchain_core.documents import Document
     from langchain_core.messages import BaseMessage
 

@@ -71,14 +71,17 @@ class HuggingfaceTEIEmbeddings(BaseModel, Embeddings):
 
     async def _aembed(self, inputs: list[str]) -> list[float]:
         """Asynchronous POST request."""
-        async with aiohttp.ClientSession() as session, session.post(
-            urljoin(self.base_url, "/embed"),
-            json={
-                "inputs": inputs,
-                "normalize": self.normalize,
-                "truncate": self.truncate,
-            },
-        ) as resp:
+        async with (
+            aiohttp.ClientSession() as session,
+            session.post(
+                urljoin(self.base_url, "/embed"),
+                json={
+                    "inputs": inputs,
+                    "normalize": self.normalize,
+                    "truncate": self.truncate,
+                },
+            ) as resp,
+        ):
             return await resp.json()
 
     def _split_texts(self, texts: list[str]) -> list[list[str]]:

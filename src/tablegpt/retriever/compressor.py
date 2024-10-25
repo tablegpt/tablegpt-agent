@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from sys import version_info
-from typing import TYPE_CHECKING, Sequence
+from typing import TYPE_CHECKING
 
 from langchain_core.documents import Document
 from langchain_core.documents.compressor import BaseDocumentCompressor
@@ -15,6 +15,8 @@ else:
 
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from langchain_core.callbacks import Callbacks
 
 

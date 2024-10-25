@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import logging
 from sys import version_info
-from typing import Any, Iterable, Sequence
+from typing import TYPE_CHECKING, Any
 
 from langchain_qdrant import Qdrant
 
@@ -14,6 +14,10 @@ else:
 
     def override(func):
         return func
+
+
+if TYPE_CHECKING:
+    from collections.abc import Iterable, Sequence
 
 
 class FallbackQdrant(Qdrant):

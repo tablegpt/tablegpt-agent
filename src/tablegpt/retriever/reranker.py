@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from sys import version_info
-from typing import TYPE_CHECKING, Sequence
+from typing import TYPE_CHECKING
 from urllib.parse import urljoin
 
 import aiohttp
@@ -19,6 +19,8 @@ else:
 
 
 if TYPE_CHECKING:
+    from collections.abc import Sequence
+
     from langchain_core.callbacks import Callbacks
 
 
@@ -99,13 +101,16 @@ class HuggingfaceTEIReranker(BaseDocumentCompressor):
 
     async def _arerank(self, query: str, inputs: list[str]) -> list[RerankResponseEntry]:
         """Asynchronous POST request."""
-        async with aiohttp.ClientSession() as session, session.post(
-            urljoin(self.base_url, "/rerank"),
-            json={
-                "query": query,
-                "texts": inputs,
-            },
-        ) as resp:
+        async with (
+            aiohttp.ClientSession() as session,
+            session.post(
+                urljoin(self.base_url, "/rerank"),
+                json={
+                    "query": query,
+                    "texts": inputs,
+                },
+            ) as resp,
+        ):
             return await resp.json()
 
     def _split_documents(self, docs: list[Document]) -> list[list[Document]]:
