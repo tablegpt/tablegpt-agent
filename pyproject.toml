@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "tablegpt-agent"
+name = "tablegpt"
 dynamic = ["version"]
 description = ''
 readme = "README.md"
@@ -33,31 +33,31 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/ZJUICI/tablegpt-slim-py/libs/tablegpt-agent#README.md"
-Issues = "https://github.com/ZJUICI/tablegpt-slim-py/issues"
-Source = "https://github.com/ZJUICI/tablegpt-slim-py"
+Documentation = "https://github.com/tablegpt/tablegpt/blob/main/README.md"
+Issues = "https://github.com/tablegpt/tablegpt/issues"
+Source = "https://github.com/tablegpt/tablegpt"
 
 [tool.hatch.version]
-path = "src/tablegpt_agent/__about__.py"
+path = "src/tablegpt/__about__.py"
 
 [tool.hatch.envs.types]
 extra-dependencies = [
   "mypy>=1.0.0",
 ]
 [tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/tablegpt_agent tests}"
+check = "mypy --install-types --non-interactive {args:src/tablegpt tests}"
 
 [tool.coverage.run]
-source_pkgs = ["tablegpt_agent", "tests"]
+source_pkgs = ["tablegpt", "tests"]
 branch = true
 parallel = true
 omit = [
-  "src/tablegpt_agent/__about__.py",
+  "src/tablegpt/__about__.py",
 ]
 
 [tool.coverage.paths]
-tablegpt_agent = ["src/tablegpt_agent", "*/tablegpt-agent/src/tablegpt_agent"]
-tests = ["tests", "*/tablegpt-agent/tests"]
+tablegpt = ["src/tablegpt"]
+tests = ["tests"]
 
 [tool.coverage.report]
 exclude_lines = [
