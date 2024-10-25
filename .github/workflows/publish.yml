@@ -11,6 +11,7 @@ jobs:
 
     permissions:
       id-token: write # IMPORTANT: this permission is mandatory for trusted publishing
+      contents: read  # IMPORTANT: this permission is mandatory for private repositories
 
     steps:
     - uses: actions/checkout@v4
@@ -28,4 +29,3 @@ jobs:
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         verbose: true
-        # repository-url: https://test.pypi.org/legacy/
