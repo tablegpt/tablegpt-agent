@@ -1,7 +1,7 @@
-from tablegpt.agent.retriever.compressor import ColumnDocCompressor
-from tablegpt.agent.retriever.embeddings import HuggingfaceTEIEmbeddings
-from tablegpt.agent.retriever.reranker import HuggingfaceTEIReranker
-from tablegpt.agent.retriever.vectorstore import FallbackQdrant
+from tablegpt.retriever.compressor import ColumnDocCompressor
+from tablegpt.retriever.embeddings import HuggingfaceTEIEmbeddings
+from tablegpt.retriever.reranker import HuggingfaceTEIReranker
+from tablegpt.retriever.vectorstore import FallbackQdrant
 
 __all__ = [
     "ColumnDocCompressor",
