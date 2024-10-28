@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from datetime import date  # noqa: TCH003
 from typing import TYPE_CHECKING
 from uuid import uuid4
 
@@ -19,7 +20,6 @@ from tablegpt.tools import IPythonTool, markdown_console_template, process_conte
 from tablegpt.utils import filter_contents, format_columns
 
 if TYPE_CHECKING:
-    from datetime import date
     from pathlib import Path
 
     from langchain_core.agents import AgentAction, AgentFinish

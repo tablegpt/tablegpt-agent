@@ -1,18 +1,18 @@
 from __future__ import annotations
 
+from datetime import date  # noqa: TCH003
 from typing import TYPE_CHECKING
 
+from langchain_core.messages import BaseMessage  # noqa: TCH002
 from langgraph.graph import END, START, MessagesState, StateGraph
 
 from tablegpt.agent.data_analyzer import create_data_analyze_workflow
 from tablegpt.agent.file_reading import Stage, create_file_reading_workflow
 
 if TYPE_CHECKING:
-    from datetime import date
     from pathlib import Path
 
     from langchain_core.language_models import BaseLanguageModel
-    from langchain_core.messages import BaseMessage
     from langchain_core.retrievers import BaseRetriever
     from langchain_core.runnables import Runnable
     from langgraph.checkpoint.base import BaseCheckpointSaver

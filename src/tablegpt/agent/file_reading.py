@@ -9,6 +9,7 @@ from uuid import uuid4
 from langchain_core.messages import AIMessage, BaseMessage, ToolMessage
 from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.prebuilt import ToolNode
+from pybox.base import BasePyBoxManager  # noqa: TCH002
 
 from tablegpt.chains.data_normalizer import (
     get_data_normalize_chain,
@@ -23,7 +24,6 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from langchain_core.language_models import BaseLanguageModel
-    from pybox.base import BasePyBoxManager
 
 logger = logging.getLogger(__name__)
 
