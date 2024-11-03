@@ -23,6 +23,16 @@ pip install pppybox[local]
 
 ## Quick Start
 
+Before using `tablegpt-agent`, ensure you have an OpenAI-compatible server set up to host TableGPT2. We recommend using [vllm](https://github.com/vllm-project/vllm) for this:
+
+```sh
+python -m vllm.entrypoints.openai.api_server --served-model-name TableGPT2-7B --model path/to/weights
+```
+
+> Note: For production environments, it’s important to optimize the vllm server configuration. For details, refer to the [vllm documentation on server configuration](https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server).
+
+After setting up the server, you can use the following code to interact with the TableGPT model:
+
 ```python
 from datetime import date
 
@@ -32,7 +42,7 @@ from tablegpt.agent import create_tablegpt_graph
 from pybox import LocalPyBoxManager
 
 
-llm = ChatOpenAI()
+llm = ChatOpenAI(openai_api_base=YOUR_VLLM_URL, openai_api_key="whatever", model_name="TableGPT2-7B")
 
 pybox_manager = LocalPyBoxManager()
 
@@ -77,6 +87,7 @@ The `tablegpt-agent` directs `tablegpt` to generate python code for performing d
 ## Liscence
 
 ## Model Card
+
 See [model_card.md](https://huggingface.co/tablegpt/tablegpt).
 
 ## Citation
