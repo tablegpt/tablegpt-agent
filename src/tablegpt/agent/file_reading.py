@@ -53,7 +53,6 @@ def create_file_reading_workflow(
     session_id: str | None = None,
     nlines: int | None = None,
     model_type: str | None = None,
-    enable_normalization: bool = False,
     normalize_llm: BaseLanguageModel | None = None,
     verbose: bool = False,
 ):
@@ -126,7 +125,7 @@ def create_file_reading_workflow(
 {var_name} = read_df('{filename}')"""
 
         normalization_code = ""
-        if enable_normalization and normalize_llm:
+        if normalize_llm is not None:
             try:
                 normalization_code = await generate_normalization_code(state)
             except Exception as e:  # noqa: BLE001

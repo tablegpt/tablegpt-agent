@@ -36,15 +36,14 @@ def create_tablegpt_graph(
     llm: BaseLanguageModel,
     pybox_manager: BasePyBoxManager,
     *,
+    session_id: str | None = None,
     workdir: Path | None = None,
     model_type: str | None = None,
-    vlm: BaseLanguageModel | None = None,
-    session_id: str | None = None,
     error_trace_cleanup: bool = False,
+    nlines: int | None = None,
+    vlm: BaseLanguageModel | None = None,
     guard_chain: Runnable | None = None,
     dataset_retriever: BaseRetriever | None = None,
-    nlines: int | None = None,
-    enable_normalization: bool = False,
     normalize_llm: BaseLanguageModel | None = None,
     checkpointer: BaseCheckpointSaver | None = None,
     verbose: bool = False,
@@ -65,7 +64,6 @@ def create_tablegpt_graph(
             The risk category should be one of the hazard categories defined in the guard.py file.
         dataset_retriever (BaseRetriever | None, optional): _description_. Defaults to None.
         nlines (int | None, optional): _description_. Defaults to None.
-        enable_normalization (bool, optional): _description_. Defaults to False.
         normalize_llm (BaseLanguageModel | None, optional): _description_. Defaults to None.
         checkpointer (BaseCheckpointSaver | None, optional): _description_. Defaults to None.
         verbose (bool, optional): _description_. Defaults to False.
@@ -80,7 +78,6 @@ def create_tablegpt_graph(
         workdir=workdir,
         session_id=session_id,
         model_type=model_type,
-        enable_normalization=enable_normalization,
         normalize_llm=normalize_llm,
         verbose=verbose,
     )
