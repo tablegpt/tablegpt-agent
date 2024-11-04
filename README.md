@@ -70,9 +70,20 @@ async for event in agent.astream_events(
 
 <!-- API reference -->
 
-## Workflow
+## Components
 
 ### Data Analysis workflow
+
+The Data Analysis workflow is the core functionality of the `tablegpt-agent`. It processes user input and generates appropriate responses. This workflow is similar to those found in most single-agent systems and consists of an agent and various tools. Specifically, the data analysis workflow includes:
+
+- **An Agent Powered by TableGPT2**: This agent performs data analysis tasks.
+- **An IPython tool**: This tool executes the generated code within a sandbox environment.
+
+Additionally, the data analysis workflow offers several optional plugins that extend the agent's functionality:
+
+- [VLM](#vlm): A Visual Language Model that can be used to enhance summarization for data visualization tasks.
+- [Dataset Retriever](#dataset-retriever): A retriever that fetches information about the dataset, improving the quality and relevance of the generated code.
+- [Safaty Guard](#safaty-guard): A safety mechanism that protects the system from toxic inputs.
 
 ### File Reading workflow
 
@@ -92,11 +103,11 @@ The `tablegpt-agent` directs `tablegpt` to generate Python code for data analysi
 
 #### VLM
 
-#### RAG
+#### Dataset Retriever
 
-#### Security Guard
+#### Safaty Guard
 
-  <!-- normalization chain -->
+#### Dataset Normalizer
 
 ## Liscence
 
