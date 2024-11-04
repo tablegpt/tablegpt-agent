@@ -7,15 +7,17 @@
 
 ## Introduction
 
-`tablegpt-agent` is a pre-built agent for TableGPT2 ([huggingface](https://huggingface.co/collections/tablegpt/tablegpt2-67265071d6e695218a7e0376)), a series of LLMs for table-based question answering. This agent is built on top of the [Langgraph](https://github.com/langchain-ai/langgraph) library and provides a simple interface for interacting with the TableGPT model.
+`tablegpt-agent` is a pre-built agent for TableGPT2 ([huggingface](https://huggingface.co/collections/tablegpt/tablegpt2-67265071d6e695218a7e0376)), a series of LLMs for table-based question answering. This agent is built on top of the [Langgraph](https://github.com/langchain-ai/langgraph) library and provides a user-friendly interface for interacting with the TableGPT model.
 
 ## Installation
+
+To install `tablegpt-agent`, use the following command:
 
 ```sh
 pip install tablegpt-agent
 ```
 
-`tablegpt-agent` depends on [pybox](https://github.com/edwardzjl/pybox), which is a Python code sandbox delegator. `pybox` defaults to an in-cluster mode. If you want to run `tablegpt-agent` in a local environment, you need to install an optional dependency:
+This package depends on [pybox](https://github.com/edwardzjl/pybox), a Python code sandbox delegator. By default, `pybox` operates in an in-cluster mode. If you wish to run `tablegpt-agent` in a local environment, you need to install an optional dependency:
 
 ```sh
 pip install pppybox[local]
@@ -23,15 +25,15 @@ pip install pppybox[local]
 
 ## Quick Start
 
-Before using `tablegpt-agent`, ensure you have an OpenAI-compatible server set up to host TableGPT2. We recommend using [vllm](https://github.com/vllm-project/vllm) for this:
+Before using `tablegpt-agent`, ensure that you have an OpenAI-compatible server set up to host TableGPT2. We recommend using [vllm](https://github.com/vllm-project/vllm) for this:
 
 ```sh
 python -m vllm.entrypoints.openai.api_server --served-model-name TableGPT2-7B --model path/to/weights
 ```
 
-> Note: For production environments, it’s important to optimize the vllm server configuration. For details, refer to the [vllm documentation on server configuration](https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server).
+> **Note:** For production environments, it’s important to optimize the vllm server configuration. For details, refer to the [vllm documentation on server configuration](https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server).
 
-After setting up the server, you can use the following code to interact with the TableGPT model:
+Once the server is set up, you can use the following code to interact with the TableGPT model:
 
 ```python
 from datetime import date
@@ -44,6 +46,7 @@ from pybox import LocalPyBoxManager
 
 llm = ChatOpenAI(openai_api_base=YOUR_VLLM_URL, openai_api_key="whatever", model_name="TableGPT2-7B")
 
+# Use local pybox manager for development and testing
 pybox_manager = LocalPyBoxManager()
 
 agent = create_tablegpt_graph(
@@ -69,26 +72,37 @@ async for event in agent.astream_events(
 
 ## Workflow
 
-### Main workflow
+### Data Analysis workflow
 
-### File Upload workflow
+### File Reading workflow
+
+We separate the file reading workflow from the data analysis workflow to maintain greater control over how the LLM inspects the dataset files. Typically, if you let the LLM inspect the dataset itself, it uses the `df.head()` function to get a preview of the data. While this is sufficient for basic cases, we have implemented a more structured approach by hard-coding the file reading workflow into several steps:
+
+- `normalization` (optional): For some Excel files, the content may not be 'pandas-friendly'. We include an optional normalization step to transform the Excel content into a more 'pandas-friendly' way.
+- `df.info()`: Unlike `df.head()`, `df.info()` provides a different aspect of the dataset, such as the data types of each column, and number of non-null values, which also indicates whether a column contains NaN. This insight helps the LLM understand the structure and quality of the data.
+- `df.head()`: The final step displays the first n rows of the dataset, where n is configurable. A larger value for n allows the LLM to glean more information from the dataset; however, too much detail may divert its attention from the primary task.
 
 ### Code Execution
 
-The `tablegpt-agent` directs `tablegpt` to generate python code for performing data analysis. This code is then executed within a sandbox environment to maintain system security. The execution is managed by the [pybox](https://github.com/edwardzjl/pybox) library, which offers a straightforward way to run Python code outside the main process.
+The `tablegpt-agent` directs `tablegpt` to generate python code for data analysis. This code is then executed within a sandbox environment to maintain system security. The execution is managed by the [pybox](https://github.com/edwardzjl/pybox) library, which provides a simple way to run Python code outside the main process.
 
 ### Plugins
 
-  <!-- vlm -->
-  <!-- guard chain -->
-  <!-- RAG -->
+`tablegpt-agent` provides several plugin interfaces for extending its functionality. These plugins are designed to be easily integrated into the agent and can be used to add new features or modify existing ones. The following plugins are available:
+
+#### VLM
+
+#### RAG
+
+#### Security Guard
+
   <!-- normalization chain -->
 
 ## Liscence
 
 ## Model Card
 
-See [model_card.md](https://huggingface.co/tablegpt/tablegpt).
+For more information about TableGPT2, see the [TableGPT2 Model Card](https://huggingface.co/tablegpt/tablegpt).
 
 ## Citation
 
