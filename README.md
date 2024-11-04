@@ -72,7 +72,7 @@ async for event in agent.astream_events(
 
 ## Components
 
-### Data Analysis workflow
+### Data Analysis Workflow
 
 The Data Analysis workflow is the core functionality of the `tablegpt-agent`. It processes user input and generates appropriate responses. This workflow is similar to those found in most single-agent systems and consists of an agent and various tools. Specifically, the data analysis workflow includes:
 
@@ -85,7 +85,7 @@ Additionally, the data analysis workflow offers several optional plugins that ex
 - [Dataset Retriever](#dataset-retriever): A retriever that fetches information about the dataset, improving the quality and relevance of the generated code.
 - [Safaty Guard](#safaty-guard): A safety mechanism that protects the system from toxic inputs.
 
-### File Reading workflow
+### File Reading Workflow
 
 We separate the file reading workflow from the data analysis workflow to maintain greater control over how the LLM inspects the dataset files. Typically, if you let the LLM inspect the dataset itself, it uses the `df.head()` function to preview the data. While this is sufficient for basic cases, we have implemented a more structured approach by hard-coding the file reading workflow into several steps:
 
@@ -108,6 +108,15 @@ While TableGPT2 excels in data analysis tasks, it currently lacks built-in suppo
 When the agent performs a visualization task—typically using `matplotlib.pyplot.show`—the VLM will take over from the LLM, offering a more nuanced summarization of the visualization. This approach avoids the common pitfalls of LLMs in visualization tasks, which often either state, "I have plotted the data," or hallucinating the content of the plot.
 
 #### Dataset Retriever
+
+While the [File Reading Workflow](file-reading-workflow) is adequate for most scenarios, it may not always provide the information necessary for the LLM to generate accurate code. Consider the following examples:
+
+- A categorical column in the dataset contains 'foo', 'bar', and 'baz', but 'baz' only appears after approximately 100 rows. In this case, the LLM may not encounter the 'baz' value through `df.head()`.
+- The user's query may not align with the dataset's content for several reasons:
+  - The dataset lacks proper governance. For instance, a cell value might be misspelled from 'foo' to 'fou'.
+  - There could be a typo in the user's query. For example, if the user queries, "Show me the data for 'fou'," but the dataset contains 'foo' instead.
+
+In such situations, the Dataset Retriever plugin can be utilized to fetch additional information about the dataset from external sources, thereby providing the LLM with more context and improving its ability to generate accurate responses.
 
 #### Safaty Guard
 
