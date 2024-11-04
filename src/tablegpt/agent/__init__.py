@@ -42,7 +42,7 @@ def create_tablegpt_graph(
     error_trace_cleanup: bool = False,
     nlines: int | None = None,
     vlm: BaseLanguageModel | None = None,
-    guard_chain: Runnable | None = None,
+    safety_llm: Runnable | None = None,
     dataset_retriever: BaseRetriever | None = None,
     normalize_llm: BaseLanguageModel | None = None,
     checkpointer: BaseCheckpointSaver | None = None,
@@ -58,7 +58,7 @@ def create_tablegpt_graph(
         vlm (BaseLanguageModel | None, optional): _description_. Defaults to None.
         session_id (str | None, optional): _description_. Defaults to None.
         error_trace_cleanup (bool, optional): _description_. Defaults to False.
-        guard_chain (Runnable | None, optional): _description_. Defaults to None.
+        safety_llm (Runnable | None, optional): _description_. Defaults to None.
             Your guard chain should return a tuple of (safety_flag, risk_category).
             The safety flag should be one of "safe", "unsafe", or "unknown".
             The risk category should be one of the hazard categories defined in the guard.py file.
@@ -85,10 +85,10 @@ def create_tablegpt_graph(
         llm=llm,
         pybox_manager=pybox_manager,
         workdir=workdir,
-        vlm=vlm,
         session_id=session_id,
         error_trace_cleanup=error_trace_cleanup,
-        guard_chain=guard_chain,
+        vlm=vlm,
+        safety_llm=safety_llm,
         dataset_retriever=dataset_retriever,
         verbose=verbose,
     )

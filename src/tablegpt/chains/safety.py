@@ -29,7 +29,7 @@ hazard_categories = {
 }
 
 
-class GuardOutputParser(BaseTransformOutputParser[tuple[str, str | None]]):
+class HazardOutputParser(BaseTransformOutputParser[tuple[str, str | None]]):
     def parse(self, text: str) -> tuple[str, str | None]:
         """Parse the output of the guard model.
 
@@ -57,9 +57,9 @@ tmpl = ChatPromptTemplate.from_messages(
 )
 
 
-output_parse = GuardOutputParser()
+output_parse = HazardOutputParser()
 
 
-def get_guard_chain(llm: BaseLanguageModel) -> Runnable:
+def create_hazard_classifier(llm: BaseLanguageModel) -> Runnable:
     """return the guard chain runnable."""
     return tmpl | llm | output_parse

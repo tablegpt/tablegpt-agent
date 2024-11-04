@@ -16,6 +16,7 @@ from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.prebuilt import ToolNode
 
 from tablegpt.agent.output_parser import MarkdownOutputParser
+from tablegpt.chains import create_hazard_classifier
 from tablegpt.tools import IPythonTool, markdown_console_template, process_content
 from tablegpt.utils import filter_contents, format_columns
 
@@ -71,7 +72,7 @@ def create_data_analyze_workflow(
     session_id: str | None = None,
     error_trace_cleanup: bool = False,
     vlm: Runnable | None = None,
-    guard_chain: Runnable | None = None,
+    safety_llm: Runnable | None = None,
     dataset_retriever: BaseRetriever | None = None,
     verbose: bool = False,
 ) -> Runnable:
@@ -84,7 +85,7 @@ def create_data_analyze_workflow(
         session_id (str | None, optional): _description_. Defaults to None.
         error_trace_cleanup (bool, optional): _description_. Defaults to False.
         vlm (Runnable | None, optional): _description_. Defaults to None.
-        guard_chain (Runnable | None, optional): _description_. Defaults to None.
+        safety_llm (Runnable | None, optional): _description_. Defaults to None.
         dataset_retriever (BaseRetriever | None, optional): _description_. Defaults to None.
         verbose (bool, optional): _description_. Defaults to False.
 
@@ -97,10 +98,14 @@ def create_data_analyze_workflow(
     if vlm is not None:
         vlm_agent = get_data_analyzer_agent(vlm)
 
+    hazard_classifier = None
+    if safety_llm is not None:
+        hazard_classifier = create_hazard_classifier(safety_llm)
+
     async def run_input_guard(state: AgentState) -> dict[str, list[BaseMessage]]:
-        if guard_chain is not None:
+        if hazard_classifier is not None:
             last_message = state["messages"][-1]
-            flag, category = await guard_chain.ainvoke(input={"input": last_message.content})
+            flag, category = await hazard_classifier.ainvoke(input={"input": last_message.content})
             if flag == "unsafe" and category is not None:
                 # TODO: "敏感话题"?
                 content = f"用户问题可能涉及与 `{category}` 相关的敏感话题，请谨慎回答。"  # noqa: RUF001

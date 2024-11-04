@@ -1,3 +1,3 @@
-from tablegpt.chains.guard import get_guard_chain
+from tablegpt.chains.safety import create_hazard_classifier
 
-__all__ = ["get_guard_chain"]
+__all__ = ["create_hazard_classifier"]
