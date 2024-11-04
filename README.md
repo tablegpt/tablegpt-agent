@@ -7,7 +7,7 @@
 
 ## Introduction
 
-`tablegpt-agent` is a pre-built agent for TableGPT2 ([huggingface](https://huggingface.co/collections/tablegpt/tablegpt2-67265071d6e695218a7e0376)), a series of LLMs for table-based question answering. This agent is built on top of the [Langgraph](https://github.com/langchain-ai/langgraph) library and provides a user-friendly interface for interacting with the TableGPT model.
+`tablegpt-agent` is a pre-built agent for TableGPT2 ([huggingface](https://huggingface.co/collections/tablegpt/tablegpt2-67265071d6e695218a7e0376)), a series of LLMs for table-based question answering. This agent is built on top of the [Langgraph](https://github.com/langchain-ai/langgraph) library and provides a user-friendly interface for interacting with TableGPT2.
 
 ## Installation
 
@@ -102,6 +102,10 @@ The `tablegpt-agent` directs `tablegpt` to generate Python code for data analysi
 `tablegpt-agent` provides several plugin interfaces for extending its functionality. These plugins are designed to be easily integrated into the agent and can be used to add new features or modify existing ones. The following plugins are available:
 
 #### VLM
+
+While TableGPT2 excels in data analysis tasks, it currently lacks built-in support for visual modalities. Many data analysis tasks involve visualization, so to address this limitation, we provide an interface for integrating your own Visual Language Model (VLM) plugin.
+
+When the agent performs a visualization task—typically using `matplotlib.pyplot.show`—the VLM will take over from the LLM, offering a more nuanced summarization of the visualization. This approach avoids the common pitfalls of LLMs in visualization tasks, which often either state, "I have plotted the data," or hallucinating the content of the plot.
 
 #### Dataset Retriever
 
