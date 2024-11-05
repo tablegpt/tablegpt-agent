@@ -111,9 +111,7 @@ class FileEncoding(NamedTuple):
     """The language of the file."""
 
 
-def detect_file_encodings(
-    file_path: str | Path, timeout: int = 5
-) -> list[FileEncoding]:
+def detect_file_encodings(file_path: str | Path, timeout: int = 5) -> list[FileEncoding]:
     """Try to detect the file encoding.
 
     Returns a list of `FileEncoding` tuples with the detected encodings ordered
@@ -192,8 +190,7 @@ def format_values(
     # Apply cell length limit if specified
     if cell_length is not None:
         values_to_format = [
-            value[:cell_length] + "..." if len(value) > cell_length else value
-            for value in values_to_format
+            value[:cell_length] + "..." if len(value) > cell_length else value for value in values_to_format
         ]
 
     # Convert values to JSON representation
@@ -206,9 +203,7 @@ def format_values(
     return values_repr
 
 
-def filter_contents(
-    messages: list[BaseMessage], keep: Sequence[str] | None = None
-) -> list[BaseMessage]:
+def filter_contents(messages: list[BaseMessage], keep: Sequence[str] | None = None) -> list[BaseMessage]:
     """Filters a list of messages, retaining specified content parts for each message.
 
     This function applies the `filter_content` function to a list of `BaseMessage` instances,
@@ -245,9 +240,7 @@ def filter_contents(
     return [filter_content(msg, keep) for msg in messages]
 
 
-def filter_content(
-    message: BaseMessage, keep: Sequence[str] | None = None
-) -> BaseMessage:
+def filter_content(message: BaseMessage, keep: Sequence[str] | None = None) -> BaseMessage:
     """Filters the content of a message, ensuring that only specified parts are retained.
 
     This function examines the `content` of a `BaseMessage` and filters it based on the provided
@@ -328,9 +321,7 @@ def get_raw_table_info(
     # Replace NaN with None and format datetime cells
     df = df.where(df.notnull(), None).map(
         lambda cell: (
-            cell.strftime(date_format)
-            if isinstance(cell, (pd.Timestamp, datetime)) and pd.notnull(cell)
-            else cell
+            cell.strftime(date_format) if isinstance(cell, (pd.Timestamp, datetime)) and pd.notnull(cell) else cell
         )
     )
     # Convert DataFrame to a list of lists

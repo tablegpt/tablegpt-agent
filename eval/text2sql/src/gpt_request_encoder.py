@@ -19,9 +19,9 @@ import logging
 import os
 import sqlite3
 import warnings
+
 # from io import StringIO
 # from typing import Literal, List, Optional
-
 # import pandas as pd
 from text2sql.src.gpt_request import (
     cot_wizard,
