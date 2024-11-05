@@ -4,10 +4,10 @@ from typing import TYPE_CHECKING
 
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import Runnable
 
 if TYPE_CHECKING:
     from langchain_core.language_models import BaseLanguageModel
+    from langchain_core.runnables import Runnable
 
 
 TRANSLATION_PROMPT = """You are a translation assistant. Translate user input directly into the primary language of the {locale} region without explanation."""
