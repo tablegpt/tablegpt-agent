@@ -75,7 +75,7 @@ async def main() -> None:
 asyncio.run(main())
 ```
 
-<!-- API reference -->
+<!-- TODO: Add API reference -->
 
 ## Components
 
@@ -133,7 +133,13 @@ The `Dataset Normalizer` plugin is used to transform 'pandas-unfriendly' dataset
 
 In `tablegpt-agent`, this plugin is used to better format 'pandas-unfriendly' datasets, making them more understandable for the subsequent steps. This plugin is optional; if used, it serves as the very first step in the [File Reading workflow](#file-reading-workflow), easing the difficulity of data analysis in the subsequent workflow.
 
+## Evaluation
+
+This repository also includes a collection of evaluation scripts for table-related benchmarks. The evaluation scripts and datasets can be found in the `realtabbench` directory. For more details, please refer to the [RealTabBench README](realtabbench/README.md).
+
 ## Liscence
+
+`tablegpt-agent` is unser Apache-2.0 License. For more information, see the [LICENSE](LICENSE) file.
 
 ## Model Card
 
