@@ -135,7 +135,7 @@ In `tablegpt-agent`, this plugin is used to better format 'pandas-unfriendly' da
 
 ## Evaluation
 
-This repository also includes a collection of evaluation scripts for table-related benchmarks. The evaluation scripts and datasets can be found in the `realtabbench` directory. For more details, please refer to the [RealTabBench README](realtabbench/README.md).
+This repository also includes a collection of evaluation scripts for table-related benchmarks. The evaluation scripts and datasets can be found in the `eval` directory. For more details, please refer to the [Evaluation README](eval/README.md).
 
 ## Liscence
 
