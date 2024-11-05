@@ -6,7 +6,7 @@ from langchain_core.output_parsers import BaseTransformOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 
 if TYPE_CHECKING:
-    from langchain.llms.base import BaseLanguageModel
+    from langchain_core.language_models import BaseLanguageModel
     from langchain_core.runnables import Runnable
 
 

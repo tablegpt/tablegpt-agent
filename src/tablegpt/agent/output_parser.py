@@ -6,9 +6,9 @@ from re import Pattern
 from sys import version_info
 from uuid import uuid4
 
-from langchain.agents.agent import AgentOutputParser
 from langchain_core.agents import AgentAction, AgentActionMessageLog, AgentFinish
 from langchain_core.messages import AIMessage
+from langchain_core.output_parsers import BaseOutputParser
 
 from tablegpt.errors import SimpleOutputParserException
 
@@ -22,7 +22,7 @@ else:
         return func
 
 
-class MarkdownOutputParser(AgentOutputParser):
+class MarkdownOutputParser(BaseOutputParser[AgentAction | AgentFinish]):
     """Output parser that extracts markdown code blocks and try to parse them into actions."""
 
     # group1: thought; group2: language; group3: tool_input; group4: remaining content
