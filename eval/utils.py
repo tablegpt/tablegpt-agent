@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import ast
 import json
 import random
@@ -6,30 +5,24 @@ import re
 import signal
 import threading
 from contextlib import contextmanager
-from typing import Any, Tuple
+from typing import Any
 
 import pandas as pd
+from evaluate_code_correction.pytool import extract_last_df, format_result
 from langchain_experimental.tools.python.tool import PythonAstREPLTool
-
-from evaluate_code_correction.pytool import (
-    extract_last_df, format_result)
 
 
 def read_jsonl(file_path):
+    with open(file_path, encoding="utf-8") as f:
+        return [json.loads(line.strip()) for line in f]
 
-    data = []
-    with open(file_path, "r", encoding="utf-8") as f:
-        for line in f:
-            data.append(json.loads(line.strip()))
-    return data
 
 def load_json(data_path):
     """
     # 加载 json 文件
     """
-    with open(data_path, "r", encoding="utf-8") as f:
-        data = json.load(f)
-    return data
+    with open(data_path, encoding="utf-8") as f:
+        return json.load(f)
 
 
 def save_json(data_path, data_list):
@@ -44,46 +37,38 @@ def get_dfs_info(table_paths):
     """将所有csv文件对应的df-info拼装到一起"""
     infos_list = []
     if len(table_paths) == 1:
-        df_markdown_info = str(
-            pd.read_csv(table_paths[0], encoding="utf-8").head(5).to_string(index=False)
-        )
+        df_markdown_info = str(pd.read_csv(table_paths[0], encoding="utf-8").head(5).to_string(index=False))
         normalized_head = f"""/*\n"df.head()" as follows:\n{df_markdown_info}\n*/"""
         infos_list.append(normalized_head)
     else:
         for i, path in enumerate(table_paths):
             # normalized_name = normalize_table_name(path)
-            df_markdown_info = str(
-                pd.read_csv(path, encoding="utf-8").head(5).to_string(index=False)
-            )
-            normalized_head = (
-                f"""/*\n"df{i+1}.head()" as follows:\n{df_markdown_info}\n*/"""
-            )
+            df_markdown_info = str(pd.read_csv(path, encoding="utf-8").head(5).to_string(index=False))
+            normalized_head = f"""/*\n"df{i+1}.head()" as follows:\n{df_markdown_info}\n*/"""
             # single_table_name = "\n".join([normalized_head, df_markdown_info])
             infos_list.append(normalized_head)
     return "\n".join(infos_list)
 
 
-def sample_from_two_lists(list1, list2):
-    # 如果列表为空，则直接返回None或抛出异常，取决于你的需求
+def sample_from_two_lists(list1, list2, threshold=0.5):
+    # 如果列表为空, 则直接返回None或抛出异常, 取决于你的需求
     if not list1 or not list2:
         return None  # 或者你可以抛出异常
 
     # 生成一个0到1之间的随机浮点数
-    rand_val = random.random()
+    rand_val = random.random()  # noqa: S311
 
-    # 如果随机数小于0.5，从第一个列表中采样
-    if rand_val < 0.5:
-        return random.choice(list1)
-    # 否则，从第二个列表中采样
-    else:
-        return random.choice(list2)
+    # 如果随机数小于0.5, 从第一个列表中采样
+    if rand_val < threshold:
+        return random.choice(list1)  # noqa: S311
+    # 否则, 从第二个列表中采样
+    return random.choice(list2)  # noqa: S311
 
 
-def recraft_query(query, locals):
-    last_df = extract_last_df(query, locals)
-    end_str = "\n" + format_result + "print(format_result({}))".format(last_df)
-    recraft_query = query + end_str
-    return recraft_query
+def recraft_query(query, _locals):
+    last_df = extract_last_df(query, _locals)
+    end_str = "\n" + format_result + f"print(format_result({last_df}))"
+    return query + end_str
 
 
 def extract_code_without_comments(code):
@@ -100,10 +85,10 @@ def extract_code_without_comments(code):
     lines = code.split("\n")
     cleaned_lines = []
     for line in lines:
-        # 移除以 # 开始的注释，但保留字符串中的 #
+        # 移除以 # 开始的注释, 但保留字符串中的 #
         cleaned_line = re.sub(r'(?<!["\'"])#.*$', "", line)
         cleaned_lines.append(cleaned_line.rstrip())  # rstrip() 移除行尾空白
-    # 重新组合代码，保留空行以维持原始结构
+    # 重新组合代码, 保留空行以维持原始结构
     return "\n".join(cleaned_lines)
 
 
@@ -131,7 +116,7 @@ def is_python_code(line: str) -> bool:
                 ),
             ):
                 return True
-        return False
+        return False  # noqa: TRY300
     except SyntaxError:
         return False
 
@@ -152,12 +137,7 @@ def extract_text_before_code(text: str) -> str:
 def extract_python_code(text: str) -> str:
     """Tool function for extract python code"""
     lines = text.split("\n")
-    python_code = []
-
-    for line in lines:
-        if is_python_code(line):
-            python_code.append(line)
-
+    python_code = [line for line in lines if is_python_code(line)]
     return "\n".join(python_code)
 
 
@@ -172,20 +152,15 @@ def filter_cot(completion: str):
     :return filtered COT content
     """
     try:
-        # 如果输出较为规范，可以使用这种方式提取cot部分的内容
+        # 如果输出较为规范, 可以使用这种方式提取cot部分的内容
         pattern = r"Thought:\s*(.*?)\s*(?=Python Code:)"
         match = re.search(pattern, completion, re.DOTALL)
-        if match:
-            thought_content = match.group(1)
-        else:
-            # 如果输出内容相对杂乱
-            thought_content = extract_text_before_code(completion)
-        return thought_content
-    except:
+        return match.group(1) if match else extract_text_before_code(completion)
+    except:  # noqa: E722
         return ""
 
 
-def filter_code(completion: str) -> Tuple[str, str]:
+def filter_code(completion: str) -> tuple[str, str]:
     """
     Filter python code from the llm output completion
     :param completion: llm output contents
@@ -206,8 +181,8 @@ def filter_code(completion: str) -> Tuple[str, str]:
             code = extract_python_code(completion)
             code = code.strip(" ")
         pure_code = extract_code_without_comments(code)
-        return code, pure_code
-    except:
+        return code, pure_code  # noqa: TRY300
+    except:  # noqa: E722
         return "", ""
 
 
@@ -218,18 +193,18 @@ def get_tool(df: Any, df_names=None):
     :return Runnable
     """
     tool = PythonAstREPLTool()
-    if df_names == None:
+    if df_names is None:
         if isinstance(df, pd.DataFrame):
-            locals = {"df": df}
+            _locals = {"df": df}
         else:
-            locals = {}
+            _locals = {}
             for i, dataframe in enumerate(df):
-                locals[f"df{i + 1}"] = dataframe
+                _locals[f"df{i + 1}"] = dataframe
     else:
-        locals = {}
+        _locals = {}
         for i, dataframe in enumerate(df):
-            locals[df_names[i]] = dataframe
-    tool.locals = locals
+            _locals[df_names[i]] = dataframe
+    tool.locals = _locals
     tool.globals = tool.locals
     return tool
 
@@ -238,29 +213,21 @@ def get_table_infos(table_paths):
     """将所有csv文件对应的df-info拼装到一起"""
     infos_list = []
     if len(table_paths) == 1:
-        df_markdown_info = str(
-            pd.read_csv(table_paths[0], encoding="utf-8")
-            .head(3)
-            .to_markdown(index=False)
-        )
+        df_markdown_info = str(pd.read_csv(table_paths[0], encoding="utf-8").head(3).to_markdown(index=False))
         normalized_head = f"""/*\n"df.head()" as follows:\n{df_markdown_info}\n*/"""
         infos_list.append(normalized_head)
     else:
         for i, path in enumerate(table_paths):
             # normalized_name = normalize_table_name(path)
-            df_markdown_info = str(
-                pd.read_csv(path, encoding="utf-8").head(3).to_markdown(index=False)
-            )
-            normalized_head = (
-                f"""/*\n"df{i+1}.head()" as follows:\n{df_markdown_info}\n*/"""
-            )
+            df_markdown_info = str(pd.read_csv(path, encoding="utf-8").head(3).to_markdown(index=False))
+            normalized_head = f"""/*\n"df{i+1}.head()" as follows:\n{df_markdown_info}\n*/"""
             # single_table_name = "\n".join([normalized_head, df_markdown_info])
             infos_list.append(normalized_head)
     return "\n".join(infos_list)
 
 
-# 定义一个异常类，用于超时处理
-class TimeoutException(Exception):
+# 定义一个异常类, 用于超时处理
+class TimeoutException(Exception):  # noqa: N818
     pass
 
 
@@ -268,8 +235,10 @@ class TimeoutException(Exception):
 @contextmanager
 def timeout(time):
     # 定义信号处理函数
-    def raise_timeout(signum, frame):
-        raise TimeoutException(f"Timeout error, running time exceed {time}")
+    def raise_timeout(signum, frame):  # noqa: ARG001
+        raise TimeoutException(  # noqa: TRY003
+            f"Timeout error, running time exceed {time}"  # noqa: EM102
+        )
 
     # 设置信号定时器
     signal.signal(signal.SIGALRM, raise_timeout)
@@ -285,7 +254,7 @@ def run_code(code, result, tool):
     try:
         # 在子线程中运行代码
         result.append(tool.run(code))
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         result.append(e)
 
 
@@ -296,11 +265,12 @@ def execute_with_timeout(code, timeout_seconds, tool):
     thread.join(timeout_seconds)
 
     if thread.is_alive():
-        thread._stop()  # 终止子线程
-        raise TimeoutException(
-            f"Timeout error, running time exceed {timeout_seconds} seconds"
+        # 终止子线程
+        thread._stop()  # noqa: SLF001
+        raise TimeoutException(  # noqa: TRY003
+            f"Timeout error, running time exceed {timeout_seconds} seconds"  # noqa: EM102
         )
-    else:
+    else:  # noqa: RET506
         if isinstance(result[0], Exception):
             raise result[0]
         return result[0]

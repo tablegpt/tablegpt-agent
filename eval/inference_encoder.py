@@ -1,29 +1,32 @@
-import pandas as pd
-from vllm import LLM
-from vllm.sampling_params import SamplingParams
+import contextlib
 import copy
+import gc
+import logging
+
+import pandas as pd
+import torch
+from vllm import LLM
+from vllm.distributed import destroy_distributed_environment, destroy_model_parallel
+from vllm.sampling_params import SamplingParams
+from vllm.utils import is_cpu
+
+logger = logging.getLogger(__name__)
 
 
 def extract_contrastive_table(df: pd.DataFrame):
     # Convert DataFrame to the desired format
     return {
         "columns": [
-          {
-              "name": col,
-              "dtype": str(df[col].dtype),
-              "contains_nan": df[col].isnull().any(),
-              "is_unique":df[col].nunique() == len(df[col]),
-              "values": df[col].tolist(),  # slice?
-          }
-          for col in df.columns
-      ]
+            {
+                "name": col,
+                "dtype": str(df[col].dtype),
+                "contains_nan": df[col].isnull().any(),
+                "is_unique": df[col].nunique() == len(df[col]),
+                "values": df[col].tolist(),  # slice?
+            }
+            for col in df.columns
+        ]
     }
-
-import contextlib
-import gc
-import torch
-from vllm.distributed import destroy_distributed_environment, destroy_model_parallel
-from vllm.utils import is_cpu
 
 
 def cleanup():
@@ -35,8 +38,9 @@ def cleanup():
     if not is_cpu():
         torch.cuda.empty_cache()
 
+
 def inference_with_encoder(args, format_msg_datas):
-    print("Load model...")
+    logger.info("Load model...")
     model = LLM(
         model=args.model_path,
         max_model_len=args.max_model_len,
@@ -55,13 +59,12 @@ def inference_with_encoder(args, format_msg_datas):
     cleanup()
     return model_outputs_text
 
+
 def truncate(value, max_length=80):
-    new_value = ""
     if not isinstance(value, str) or len(value) <= max_length:
-        new_value = value
-    else:
-        new_value = value[:max_length] + "..."
-    return new_value
+        return value
+    return value[:max_length] + "..."
+
 
 def format_encoder_tables(df_names, table_paths):
     tables = []
@@ -75,24 +78,25 @@ def format_encoder_tables(df_names, table_paths):
         max_columns = 50  # 可以根据你的需求设置这个数量
         if len(df.columns) > max_columns:
             df = df.iloc[:, :max_columns]
-            
+
         df_extra_info = extract_contrastive_table(df)
         tables_info.append(copy.deepcopy(f"Details about the '{df_name}' other info as follows:\n<TABLE_CONTENT>\n"))
         tables.append(copy.deepcopy(df_extra_info))
-    
-    tables_list = []
-    for tb in tables:
-        tables_list.append({
+
+    tables_list = [
+        {
             "type": "table",
             "table": tb,
-        })
+        }
+        for tb in tables
+    ]
 
     return tables_list, tables_info
+
 
 def build_encoder_table_part_content(df_names, table_paths):
     content_msg = []
     for idx, table_path in enumerate(table_paths):
-        
         content_msg.append(
             {
                 "type": "text",
@@ -108,14 +112,7 @@ def build_encoder_table_part_content(df_names, table_paths):
         if len(df.columns) > max_columns:
             df = df.iloc[:, :max_columns]
 
-        content_msg.append(
-            {
-                "type": "table",
-                "table": extract_contrastive_table(
-                    copy.deepcopy(df)
-                )
-            }
-        )
+        content_msg.append({"type": "table", "table": extract_contrastive_table(copy.deepcopy(df))})
         content_msg.append(
             {
                 "type": "text",
@@ -125,6 +122,7 @@ def build_encoder_table_part_content(df_names, table_paths):
 
     return content_msg
 
+
 def read_df_head(table_path, head_num=3, format_type="string"):
     df = pd.read_csv(table_path, encoding="utf-8", nrows=500)
     df.columns = df.columns.str.strip()
@@ -133,7 +131,7 @@ def read_df_head(table_path, head_num=3, format_type="string"):
     max_columns = 50  # 可以根据你的需求设置这个数量
     if len(df.columns) > max_columns:
         df = df.iloc[:, :max_columns]
-        
+
     df_head = copy.deepcopy(df.head(head_num))
     df_truncated_head = df_head.apply(lambda x: x.map(lambda y: truncate(y, 80)))
     if format_type == "string":
@@ -143,4 +141,3 @@ def read_df_head(table_path, head_num=3, format_type="string"):
     else:
         df_truncated_head_str = df_truncated_head.to_string()
     return df_truncated_head_str, df
-
