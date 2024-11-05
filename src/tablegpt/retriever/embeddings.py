@@ -3,7 +3,6 @@ from __future__ import annotations
 import asyncio
 import itertools
 from sys import version_info
-from typing import override
 from urllib.parse import urljoin
 
 import aiohttp
