@@ -54,7 +54,7 @@ async def main() -> None:
 
   agent = create_tablegpt_graph(
     llm=llm,
-    pybox_manager=app_state.pybox_manager,
+    pybox_manager=pybox_manager,
   )
 
   message = HumanMessage(content="Hi")
