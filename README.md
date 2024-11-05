@@ -36,6 +36,7 @@ python -m vllm.entrypoints.openai.api_server --served-model-name TableGPT2-7B --
 Once the server is set up, you can use the following code to interact with the TableGPT model:
 
 ```python
+import asyncio
 from datetime import date
 
 from langchain_core.messages import HumanMessage
@@ -44,28 +45,34 @@ from tablegpt.agent import create_tablegpt_graph
 from pybox import LocalPyBoxManager
 
 
-llm = ChatOpenAI(openai_api_base=YOUR_VLLM_URL, openai_api_key="whatever", model_name="TableGPT2-7B")
+# tablegpt-agent fully supports async invocation
+async def main() -> None:
+  llm = ChatOpenAI(openai_api_base=YOUR_VLLM_URL, openai_api_key="whatever", model_name="TableGPT2-7B")
 
-# Use local pybox manager for development and testing
-pybox_manager = LocalPyBoxManager()
+  # Use local pybox manager for development and testing
+  pybox_manager = LocalPyBoxManager()
 
-agent = create_tablegpt_graph(
-  llm=llm,
-  pybox_manager=app_state.pybox_manager,
-)
+  agent = create_tablegpt_graph(
+    llm=llm,
+    pybox_manager=app_state.pybox_manager,
+  )
 
-message = HumanMessage(content="Hi")
-input = {
-    "messages": [message],
-    "parent_id": "some-parent-id",
-    "date": date.today(),
-}
+  message = HumanMessage(content="Hi")
+  input = {
+      "messages": [message],
+      "parent_id": "some-parent-id",
+      "date": date.today(),
+  }
 
-async for event in agent.astream_events(
-    input=input,
-    version="v2",
-):
-    print(event)
+
+  async for event in agent.astream_events(
+      input=input,
+      version="v2",
+  ):
+      print(event)
+
+
+asyncio.run(main())
 ```
 
 <!-- API reference -->
