@@ -10,7 +10,6 @@ from tablegpt.utils import (
     filter_content,
     format_columns,
     get_raw_table_info,
-    list_sheets,
     path_from_uri,
 )
 
@@ -112,22 +111,6 @@ Here are some extra column information that might help you understand the datase
 """
         formated_columns = format_columns(docs, dataset_cell_length_threshold=3, max_dataset_cells=2)
         assert formated_columns == hint
-
-
-class TestListSheets(unittest.TestCase):
-    def setUp(self):
-        self.mock_excel_file = MagicMock()
-        # Patch pandas.ExcelFile to return the mock ExcelFile object
-        patcher = patch("pandas.ExcelFile", return_value=self.mock_excel_file)
-        self.mock_pd_excelfile = patcher.start()
-        self.addCleanup(patcher.stop)  # Ensure patch is stopped after tests
-
-    def test_list_sheets_with_sheets(self):
-        """Test list sheets when Excel file contains sheets."""
-        self.mock_excel_file.sheet_names = ["Sheet1", "Sheet2"]
-        path = Path("/home/user/file.xlsx")
-        sheet_names = list_sheets(path)
-        assert sheet_names == ["Sheet1", "Sheet2"]
 
 
 class TestGetRawTableInfo(unittest.TestCase):
