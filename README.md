@@ -136,9 +136,14 @@ For more information about TableGPT2, see the [TableGPT2 Model Card](https://hug
 
 If you find our work helpful, please cite us by
 
-```
-
-@misc{
+```bibtex
+@misc{su2024tablegpt2largemultimodalmodel,
+      title={TableGPT2: A Large Multimodal Model with Tabular Data Integration}, 
+      author={Aofeng Su and Aowen Wang and Chao Ye and Chen Zhou and Ga Zhang and Guangcheng Zhu and Haobo Wang and Haokai Xu and Hao Chen and Haoze Li and Haoxuan Lan and Jiaming Tian and Jing Yuan and Junbo Zhao and Junlin Zhou and Kaizhe Shou and Liangyu Zha and Lin Long and Liyao Li and Pengzuo Wu and Qi Zhang and Qingyi Huang and Saisai Yang and Tao Zhang and Wentao Ye and Wufang Zhu and Xiaomeng Hu and Xijun Gu and Xinjie Sun and Xiang Li and Yuhang Yang and Zhiqing Xiao},
+      year={2024},
+      eprint={2411.02059},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={https://arxiv.org/abs/2411.02059}, 
 }
-
 ```
