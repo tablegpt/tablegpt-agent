@@ -1,23 +1,20 @@
 # RealTabBench:  A varies of table-related benchmarks evaluations for tablegpt
 
-
-
-
 ## Overview
 
-This is a repo opened for evaluation on different table-related benchmarks for tablegpt. 
+This is a repo opened for evaluation on different table-related benchmarks for tablegpt.
 
-Given the complexity of table related tasks and the uncertainty of input instructions,  we prepare to provide evaluation datasets and scripts for 3 different table-related benchmarks: 
+Given the complexity of table related tasks and the uncertainty of input instructions,  we prepare to provide evaluation datasets and scripts for 3 different table-related benchmarks:
 
 - ✨Table-Bench.
 - ✨Text2Sql.
 - ✨TableInstruct,  which includes a series of table-related evaluation benchmarks.
 
-We have built an inference method based on the  local model path using vLLM as the backend, and defined a set of example prompts templates for the above benchmarks. 
+We have built an inference method based on the  local model path using vLLM as the backend, and defined a set of example prompts templates for the above benchmarks.
 
-Currently, we have only open-sourced the evaluation scripts and data for the Text2Sql task. 
+Currently, we have only open-sourced the evaluation scripts and data for the Text2Sql task.
 
-**## Usage**
+## Usage
 
 </div>
 
@@ -26,13 +23,9 @@ Currently, we have only open-sourced the evaluation scripts and data for the Tex
 ⏬ To use this framework, please first install the repository from GitHub:
 
 ```shell
-
 git clone https://github.com/tablegpt/tablegpt-agent
-
 cd realtabbench
-
 pip install -r requirements.txt
-
 ```
 
 </div>
@@ -41,20 +34,15 @@ pip install -r requirements.txt
 
 ### Text2SQL evaluation
 
-**Running steps**
+Running steps
 
-1.   The database files are shared in google drive. The file urls are as follows:
+1. The database files are shared in google drive. The file urls are as follows:
 
-   ```python
-   # spider dev
-   https://drive.google.com/file/d/15xVsPLEVHXxyfczrAjYYKUEzFX6Jxjzn/view?usp=sharing
-   # spider test
-   https://drive.google.com/file/d/1O_Bs4Nw4vIjKx2T5IXUgjhG4AxVxCl78/view?usp=sharing
-   # bird dev
-   https://drive.google.com/file/d/1gXS8syJC0WcyDzX3LT2AdDxs9peWhsyV/view?usp=sharing
-   ```
+- [spider dev](https://drive.google.com/file/d/15xVsPLEVHXxyfczrAjYYKUEzFX6Jxjzn/view?usp=sharing)
+- [spider test](https://drive.google.com/file/d/1O_Bs4Nw4vIjKx2T5IXUgjhG4AxVxCl78/view?usp=sharing)
+- [bird dev](https://drive.google.com/file/d/1gXS8syJC0WcyDzX3LT2AdDxs9peWhsyV/view?usp=sharing)
 
-2.  Download and unzip all the zip files to the specified directories:
+1. Download and unzip all the zip files to the specified directories:
 
    ```bash
    unzip bird_dev_database.zip -d realtabbench/evalset/bird_data \
@@ -64,12 +52,10 @@ pip install -r requirements.txt
    unzip spider_test_database.zip -d realtabbench/evalset/spider_data
    ```
 
-3.  run eval script to get bird or spider metric(accuracy)
+1. run eval script to get bird or spider metric(accuracy)
 
    ```bash
    python realtabbench/run_text2sql_eval.py --model_path <MODEL_PATH> \
    --eval_data_name <enum ["bird", "spider"]> \
    --mode <enum ["dev", "test"]>
    ```
-
-   
