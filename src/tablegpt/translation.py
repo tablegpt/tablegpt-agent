@@ -23,6 +23,6 @@ translation_prompt_template = ChatPromptTemplate.from_messages(
 output_parser = StrOutputParser()
 
 
-def get_translation_chain(llm: BaseLanguageModel) -> Runnable:
+def create_translator(llm: BaseLanguageModel) -> Runnable:
     """return the guard chain runnable."""
     return translation_prompt_template | llm | output_parser

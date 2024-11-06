@@ -1,7 +1,7 @@
 import unittest
 from unittest import mock
 
-from tablegpt.chains.safety import HazardOutputParser
+from tablegpt.safety import HazardOutputParser
 
 
 class TestHazardOutputParser(unittest.TestCase):
@@ -21,7 +21,7 @@ class TestHazardOutputParser(unittest.TestCase):
         assert result == ("unknown", None)
 
     @mock.patch(
-        "tablegpt.chains.safety.hazard_categories",
+        "tablegpt.safety.hazard_categories",
         {
             "hazard1": "category1",
         },
@@ -31,7 +31,7 @@ class TestHazardOutputParser(unittest.TestCase):
         assert result == ("unsafe", "category1")
 
     @mock.patch(
-        "tablegpt.chains.safety.hazard_categories",
+        "tablegpt.safety.hazard_categories",
         {
             "hazard1": "category1",
         },

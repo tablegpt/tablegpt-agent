@@ -11,14 +11,14 @@ from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.prebuilt import ToolNode
 from pybox.base import BasePyBoxManager  # noqa: TCH002
 
-from tablegpt.chains.data_normalizer import (
+from tablegpt.agent.file_reading.data_normalizer import (
     get_data_normalize_chain,
     get_table_reformat_chain,
     wrap_normalize_code,
 )
-from tablegpt.chains.translation import get_translation_chain
 from tablegpt.errors import NoAttachmentsError
 from tablegpt.tools import IPythonTool, markdown_console_template
+from tablegpt.translation import create_translator
 from tablegpt.utils import get_raw_table_info
 
 if TYPE_CHECKING:
@@ -83,7 +83,7 @@ def create_file_reading_workflow(
 
     translation_chain = None
     if locale is not None:
-        translation_chain = get_translation_chain(llm=llm)
+        translation_chain = create_translator(llm=llm)
 
     tools = [IPythonTool(pybox_manager=pybox_manager, cwd=workdir, session_id=session_id)]
     tool_executor = ToolNode(tools)

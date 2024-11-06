@@ -16,8 +16,8 @@ from langgraph.graph import END, START, MessagesState, StateGraph
 from langgraph.prebuilt import ToolNode
 
 from tablegpt.agent.output_parser import MarkdownOutputParser
-from tablegpt.chains import create_hazard_classifier
 from tablegpt.retriever import format_columns
+from tablegpt.safety import create_hazard_classifier
 from tablegpt.tools import IPythonTool, markdown_console_template, process_content
 from tablegpt.utils import filter_contents
 
