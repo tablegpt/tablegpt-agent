@@ -7,18 +7,12 @@ from langchain_core.documents import Document
 from pandas.api.types import is_string_dtype
 
 from tablegpt.retriever.compressor import ColumnDocCompressor
-from tablegpt.retriever.embeddings import HuggingfaceTEIEmbeddings
-from tablegpt.retriever.reranker import HuggingfaceTEIReranker
-from tablegpt.retriever.vectorstore import FallbackQdrant
 
 if TYPE_CHECKING:
     from pandas import Series
 
 __all__ = [
     "ColumnDocCompressor",
-    "HuggingfaceTEIEmbeddings",
-    "HuggingfaceTEIReranker",
-    "FallbackQdrant",
     "column2docs",
     "format_columns",
 ]
