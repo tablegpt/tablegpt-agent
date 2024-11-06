@@ -1,17 +1,13 @@
+from __future__ import annotations
+
 import asyncio
+import datetime
 import json
 import logging
 import traceback
-from datetime import datetime
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import aiofiles
-from langchain_openai import ChatOpenAI
-from langgraph.checkpoint.base import Checkpoint
-from langgraph.checkpoint.memory import MemorySaver
-from tqdm.asyncio import tqdm
-
-from agent_eval.config import EvalSettings
 from agent_eval.grader import grader_chain
 from agent_eval.grader.prompt import (
     DEFAULT_CRITERIA_WITH_REFERENCE_ANSWER,
@@ -19,11 +15,19 @@ from agent_eval.grader.prompt import (
 )
 from agent_eval.student import create_student_graph, student_context
 from agent_eval.workflow import create_eval_workflow
+from langchain_openai import ChatOpenAI
+from langgraph.checkpoint.memory import MemorySaver
+from tqdm.asyncio import tqdm
+
+if TYPE_CHECKING:
+    from agent_eval.config import EvalSettings
+    from langgraph.checkpoint.base import Checkpoint
+
 
 logger = logging.getLogger(__name__)
 
 # TODO: make this configurable, and we can continue running after an error
-eval_run_output_file = f"eval_run_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl"
+eval_run_output_file = f"eval_run_{datetime.datetime.now(tz=datetime.UTC).strftime('%Y%m%d_%H%M%S')}.jsonl"
 
 
 class Evaluator:
@@ -151,7 +155,7 @@ class Evaluator:
                     # No more tasks in the queue, quit current worker
                     logger.info("Worker finished")
                     break
-                except Exception as e:
+                except Exception:
                     logger.exception("Worker encountered an error")
                     stop_event.set()  # Set the stop event to cancel other workers
                     break
@@ -163,7 +167,8 @@ class Evaluator:
         for dataset_config in self.config.datasets:
             logger.debug("Gathering samples from dataset: %s...", dataset_config.name)
 
-            with open(dataset_config.name, "r") as f:
+            # TODO: open with aiofiles
+            with open(dataset_config.name) as f:  # noqa: ASYNC101
                 dataset = json.load(f)
             _samples = gather_samples(dataset)
             logger.debug(
@@ -186,9 +191,7 @@ class Evaluator:
                     )
                     for i in range(self.config.max_concurrency)
                 ]
-                await asyncio.gather(
-                    *eval_tasks, return_exceptions=True
-                )  # Ensure all consumers exit
+                await asyncio.gather(*eval_tasks, return_exceptions=True)  # Ensure all consumers exit
             except Exception:
                 logger.exception("Error in evaluator")
             finally:
@@ -196,14 +199,12 @@ class Evaluator:
 
 
 def gather_samples(dataset: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    samples = []
     active_samples = [item for item in dataset if item["status"] != "ARCHIVED"]
 
-    for item in active_samples:
-        samples.append(
-            {
-                "item": item,
-                "datasets": item.get("attachments", []),
-            }
-        )
-    return samples
+    return [
+        {
+            "item": item,
+            "datasets": item.get("attachments", []),
+        }
+        for item in active_samples
+    ]

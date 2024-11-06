@@ -91,9 +91,7 @@ def main(dataset_path, questions_path: Path, description: str, *, nrows: int = 3
 if __name__ == "__main__":
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Generate questions based on the given dataset."
-    )
+    parser = argparse.ArgumentParser(description="Generate questions based on the given dataset.")
     parser.add_argument(
         "--dataset",
         required=True,

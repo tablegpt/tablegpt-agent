@@ -38,8 +38,8 @@ class FloatScoreOutputParser(ScoreStringResultOutputParser):
             score_str = match.group(1).strip()
             score = float(score_str)
             if score > self.upper_bound or score < self.lower_bound:
-                raise ValueError(
-                    f"Invalid output: {text}. "
+                raise ValueError(  # noqa: TRY003
+                    f"Invalid output: {text}. "  # noqa: EM102
                     f"Output must contain a double bracketed string with the verdict between {self.lower_bound} and {self.upper_bound}."
                 )
             reason = text.rsplit(self.prefix, maxsplit=1)[0].strip()
@@ -47,7 +47,6 @@ class FloatScoreOutputParser(ScoreStringResultOutputParser):
                 "reason": reason,
                 "score": round(score, 2),
             }
-        else:
-            raise ValueError(
-                f"Invalid output: {text}. Output must contain a double bracketed string. example: [[0.5]]"
-            )
+        raise ValueError(  # noqa: TRY003
+            f"Invalid output: {text}. Output must contain a double bracketed string. example: [[0.5]]"  # noqa: EM102
+        )

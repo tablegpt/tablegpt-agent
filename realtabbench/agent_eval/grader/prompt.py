@@ -28,7 +28,7 @@ def format_criteria(criteria: list[str]) -> str:
         return ""
     return f"""## Evaluation Criteria
 Consider the following criteria when assigning the rating:
-{"\n".join(map(lambda x: "- " + x, criteria))}
+{"\n".join(["- " + x for x in criteria])}
 """
 
 
@@ -37,7 +37,7 @@ def format_redlines(attentions: list[str]) -> str:
         return ""
     return f"""## Redlines
 If the answer touches one of the redlines listed below, assign a score of [[0.0]] directly.
-{"\n".join(map(lambda x: "- " + x, attentions))}
+{"\n".join(["- " + x for x in attentions])}
 """
 
 

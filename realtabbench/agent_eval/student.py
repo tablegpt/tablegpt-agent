@@ -1,21 +1,26 @@
+from __future__ import annotations
+
 import logging
 import shutil
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import TYPE_CHECKING
 from uuid import uuid4
 
 from agent_eval.student_config import Settings
 from langchain_core.messages import HumanMessage
-from langchain_core.runnables import Runnable
 from langchain_openai import ChatOpenAI
-from langgraph.checkpoint.base import BaseCheckpointSaver
-from langgraph.graph.graph import CompiledGraph
 from pybox import LocalPyBoxManager
 from pybox.kube import KubePyBoxManager
 from pydantic import BaseModel
-
 from tablegpt.agent import create_tablegpt_graph
 from tablegpt.agent.file_reading import Stage
+
+if TYPE_CHECKING:
+    from langchain_core.runnables import Runnable
+    from langgraph.checkpoint.base import BaseCheckpointSaver
+    from langgraph.graph.graph import CompiledGraph
+
 
 logger = logging.getLogger(__name__)
 
@@ -39,9 +44,7 @@ model_type = llm_args.get("metadata", {}).get("model_type")
 llm = ChatOpenAI(**llm_args)
 
 vlm = ChatOpenAI(**settings.vlm) if settings.vlm else None
-normalize_llm = (
-    ChatOpenAI(**settings.normalize_llm) if settings.normalize_llm is not None else None
-)
+normalize_llm = ChatOpenAI(**settings.normalize_llm) if settings.normalize_llm is not None else None
 
 
 # TODO: a copy-paste from tablegpt-chat

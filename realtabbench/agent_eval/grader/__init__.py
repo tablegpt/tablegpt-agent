@@ -17,17 +17,9 @@ output_parser = FloatScoreOutputParser()
 
 
 formatter = RunnableParallel(
-    criteria=lambda x: (
-        format_criteria(x["criteria"]) if "criteria" in x and x["criteria"] else ""
-    ),
-    redlines=lambda x: (
-        format_redlines(x["redlines"]) if "redlines" in x and x["redlines"] else ""
-    ),
-    reference_answer=lambda x: (
-        format_reference_answer(x["reference_answer"])
-        if "reference_answer" in x and x["reference_answer"]
-        else ""
-    ),
+    criteria=lambda x: (format_criteria(x["criteria"]) if x.get("criteria") else ""),
+    redlines=lambda x: (format_redlines(x["redlines"]) if x.get("redlines") else ""),
+    reference_answer=lambda x: (format_reference_answer(x["reference_answer"]) if x.get("reference_answer") else ""),
     question=itemgetter("question"),
     answer=itemgetter("answer"),
 )

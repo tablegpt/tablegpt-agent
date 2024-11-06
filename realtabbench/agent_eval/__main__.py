@@ -10,12 +10,10 @@ from dotenv import find_dotenv, load_dotenv
 from langchain.globals import set_debug
 from traitlets.log import get_logger
 
-LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
-
-
 logger = logging.getLogger(__name__)
-logger.setLevel(level=LOG_LEVEL)
 
+
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 set_debug(LOG_LEVEL.upper() == "TRACE")
 
 # silent traitlets logs

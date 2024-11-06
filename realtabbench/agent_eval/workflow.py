@@ -1,10 +1,14 @@
+from __future__ import annotations
+
 from datetime import date
-from typing import TypedDict
+from typing import TYPE_CHECKING, TypedDict
 from uuid import uuid4
 
 from langchain_core.messages import HumanMessage
-from langchain_core.runnables import Runnable
 from langgraph.graph import END, START, StateGraph
+
+if TYPE_CHECKING:
+    from langchain_core.runnables import Runnable
 
 
 class AgentState(TypedDict):
@@ -35,7 +39,7 @@ def create_eval_workflow(
             input={
                 "parent_id": str(uuid4()),
                 "messages": [HumanMessage(content=data["input"])],
-                "date": date.today(),
+                "date": date.today(),  # noqa: DTZ011
             },
         )
         student_answer = student_state["messages"][-1]
@@ -66,6 +70,4 @@ def create_eval_workflow(
     workflow.add_edge("arun_student_graph", "arun_grader_chain")
     workflow.add_edge("arun_grader_chain", END)
 
-    app = workflow.compile()
-
-    return app
+    return workflow.compile()

@@ -1,4 +1,5 @@
 import argparse
+import logging
 from pathlib import Path
 from typing import Any
 from uuid import uuid4
@@ -6,6 +7,8 @@ from uuid import uuid4
 import yaml
 from pydantic import BaseModel, Field, PositiveInt
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+logger = logging.getLogger(__name__)
 
 
 class DatasetSettings(BaseModel):
@@ -37,13 +40,14 @@ def load_config() -> dict[str, Any]:
     args = parser.parse_args()
     config_path = Path(args.config).absolute()
     if not config_path.exists():
-        raise RuntimeError(f"Config file '{args.config}' not found")
+        raise RuntimeError(f"Config file '{args.config}' not found")  # noqa: TRY003, EM102
 
-    print(f"Using config file: {config_path}")
-    with open(str(config_path), "r") as file:
+    logger.info("Using config file: %s", config_path)
+    with open(str(config_path)) as file:
         try:
             config = yaml.safe_load(file)
-        except Exception as e:
-            raise ValueError(f"Error loading config file: {e}")
+        except Exception:
+            logger.exception("Error loading config file")
+            raise
 
     return EvalSettings(**config)
