@@ -3,39 +3,17 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
-from langchain_core.documents import Document
-from pandas.api.types import is_string_dtype
-
 from tablegpt.retriever.compressor import ColumnDocCompressor
+from tablegpt.retriever.loader import CSVLoader
 
 if TYPE_CHECKING:
-    from pandas import Series
+    from langchain_core.documents import Document
 
 __all__ = [
+    "CSVLoader",
     "ColumnDocCompressor",
-    "column2docs",
     "format_columns",
 ]
-
-
-def column2docs(column: Series, metadata: dict | None = None) -> list[Document]:
-    # If a string column contains NaN, it will be presented as object dtype.
-    dtype = "string" if is_string_dtype(column.dropna()) else str(column.dtype)
-    unique_values = column.unique()
-    metadata = {} if metadata is None else metadata
-    return [
-        Document(
-            page_content=f"{column.name}:{value}",
-            metadata={
-                "column": column.name,
-                "dtype": dtype,
-                "n_unique": len(unique_values),
-                "value": str(value),  # may need to further consolidate
-            }
-            | metadata,
-        )
-        for value in unique_values
-    ]
 
 
 def format_columns(
