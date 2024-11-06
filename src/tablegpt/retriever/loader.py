@@ -66,6 +66,7 @@ class CSVLoader(BaseLoader):
     async def alazy_load(self) -> AsyncIterator[Document]:
         """A lazy loader for Documents."""
         # TODO: pandas does not support async read_csv yet. We might need to async read the file first.
+        return await super().alazy_load()
 
     def column2docs(self, column: Series) -> Iterator[Document]:
         # If a string column contains NaN, it will be presented as object dtype.
