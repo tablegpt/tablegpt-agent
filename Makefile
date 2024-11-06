@@ -14,6 +14,9 @@ test:
 wheel:
 	hatch build
 
+doc:  # use 'doc' instead of 'docs', as 'make docs' is a make command
+	hatch env run -e docs mkdocs build
+
 clean:
 	hatch clean
 
@@ -23,8 +26,9 @@ clean:
 
 help:
 	@echo '----'
-	@echo 'format                       - run code formatters'
 	@echo 'lint                         - run linters'
+	@echo 'format                       - run code formatters'
 	@echo 'test                         - run unit tests'
 	@echo 'wheel                        - build wheel package'
+	@echo 'doc                          - build documentation site'
 	@echo 'clean                        - clean up'

@@ -50,6 +50,13 @@ extra-dependencies = [
 [tool.hatch.envs.types.scripts]
 check = "mypy --install-types --non-interactive {args:src/tablegpt tests}"
 
+[tool.hatch.envs.docs]
+dependencies = [
+  "mkdocs",
+  "mkdocstrings[python]",
+  "mkdocs-material",
+]
+
 [tool.coverage.run]
 source_pkgs = ["tablegpt", "tests"]
 branch = true
