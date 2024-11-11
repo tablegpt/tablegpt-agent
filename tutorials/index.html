@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#installation" class="md-skip">
+        <a href="#tutorials" class="md-skip">
           Skip to content
         </a>
       
@@ -206,6 +206,8 @@
       <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
       
       
+        
+      
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
           
@@ -233,6 +235,8 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
+  
+    
   
   
     <label class="md-nav__title" for="__toc">
@@ -362,6 +366,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -423,8 +429,7 @@
   
 
 
-  <h1>Tutorials</h1>
-
+<h1 id="tutorials">Tutorials</h1>
 <h2 id="installation">Installation</h2>
 <p>To install <code>tablegpt-agent</code>, use the following command:</p>
 <pre><code class="language-sh">pip install tablegpt-agent
@@ -437,10 +442,10 @@
 <pre><code class="language-sh">python -m vllm.entrypoints.openai.api_server --served-model-name TableGPT2-7B --model path/to/weights
 </code></pre>
 <blockquote>
-<p><strong>Note:</strong> For production environments, it’s important to optimize the vllm server configuration. For details, refer to the <a href="https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server">vllm documentation on server configuration</a>.</p>
+<p><strong>Note:</strong> For production environments, it's important to optimize the vllm server configuration. For details, refer to the <a href="https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server">vllm documentation on server configuration</a>.</p>
 </blockquote>
 <h2 id="quick-start">Quick Start</h2>
-<p>To create a <code>TablegptAgent</code>, you’ll need both <code>LLM</code> and <code>PyBoxManager</code> components:</p>
+<p>To create a <code>TablegptAgent</code>, you'll need both <code>LLM</code> and <code>PyBoxManager</code> components:</p>
 <pre><code class="language-python">from langchain_openai import ChatOpenAI
 from pybox import LocalPyBoxManager
 from tablegpt.agent import create_tablegpt_graph
@@ -542,7 +547,7 @@ agent = create_tablegpt_graph(
     session_id=&quot;some-session-id&quot;,
 )
 </code></pre>
-<p>Add the file for processing in the additional_kwargs of HumanMessage. Here’s an example using the <a href="https://github.com/tablegpt/tablegpt-agent/blob/main/examples/datasets/titanic.csv">Titanic dataset</a>.</p>
+<p>Add the file for processing in the additional_kwargs of HumanMessage. Here's an example using the <a href="https://github.com/tablegpt/tablegpt-agent/blob/main/examples/datasets/titanic.csv">Titanic dataset</a>.</p>
 <pre><code class="language-python">from typing import TypedDict
 from langchain_core.messages import HumanMessage
 
@@ -688,6 +693,7 @@ async def main() -&gt; None:
 
 asyncio.run(main())
 </code></pre>
+
 
 </details>
 
