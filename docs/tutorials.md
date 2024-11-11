@@ -1,3 +1,5 @@
+# Tutorials
+
 ## Installation
 
 To install `tablegpt-agent`, use the following command:
@@ -20,12 +22,11 @@ Before using `tablegpt-agent`, ensure that you have an OpenAI-compatible server 
 python -m vllm.entrypoints.openai.api_server --served-model-name TableGPT2-7B --model path/to/weights
 ```
 
-> **Note:** For production environments, it’s important to optimize the vllm server configuration. For details, refer to the [vllm documentation on server configuration](https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server).
-
+> **Note:** For production environments, it's important to optimize the vllm server configuration. For details, refer to the [vllm documentation on server configuration](https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server).
 
 ## Quick Start
 
-To create a `TablegptAgent`, you’ll need both `LLM` and `PyBoxManager` components:
+To create a `TablegptAgent`, you'll need both `LLM` and `PyBoxManager` components:
 
 ```python
 from langchain_openai import ChatOpenAI
@@ -128,11 +129,9 @@ asyncio.run(main())
 
 </details>
 
-
 ## Data Analysis
 
 Beyond simple conversations, `tablegpt-agent` can also analyze and process table data. For data analysis, preprocess the data first with TableGPT. Use a fixed session_id to keep the agent within the same execution context, and set a save point to enable memory retention:
-
 
 ```python
 from langgraph.checkpoint.memory import MemorySaver
@@ -145,7 +144,7 @@ agent = create_tablegpt_graph(
 )
 ```
 
-Add the file for processing in the additional_kwargs of HumanMessage. Here’s an example using the [Titanic dataset](https://github.com/tablegpt/tablegpt-agent/blob/main/examples/datasets/titanic.csv).
+Add the file for processing in the additional_kwargs of HumanMessage. Here's an example using the [Titanic dataset](https://github.com/tablegpt/tablegpt-agent/blob/main/examples/datasets/titanic.csv).
 
 ```python
 from typing import TypedDict
@@ -304,4 +303,5 @@ async def main() -> None:
 
 asyncio.run(main())
 ```
+
 </details>
