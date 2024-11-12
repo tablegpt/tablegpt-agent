@@ -6,12 +6,25 @@ theme:
 plugins:
   - mkdocstrings
 
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
 nav:
-  - index.md
-  - tutorials.md
-  - how-to-guides.md
-  - reference.md
-  - explanation.md
+  - Home: index.md
+  - Tutorials:
+    - 'Quick Start': tutorials/quickstart.md
+    - 'Chat on tablular data': tutorials/table-chat.md
+  - 'How-To Guides':
+    - 'Enhance TableGPT Agent with RAG': howto/retrieval.md
+    - 'Persist Messages': howto/persist-messages.md
+  - Reference: reference.md
+  - Explanation: explanation.md
 
 repo_name: tablegpt/tablegpt-agent
 repo_url: https://github.com/tablegpt/tablegpt-agent

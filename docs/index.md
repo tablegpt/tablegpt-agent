@@ -9,14 +9,19 @@ tablegpt-agent is a pre-built agent for [TableGPT2 (huggingface)](https://huggin
 
 ## Table Of Contents
 
-1. [Tutorials](tutorials.md)
-2. [How-To Guides](how-to-guides.md)
-3. [Reference](reference.md)
-4. [Explanation](explanation.md)
+<!-- mkdocs requires 4 space to intent the list -->
+- Tutorials
+    - [Quickstart](tutorials/quickstart.md)
+    - [Chat on Tabular Data](tutorials/table-chat.md)
+- How-To Guides
+    - [Enhance TableGPT Agent with RAG](howto/retrieval.md)
+    - [Persist Messages](howto/persist-messages.md)
+- [Reference](reference.md)
+- [Explanation](explanation.md)
 
 ## Contributing
 
-For more information on how to contribute, see [here](https://github.com/tablegpt/tablegpt-agent/blob/main/CONTRIBUTING.md).
+Thank you for your interest in TableGPT Agent. For more information on contributing, please see [the contributing guide](https://github.com/tablegpt/tablegpt-agent/blob/main/CONTRIBUTING.md).
 
 ## Acknowledgements
 
