@@ -10,7 +10,7 @@
       
       
       
-        <link rel="next" href="tutorials/">
+        <link rel="next" href="tutorials/quickstart/">
       
       
       <link rel="icon" href="assets/images/favicon.png">
@@ -273,16 +273,80 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="tutorials/" class="md-nav__link">
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
   
   <span class="md-ellipsis">
     Tutorials
   </span>
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Tutorials
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorials/quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quick Start
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="tutorials/table-chat/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chat on tablular data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -293,16 +357,80 @@
   
   
   
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    How-To Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            How-To Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
     <li class="md-nav__item">
-      <a href="how-to-guides/" class="md-nav__link">
+      <a href="howto/retrieval/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    How to guides
+    Enhance TableGPT Agent with RAG
   </span>
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="howto/persist-messages/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Persist Messages
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -318,7 +446,7 @@
         
   
   <span class="md-ellipsis">
-    API Reference
+    Reference
   </span>
   
 
@@ -433,14 +561,23 @@
 <h2 id="introduction">Introduction</h2>
 <p>tablegpt-agent is a pre-built agent for <a href="https://huggingface.co/tablegpt/TableGPT2-7B">TableGPT2 (huggingface)</a>, a series of LLMs for table-based question answering. This agent is built on top of the <a href="https://www.langchain.com/langgraph">Langgraph</a> library and provides a user-friendly interface for interacting with TableGPT2.</p>
 <h2 id="table-of-contents">Table Of Contents</h2>
-<ol>
-<li><a href="tutorials/">Tutorials</a></li>
-<li><a href="how-to-guides/">How-To Guides</a></li>
+<!-- mkdocs requires 4 space to intent the list -->
+<ul>
+<li>Tutorials<ul>
+<li><a href="tutorials/quickstart/">Quickstart</a></li>
+<li><a href="tutorials/table-chat/">Chat on Tabular Data</a></li>
+</ul>
+</li>
+<li>How-To Guides<ul>
+<li><a href="howto/retrieval/">Enhance TableGPT Agent with RAG</a></li>
+<li><a href="howto/persist-messages/">Persist Messages</a></li>
+</ul>
+</li>
 <li><a href="reference/">Reference</a></li>
 <li><a href="explanation/">Explanation</a></li>
-</ol>
+</ul>
 <h2 id="contributing">Contributing</h2>
-<p>For more information on how to contribute, see <a href="https://github.com/tablegpt/tablegpt-agent/blob/main/CONTRIBUTING.md">here</a>.</p>
+<p>Thank you for your interest in TableGPT Agent. For more information on contributing, please see <a href="https://github.com/tablegpt/tablegpt-agent/blob/main/CONTRIBUTING.md">the contributing guide</a>.</p>
 <h2 id="acknowledgements">Acknowledgements</h2>
 <p>We extend our sincere gratitude to all contributors and collaborators who played a pivotal role in the development of tablegpt-agent. Special thanks to our team members and the open-source community, whose insights and feedback were invaluable throughout the project.</p>
 <p>Thank you to our early users for their suggestions and engagement, which have greatly helped in refining and enhancing this tool.</p>
