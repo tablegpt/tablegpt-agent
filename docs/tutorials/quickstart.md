@@ -26,7 +26,7 @@ python -m vllm.entrypoints.openai.api_server --served-model-name TableGPT2-7B --
 
 ## Chat with TableGPT Agent
 
-To create a `TablegptAgent`, you'll need both `LLM` and `PyBoxManager` components:
+To create a `TablegptAgent`, you'll need both an `LLM` and a `PyBoxManager` instance:
 
 ```pycon
 >>> from langchain_openai import ChatOpenAI
