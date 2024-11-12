@@ -12,7 +12,7 @@
         <link rel="prev" href="../..">
       
       
-        <link rel="next" href="../table-chat/">
+        <link rel="next" href="../chat-on-tabular-data/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -325,11 +325,32 @@
   
   
     <li class="md-nav__item">
-      <a href="../table-chat/" class="md-nav__link">
+      <a href="../chat-on-tabular-data/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
     Chat on tablular data
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../continue-analysis-on-generated-charts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Continue Analysis on Generated Charts
   </span>
   
 
@@ -423,6 +444,48 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../howto/incluster-code-execution/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Incluster Code Execution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../howto/normalize-datasets/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Normalize Datasets
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -456,16 +519,80 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../explanation/" class="md-nav__link">
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
         
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
   
   <span class="md-ellipsis">
     Explanation
   </span>
   
 
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Explanation
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../explanation/agent-workflow/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Agent Workflow
+  </span>
+  
+
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../explanation/file-reading/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    File Reading
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
     </li>
   
 
@@ -557,7 +684,7 @@
 <p><strong>Note:</strong> For production environments, it's important to optimize the vllm server configuration. For details, refer to the <a href="https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server">vllm documentation on server configuration</a>.</p>
 </blockquote>
 <h2 id="chat-with-tablegpt-agent">Chat with TableGPT Agent</h2>
-<p>To create a <code>TablegptAgent</code>, you'll need both <code>LLM</code> and <code>PyBoxManager</code> components:</p>
+<p>To create a <code>TablegptAgent</code>, you'll need both an <code>LLM</code> and a <code>PyBoxManager</code> instance:</p>
 <div class="language-pycon highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pybox</span> <span class="kn">import</span> <span class="n">LocalPyBoxManager</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tablegpt.agent</span> <span class="kn">import</span> <span class="n">create_tablegpt_graph</span>

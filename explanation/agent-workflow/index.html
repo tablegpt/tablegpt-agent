@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../../tutorials/continue-analysis-on-generated-charts/">
+        <link rel="prev" href="../../reference/">
       
       
-        <link rel="next" href="../persist-messages/">
+        <link rel="next" href="../file-reading/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Enhance TableGPT Agent with RAG - TableGPT Agent</title>
+        <title>Agent Workflow - TableGPT Agent</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#enhance-tablegpt-agent-with-rag" class="md-skip">
+        <a href="#agent-workflow" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Enhance TableGPT Agent with RAG
+              Agent Workflow
             
           </span>
         </div>
@@ -302,19 +302,17 @@
       
   
   
-    
   
   
-  
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
@@ -328,7 +326,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             How-To Guides
@@ -339,19 +337,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../howto/retrieval/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -360,7 +349,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -373,7 +361,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../persist-messages/" class="md-nav__link">
+      <a href="../../howto/persist-messages/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -394,7 +382,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../incluster-code-execution/" class="md-nav__link">
+      <a href="../../howto/incluster-code-execution/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -415,7 +403,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../normalize-datasets/" class="md-nav__link">
+      <a href="../../howto/normalize-datasets/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -460,17 +448,19 @@
       
   
   
+    
   
   
+  
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
@@ -484,7 +474,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Explanation
@@ -495,10 +485,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../explanation/agent-workflow/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -507,6 +506,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -519,7 +519,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../explanation/file-reading/" class="md-nav__link">
+      <a href="../file-reading/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -576,15 +576,18 @@
   
 
 
-<h1 id="enhance-tablegpt-agent-with-rag">Enhance TableGPT Agent with RAG</h1>
-<p>While the <a href="file-reading-workflow">File Reading Workflow</a> is adequate for most scenarios, it may not always provide the information necessary for the LLM to generate accurate code. Consider the following examples:</p>
+<h1 id="agent-workflow">Agent Workflow</h1>
+<p>The Agent Workflow is the core functionality of the <code>tablegpt-agent</code>. It processes user input and generates appropriate responses. This workflow is similar to those found in most single-agent systems and consists of an agent and various tools. Specifically, the data analysis workflow includes:</p>
 <ul>
-<li>A categorical column in the dataset contains 'foo', 'bar', and 'baz', but 'baz' only appears after approximately 100 rows. In this case, the LLM may not encounter the 'baz' value through <code>df.head()</code>.</li>
-<li>The user's query may not align with the dataset's content for several reasons:</li>
-<li>The dataset lacks proper governance. For instance, a cell value might be misspelled from 'foo' to 'fou'.</li>
-<li>There could be a typo in the user's query. For example, if the user queries, "Show me the data for 'fou'," but the dataset contains 'foo' instead.</li>
+<li><strong>An Agent Powered by TableGPT2</strong>: This agent performs data analysis tasks.</li>
+<li><strong>An IPython tool</strong>: This tool executes the generated code within a sandbox environment.</li>
 </ul>
-<p>In such situations, the Dataset Retriever plugin can be utilized to fetch additional information about the dataset from external sources, thereby providing the LLM with more context and improving its ability to generate accurate responses.</p>
+<p>Additionally, TableGPT Agent offers several optional plugins that extend the agent's functionality:</p>
+<ul>
+<li>A Visual Language Model that can be used to enhance summarization for data visualization tasks.</li>
+<li>A retriever that fetches information about the dataset, improving the quality and relevance of the generated code.</li>
+<li>A safety mechanism that protects the system from toxic inputs.</li>
+</ul>
 
 
 

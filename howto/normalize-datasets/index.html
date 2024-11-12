@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../../tutorials/continue-analysis-on-generated-charts/">
+        <link rel="prev" href="../incluster-code-execution/">
       
       
-        <link rel="next" href="../persist-messages/">
+        <link rel="next" href="../../reference/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Enhance TableGPT Agent with RAG - TableGPT Agent</title>
+        <title>Normalize Datasets - TableGPT Agent</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#enhance-tablegpt-agent-with-rag" class="md-skip">
+        <a href="#normalize-datasets" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Enhance TableGPT Agent with RAG
+              Normalize Datasets
             
           </span>
         </div>
@@ -339,19 +339,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../retrieval/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -360,7 +351,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -412,10 +402,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../normalize-datasets/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -424,6 +423,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -576,15 +576,9 @@
   
 
 
-<h1 id="enhance-tablegpt-agent-with-rag">Enhance TableGPT Agent with RAG</h1>
-<p>While the <a href="file-reading-workflow">File Reading Workflow</a> is adequate for most scenarios, it may not always provide the information necessary for the LLM to generate accurate code. Consider the following examples:</p>
-<ul>
-<li>A categorical column in the dataset contains 'foo', 'bar', and 'baz', but 'baz' only appears after approximately 100 rows. In this case, the LLM may not encounter the 'baz' value through <code>df.head()</code>.</li>
-<li>The user's query may not align with the dataset's content for several reasons:</li>
-<li>The dataset lacks proper governance. For instance, a cell value might be misspelled from 'foo' to 'fou'.</li>
-<li>There could be a typo in the user's query. For example, if the user queries, "Show me the data for 'fou'," but the dataset contains 'foo' instead.</li>
-</ul>
-<p>In such situations, the Dataset Retriever plugin can be utilized to fetch additional information about the dataset from external sources, thereby providing the LLM with more context and improving its ability to generate accurate responses.</p>
+<h1 id="normalize-datasets">Normalize Datasets</h1>
+<p>The <code>Dataset Normalizer</code> plugin is used to transform 'pandas-unfriendly' datasets (e.g., Excel files that do not follow a standard tabular structure) into a more suitable format for pandas. It is backed by an LLM that generates Python code to convert the original datasets into new ones.</p>
+<p>In <code>tablegpt-agent</code>, this plugin is used to better format 'pandas-unfriendly' datasets, making them more understandable for the subsequent steps. This plugin is optional; if used, it serves as the very first step in the <a href="#file-reading-workflow">File Reading workflow</a>, easing the difficulity of data analysis in the subsequent workflow.</p>
 
 
 

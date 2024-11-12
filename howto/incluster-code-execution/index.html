@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../../tutorials/continue-analysis-on-generated-charts/">
+        <link rel="prev" href="../persist-messages/">
       
       
-        <link rel="next" href="../persist-messages/">
+        <link rel="next" href="../normalize-datasets/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Enhance TableGPT Agent with RAG - TableGPT Agent</title>
+        <title>Incluster Code Execution - TableGPT Agent</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#enhance-tablegpt-agent-with-rag" class="md-skip">
+        <a href="#incluster-code-execution" class="md-skip">
           Skip to content
         </a>
       
@@ -100,7 +100,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Enhance TableGPT Agent with RAG
+              Incluster Code Execution
             
           </span>
         </div>
@@ -339,19 +339,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../retrieval/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -360,7 +351,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -391,10 +381,19 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../incluster-code-execution/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -403,6 +402,7 @@
   
 
       </a>
+      
     </li>
   
 
@@ -576,15 +576,8 @@
   
 
 
-<h1 id="enhance-tablegpt-agent-with-rag">Enhance TableGPT Agent with RAG</h1>
-<p>While the <a href="file-reading-workflow">File Reading Workflow</a> is adequate for most scenarios, it may not always provide the information necessary for the LLM to generate accurate code. Consider the following examples:</p>
-<ul>
-<li>A categorical column in the dataset contains 'foo', 'bar', and 'baz', but 'baz' only appears after approximately 100 rows. In this case, the LLM may not encounter the 'baz' value through <code>df.head()</code>.</li>
-<li>The user's query may not align with the dataset's content for several reasons:</li>
-<li>The dataset lacks proper governance. For instance, a cell value might be misspelled from 'foo' to 'fou'.</li>
-<li>There could be a typo in the user's query. For example, if the user queries, "Show me the data for 'fou'," but the dataset contains 'foo' instead.</li>
-</ul>
-<p>In such situations, the Dataset Retriever plugin can be utilized to fetch additional information about the dataset from external sources, thereby providing the LLM with more context and improving its ability to generate accurate responses.</p>
+<h1 id="incluster-code-execution">Incluster Code Execution</h1>
+<p>The <code>tablegpt-agent</code> directs <code>tablegpt</code> to generate Python code for data analysis. This code is then executed within a sandbox environment to ensure system security. The execution is managed by the <a href="https://github.com/edwardzjl/pybox">pybox</a> library, which provides a simple way to run Python code outside the main process.</p>
 
 
 
