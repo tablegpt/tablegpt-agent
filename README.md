@@ -17,7 +17,7 @@ This repository also includes a collection of evaluation scripts for table-relat
 
 ## Liscence
 
-`tablegpt-agent` is unser Apache-2.0 License. For more information, see the [LICENSE](LICENSE) file.
+`tablegpt-agent` is distributed under the terms of the [Apache 2.0](https://spdx.org/licenses/Apache-2.0.html) license.
 
 ## Model Card
 
