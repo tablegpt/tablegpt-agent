@@ -26,6 +26,9 @@
     
       <link rel="stylesheet" href="../../assets/stylesheets/main.0253249f.min.css">
       
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
+      
       
 
 
@@ -55,7 +58,14 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
   
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
@@ -106,6 +116,32 @@
         </div>
       </div>
     </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
     
     
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
@@ -725,31 +761,31 @@
 
 <h1 id="quickstart">Quickstart</h1>
 <h2 id="installation">Installation</h2>
-<p>To install <code>tablegpt-agent</code>, use the following command:</p>
+<p>To install TableGPT Agent, use the following command:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>tablegpt-agent
 </span></code></pre></div>
 <p>This package depends on <a href="https://github.com/edwardzjl/pybox">pybox</a>, a Python code sandbox delegator. By default, <code>pybox</code> operates in an in-cluster mode. If you wish to run <code>tablegpt-agent</code> in a local environment, you need to install an optional dependency:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>tablegpt-agent<span class="o">[</span>local<span class="o">]</span>
 </span></code></pre></div>
 <h2 id="setup-llm-service">Setup LLM Service</h2>
-<p>Before using <code>tablegpt-agent</code>, ensure that you have an OpenAI-compatible server set up to host TableGPT2. We recommend using <a href="https://github.com/vllm-project/vllm">vllm</a> for this:</p>
+<p>Before using TableGPT Agent, ensure that you have an OpenAI-compatible server set up to host TableGPT2. We recommend using <a href="https://github.com/vllm-project/vllm">vllm</a> for this:</p>
 <blockquote>
-<p><strong>Note:</strong>  If you need to use <code>tablegpt-agent</code> to analyze tabular data, please ensure your <code>vllm&gt;=0.5.5</code>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;vllm&gt;=0.5.5&#39;</span>
-</span></code></pre></div></p>
+<p><strong>Note:</strong>  If you need to use <code>tablegpt-agent</code> to analyze tabular data, please ensure your <code>vllm&gt;=0.5.5</code></p>
 </blockquote>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;vllm&gt;=0.5.5&#39;</span>
+</span></code></pre></div>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>python<span class="w"> </span>-m<span class="w"> </span>vllm.entrypoints.openai.api_server<span class="w"> </span>--served-model-name<span class="w"> </span>TableGPT2-7B<span class="w"> </span>--model<span class="w"> </span>path/to/weights
 </span></code></pre></div>
 <blockquote>
 <p><strong>Note:</strong> For production environments, it's important to optimize the vllm server configuration. For details, refer to the <a href="https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server">vllm documentation on server configuration</a>.</p>
 </blockquote>
 <h2 id="chat-with-tablegpt-agent">Chat with TableGPT Agent</h2>
-<p>To create a <code>TablegptAgent</code>, you'll need both an <code>LLM</code> and a <code>PyBoxManager</code> instance:</p>
+<p>To create an agent, you'll need both an <code>LLM</code> and a <code>PyBoxManager</code> instance:</p>
 <blockquote>
-<p><strong>NOTE</strong> The <code>llm</code> is created using <code>langchain-openai</code>, please install it first.
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pip<span class="w"> </span>install<span class="w"> </span>langchain-openai
-</span></code></pre></div></p>
+<p><strong>NOTE</strong> The <code>llm</code> is created using <code>langchain-openai</code>, please install it first.</p>
 </blockquote>
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>pip<span class="w"> </span>install<span class="w"> </span>langchain-openai
+</span></code></pre></div>
 <div class="language-pycon highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pybox</span> <span class="kn">import</span> <span class="n">LocalPyBoxManager</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">tablegpt.agent</span> <span class="kn">import</span> <span class="n">create_tablegpt_graph</span>
