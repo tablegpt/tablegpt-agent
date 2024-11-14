@@ -1,6 +1,13 @@
 # Chat on Tabular Data
 
-Beyond simple conversations, TableGPT Agent can also analyze and process tabular data. For data analysis, preprocess the data first with TableGPT. Use a fixed session_id to keep the agent within the same execution context, and set a save point to enable memory retention:
+TableGPT Agent excels at analyzing and processing tabular data. To perform data analysis, you need to first let the agent "see" the dataset. This is done by a specific "file-reading" workflow. In short, you begin by "uploading" the dataset and let the agent read it. Once the data is read, you can ask the agent questions about it.
+
+> To learn more about the file-reading workflow, see [File Reading](./explanation/file-reading.md).
+
+For data analysis tasks, we introduce two important parameters when creating the agent: `checkpointer` and `session_id`.
+
+- The `checkpointer` should be an instance of `langgraph.checkpoint.base.BaseCheckpointSaver`, which acts as a versioned "memory" for the agent. (See [langgraph's persistence concept](https://langchain-ai.github.io/langgraph/concepts/persistence) for more details.)
+- The `session_id` is a unique identifier for the current session. It ties the agent's execution to a specific kernel, ensuring that the agent's results are retained across multiple invocations.
 
 ```pycon
 >>> from langgraph.checkpoint.memory import MemorySaver
