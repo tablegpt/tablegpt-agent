@@ -6,6 +6,11 @@ theme:
     - navigation.footer
     - search.highlight
     - search.share
+    - content.action.edit
+    - content.action.view
+  icon:
+    edit: material/pencil 
+    view: material/eye
 
 plugins:
   - mkdocstrings
@@ -38,3 +43,4 @@ nav:
 
 repo_name: tablegpt/tablegpt-agent
 repo_url: https://github.com/tablegpt/tablegpt-agent
+edit_uri: edit/main/docs/
