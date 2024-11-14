@@ -4,9 +4,12 @@ theme:
   name: "material"
   features:
     - navigation.footer
+    - search.highlight
+    - search.share
 
 plugins:
   - mkdocstrings
+  - search
 
 markdown_extensions:
   - pymdownx.highlight:
