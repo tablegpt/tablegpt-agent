@@ -8,41 +8,41 @@ To install TableGPT Agent, use the following command:
 pip install tablegpt-agent
 ```
 
-This package depends on [pybox](https://github.com/edwardzjl/pybox), a Python code sandbox delegator. By default, `pybox` operates in an in-cluster mode. If you wish to run `tablegpt-agent` in a local environment, you need to install an optional dependency:
+This package depends on [pybox](https://github.com/edwardzjl/pybox) to manage code execution environment. By default, `pybox` operates in an in-cluster mode. If you intend to run `tablegpt-agent` in a local environment, install the optional dependency as follows:
 
 ```sh
 pip install tablegpt-agent[local]
 ```
 
-## Setup LLM Service
+## Setup the LLM Service
 
-Before using TableGPT Agent, ensure that you have an OpenAI-compatible server set up to host TableGPT2. We recommend using [vllm](https://github.com/vllm-project/vllm) for this:
-
-> **Note:**  If you need to use `tablegpt-agent` to analyze tabular data, please ensure your `vllm>=0.5.5`
-
-```sh
-pip install 'vllm>=0.5.5'
-```
+Before using TableGPT Agent, ensure you have an OpenAI-compatible server configured to host TableGPT2. We recommend using [vllm](https://github.com/vllm-project/vllm) for this:
 
 ```sh
 python -m vllm.entrypoints.openai.api_server --served-model-name TableGPT2-7B --model path/to/weights
 ```
 
-> **Note:** For production environments, it's important to optimize the vllm server configuration. For details, refer to the [vllm documentation on server configuration](https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server).
+> **Notes:**
+>
+> - To analyze tabular data with `tablegpt-agent`, make sure `TableGPT2` is served with `vllm` version 0.5.5 or higher.
+> - For production environments, it's important to optimize the vllm server configuration. For details, refer to the [vllm documentation on server configuration](https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server).
 
 ## Chat with TableGPT Agent
 
+To create an agent, you'll need at least an `LLM` instance and a `PyBoxManager`:
+> **NOTE 1:** This tutorial uses `langchain-openai` for the llm instance. Please install it first.
 
-To create an agent, you'll need both an `LLM` and a `PyBoxManager` instance:
-> **NOTE1:** The `llm` is created using `langchain-openai`, please install it first.
 ```sh
 pip install langchain-openai
 ```
-**NOTE2:** Start a Python console that supports asynchronous operations by running the following command:
+
+> **NOTE 2:** TableGPT Agent fully supports aync invocation. To start a Python console that supports asynchronous operations, run the following command:
+
 ```bash
 python -m asyncio
 ```
 
+In the console, set up the agent as follows:
 
 ```pycon
 >>> from langchain_openai import ChatOpenAI
