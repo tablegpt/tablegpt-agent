@@ -33,7 +33,7 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://github.com/tablegpt/tablegpt/blob/main/README.md"
+Documentation = "https://tablegpt.github.io/tablegpt-agent/"
 Issues = "https://github.com/tablegpt/tablegpt/issues"
 Source = "https://github.com/tablegpt/tablegpt"
 
