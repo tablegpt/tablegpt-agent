@@ -2,7 +2,7 @@
 
 ## Installation
 
-To install `tablegpt-agent`, use the following command:
+To install TableGPT Agent, use the following command:
 
 ```sh
 pip install tablegpt-agent
@@ -16,13 +16,13 @@ pip install tablegpt-agent[local]
 
 ## Setup LLM Service
 
-Before using `tablegpt-agent`, ensure that you have an OpenAI-compatible server set up to host TableGPT2. We recommend using [vllm](https://github.com/vllm-project/vllm) for this:
+Before using TableGPT Agent, ensure that you have an OpenAI-compatible server set up to host TableGPT2. We recommend using [vllm](https://github.com/vllm-project/vllm) for this:
 
 > **Note:**  If you need to use `tablegpt-agent` to analyze tabular data, please ensure your `vllm>=0.5.5`
+
 ```sh
 pip install 'vllm>=0.5.5'
 ```
-
 
 ```sh
 python -m vllm.entrypoints.openai.api_server --served-model-name TableGPT2-7B --model path/to/weights
@@ -32,8 +32,9 @@ python -m vllm.entrypoints.openai.api_server --served-model-name TableGPT2-7B --
 
 ## Chat with TableGPT Agent
 
-To create a `TablegptAgent`, you'll need both an `LLM` and a `PyBoxManager` instance:
+To create an agent, you'll need both an `LLM` and a `PyBoxManager` instance:
 > **NOTE** The `llm` is created using `langchain-openai`, please install it first.
+
 ```sh
 pip install langchain-openai
 ```

@@ -1,6 +1,6 @@
 # Chat on Tabular Data
 
-Beyond simple conversations, `tablegpt-agent` can also analyze and process tablular data. For data analysis, preprocess the data first with TableGPT. Use a fixed session_id to keep the agent within the same execution context, and set a save point to enable memory retention:
+Beyond simple conversations, TableGPT Agent can also analyze and process tabular data. For data analysis, preprocess the data first with TableGPT. Use a fixed session_id to keep the agent within the same execution context, and set a save point to enable memory retention:
 
 ```pycon
 >>> from langgraph.checkpoint.memory import MemorySaver
