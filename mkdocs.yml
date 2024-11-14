@@ -2,6 +2,8 @@ site_name: TableGPT Agent
 
 theme:
   name: "material"
+  features:
+    - navigation.footer
 
 plugins:
   - mkdocstrings
