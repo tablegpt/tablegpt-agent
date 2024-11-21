@@ -14,7 +14,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.44">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.45">
     
     
       
@@ -667,7 +667,7 @@
   
 
 
-<h1 id="file-reading">File Reading</h1>
+<h1 id="file-reading">File Reading<a class="headerlink" href="#file-reading" title="Permanent link">#</a></h1>
 <p>TableGPT Agent separates the file reading workflow from the data analysis workflow to maintain greater control over how the LLM inspects the dataset files. Typically, if you let the LLM inspect the dataset itself, it uses the <code>df.head()</code> function to preview the data. While this is sufficient for basic cases, we have implemented a more structured approach by hard-coding the file reading workflow into several steps:</p>
 <ul>
 <li><code>normalization</code> (optional): For some Excel files, the content may not be 'pandas-friendly'. We include an optional normalization step to transform the Excel content into a more suitable format for pandas.</li>
