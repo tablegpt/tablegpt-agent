@@ -39,6 +39,8 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - toc:
+      permalink: "#"
 
 nav:
   - Home: index.md
