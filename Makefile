@@ -15,7 +15,7 @@ wheel:
 	hatch build
 
 doc:  # use 'doc' instead of 'docs', as 'make docs' is a make command
-	hatch env run -e docs mkdocs build
+	cd docs && hatch env run -e docs mkdocs build
 
 clean:
 	hatch clean

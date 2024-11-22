@@ -101,7 +101,8 @@ exclude_lines = [
 [tool.ruff]
 # Exclude a variety of commonly ignored directories.
 exclude = [
-  "ipython"
+  "ipython",
+  "docs"
 ]
 # Allow lines to be as long as 120.
 line-length = 120

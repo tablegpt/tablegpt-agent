@@ -1,0 +1,106 @@
+site_name: TableGPT Agent
+repo_name: tablegpt/tablegpt-agent
+repo_url: https://github.com/tablegpt/tablegpt-agent
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  custom_dir: overrides
+  icon:
+    edit: material/pencil 
+    view: material/eye
+  features:
+    - announce.dismiss
+    - content.code.annotate
+    - content.code.copy
+    - content.code.select
+    - content.tabs.link
+    - content.tooltips
+    - header.autohide
+    - navigation.expand
+    - navigation.footer
+    - navigation.indexes
+    - navigation.instant
+    - navigation.sections
+    - navigation.instant.prefetch
+    - navigation.instant.progress
+    - navigation.path
+    - navigation.prune
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+  palette:
+    - scheme: default
+      primary: white
+      accent: gray
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: grey
+      accent: white
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  font:
+    text: "Public Sans"
+    code: "Roboto Mono"
+plugins:
+  - search:
+      separator: '[\s\u200b\-_,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - autorefs
+  - mkdocstrings
+
+nav:
+  - Home: index.md
+  - Tutorials:
+    - 'Quick Start': tutorials/quick-start.ipynb
+    - 'Chat on tablular data': tutorials/chat-on-tabular-data.ipynb
+    - 'Continue Analysis on Generated Charts': tutorials/continue-analysis-on-generated-charts.ipynb
+  - 'How-To Guides':
+    - 'Enhance TableGPT Agent with RAG': howto/retrieval.md
+    - 'Persist Messages': howto/persist-messages.ipynb
+    - 'Incluster Code Execution': howto/incluster-code-execution.md
+    - 'Normalize Datasets': howto/normalize-datasets.md
+  - Reference: reference.md
+  - Explanation:
+    - 'Agent Workflow': explanation/agent-workflow.md
+    - 'File Reading': explanation/file-reading.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - toc:
+      permalink: "#"
+
+hooks:
+  - _scripts/notebook_hooks.py
+
+validation:
+  # https://www.mkdocs.org/user-guide/configuration/
+  # We're `ignoring` nav.omitted_files because we are going to rely
+  # on files being properly links to from the index pages of:
+  # - tutorials
+  # - concepts
+  # - how-tos
+  # - reference
+  omitted_files: ignore
+  absolute_links: warn
+  unrecognized_links: warn
+  # TODO: figure out how to enable 'warn' for this
+  # it's only an issue for tutorials/storm/storm.ipynb
+  # because it creates anchors in the generated report
+  # and those anchors are not available in the actual doc
+  anchors: info
+  # this is needed to handle headers with anchors for nav
+  not_found: info
