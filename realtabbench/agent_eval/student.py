@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import shutil
 from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
@@ -64,9 +63,7 @@ async def student_context():
     # A unique session id for this context. All student workflow under this context will share one Ipython kernel.
     session_id = f"eval-session-{uuid4().hex}"
 
-    workdir = Path(settings.data_vol, session_id)
-    logger.debug("Creating workdir: %s", workdir)
-    workdir.mkdir(parents=True, exist_ok=True)
+    workdir = Path(settings.data_vol)
 
     # Spawn a kernel ahead
     await pybox_manager.astart(kernel_id=session_id, cwd=workdir)
@@ -80,8 +77,6 @@ async def student_context():
         logger.debug("Cleaning up worker resources...")
         logger.debug("Shutting down kernel: %s", session_id)
         await pybox_manager.ashutdown(session_id)
-        logger.debug("Removing workdir: %s", workdir)
-        shutil.rmtree(workdir, ignore_errors=True)
         logger.debug("Worker resources cleaned up")
 
 
