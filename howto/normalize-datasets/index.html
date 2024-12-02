@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.46">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.47">
     
     
       
@@ -1200,7 +1200,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=6993cedb">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=f174b046">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1257,6 +1257,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span>
     <span class="n">pybox_manager</span><span class="o">=</span><span class="n">pybox_manager</span><span class="p">,</span>
     <span class="n">normalize_llm</span><span class="o">=</span><span class="n">normalize_llm</span><span class="p">,</span>
+    <span class="n">session_id</span><span class="o">=</span><span class="s2">"some-session-id"</span><span class="p">,</span> <span class="c1"># This is required when using file-reading</span>
 <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-1">from pathlib import Path
@@ -1273,6 +1274,7 @@ agent = create_tablegpt_graph(
     llm=llm,
     pybox_manager=pybox_manager,
     normalize_llm=normalize_llm,
+    session_id="some-session-id", # This is required when using file-reading
 )</div>
 </div>
 </div>
