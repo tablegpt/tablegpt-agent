@@ -9,7 +9,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class IpythonSettings(BaseModel):
     incluster: bool = False
-    """Use kubernetes crd create kernel. if `incluster==true` load incluster config and create kerne CR as remote kernel"""
+    """Use kubernetes crd create kernel. if `incluster==true` load incluster config and create kernel CR as remote kernel"""
     env_file: str | None = None
     """Path to the environment file to use for the kernel."""
 

@@ -29,7 +29,7 @@ dependencies = [
   "langchain-qdrant>=0.1.4,<1.0.0",
   "langgraph>=0.0.68,<1.0.0",
   "pandas>=2.2,<3.0.0",
-  "pppybox>=0.0.14"
+  "pppybox>=0.0.16"
 ]
 
 [project.urls]
@@ -51,7 +51,7 @@ local = [
   "openpyxl >=3.1.2,<4.0.0",
   "xlrd >= 2.0.1",
   "odfpy",
-  "pppybox[local]>=0.0.14"
+  "pppybox[local]>=0.0.16"
 ]
 
 

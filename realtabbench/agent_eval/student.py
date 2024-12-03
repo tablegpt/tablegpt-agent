@@ -32,7 +32,6 @@ if settings.ipython_kernel.incluster:
     # Clear default mask. Allow the kernel to read and write shared volumes.
     os.umask(000)
     pybox_manager = KubePyBoxManager(
-        incluster=settings.ipython_kernel.incluster,
         env_file=settings.ipython_kernel.env_file,
     )
 else:
