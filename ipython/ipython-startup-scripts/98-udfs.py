@@ -1,9 +1,11 @@
+from __future__ import annotations
+
+import concurrent.futures
 import os
 from pathlib import Path
 from typing import NamedTuple, cast
 
 import pandas as pd
-import concurrent.futures
 
 
 class FileEncoding(NamedTuple):
@@ -86,7 +88,7 @@ def file_extention(file: str) -> str:
     return path.suffix
 
 
-def read_df(uri: str, autodetect_encoding: bool = True, **kwargs) -> pd.DataFrame:
+def read_df(uri: str, *, autodetect_encoding: bool = True, **kwargs) -> pd.DataFrame:
     """A simple wrapper to read different file formats into DataFrame."""
     try:
         return _read_df(uri, **kwargs)
@@ -100,7 +102,7 @@ def read_df(uri: str, autodetect_encoding: bool = True, **kwargs) -> pd.DataFram
                     continue
         # Either we ran out of detected encoding, or autodetect_encoding is False,
         # we should raise encoding error
-        raise ValueError(f"不支持的文件编码{e.encoding}，请转换成 utf-8 后重试")
+        raise ValueError(f"不支持的文件编码{e.encoding}，请转换成 utf-8 后重试")  # noqa: RUF001
 
 
 def _read_df(uri: str, encoding: str = "utf-8", **kwargs) -> pd.DataFrame:
@@ -115,6 +117,6 @@ def _read_df(uri: str, encoding: str = "utf-8", **kwargs) -> pd.DataFrame:
         df = pd.read_excel(uri, **kwargs)
     else:
         raise ValueError(
-            f"TableGPT 目前支持 csv、tsv 以及 xlsx 文件，您上传的文件格式 {ext} 暂不支持。"
+            f"TableGPT 目前支持 csv、tsv 以及 xlsx 文件，您上传的文件格式 {ext} 暂不支持。"  # noqa: RUF001
         )
     return df

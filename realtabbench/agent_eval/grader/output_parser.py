@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Any
 
 from langchain.evaluation.criteria.eval_chain import Criteria

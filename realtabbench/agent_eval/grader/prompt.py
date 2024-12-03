@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 INSTRUCTION = """You are a teacher grading a quiz. Start by providing a brief reason for the rating you will assign. Then, assign a rating on a scale from 0.0 to 1.0, using the format: "Score: [[score]]" (e.g., "Score: [[0.5]]").
 {criteria}
 {redlines}
