@@ -1128,7 +1128,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-1">
@@ -1141,9 +1141,16 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">langgraph.checkpoint.memory</span> <span class="kn">import</span> <span class="n">MemorySaver</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
+<span class="kn">from</span> <span class="nn">langgraph.checkpoint.memory</span> <span class="kn">import</span> <span class="n">MemorySaver</span>
+<span class="kn">from</span> <span class="nn">pybox</span> <span class="kn">import</span> <span class="n">LocalPyBoxManager</span>
+<span class="kn">from</span> <span class="nn">tablegpt</span> <span class="kn">import</span> <span class="n">DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR</span>
+<span class="kn">from</span> <span class="nn">tablegpt.agent</span> <span class="kn">import</span> <span class="n">create_tablegpt_graph</span>
 
+<span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">openai_api_base</span><span class="o">=</span><span class="s2">"YOUR_VLLM_URL"</span><span class="p">,</span> <span class="n">openai_api_key</span><span class="o">=</span><span class="s2">"whatever"</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">"TableGPT2-7B"</span><span class="p">)</span>
+<span class="n">pybox_manager</span> <span class="o">=</span> <span class="n">LocalPyBoxManager</span><span class="p">(</span><span class="n">profile_dir</span><span class="o">=</span><span class="n">DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR</span><span class="p">)</span>
 <span class="n">checkpointer</span> <span class="o">=</span> <span class="n">MemorySaver</span><span class="p">()</span>
+
 <span class="n">agent</span> <span class="o">=</span> <span class="n">create_tablegpt_graph</span><span class="p">(</span>
     <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span>
     <span class="n">pybox_manager</span><span class="o">=</span><span class="n">pybox_manager</span><span class="p">,</span>
@@ -1151,9 +1158,16 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <span class="n">session_id</span><span class="o">=</span><span class="s2">"some-session-id"</span><span class="p">,</span> <span class="c1"># This is required when using file-reading</span>
 <span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-1">from langgraph.checkpoint.memory import MemorySaver
+<div class="clipboard-copy-txt" id="cell-1">from langchain_openai import ChatOpenAI
+from langgraph.checkpoint.memory import MemorySaver
+from pybox import LocalPyBoxManager
+from tablegpt import DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR
+from tablegpt.agent import create_tablegpt_graph
 
+llm = ChatOpenAI(openai_api_base="YOUR_VLLM_URL", openai_api_key="whatever", model_name="TableGPT2-7B")
+pybox_manager = LocalPyBoxManager(profile_dir=DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR)
 checkpointer = MemorySaver()
+
 agent = create_tablegpt_graph(
     llm=llm,
     pybox_manager=pybox_manager,
@@ -1182,7 +1196,7 @@ agent = create_tablegpt_graph(
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-2">
@@ -1242,7 +1256,7 @@ attachment_msg = HumanMessage(
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-3">
@@ -1301,7 +1315,7 @@ response["messages"]</div>
 </div>
 <div class="jp-OutputArea jp-Cell-outputArea">
 <div class="jp-OutputArea-child jp-OutputArea-executeResult">
-<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[7]:</div>
+<div class="jp-OutputPrompt jp-OutputArea-prompt">Out[3]:</div>
 <div class="jp-RenderedText jp-OutputArea-output jp-OutputArea-executeResult" data-mime-type="text/plain" tabindex="0">
 <pre>[HumanMessage(content='', additional_kwargs={'attachments': [{'filename': 'titanic.csv'}]}, response_metadata={}, id='ab0a7157-ad7d-4de8-9b24-1bee78ad7c55'),
  AIMessage(content="我已经收到您的数据文件，我需要查看文件内容以对数据集有一个初步的了解。首先我会读取数据到 `df` 变量中，并通过 `df.info` 查看 NaN 情况和数据类型。\n```python\n# Load the data into a DataFrame\ndf = read_df('titanic.csv')\n\n# Remove leading and trailing whitespaces in column names\ndf.columns = df.columns.str.strip()\n\n# Remove rows and columns that contain only empty values\ndf = df.dropna(how='all').dropna(axis=1, how='all')\n\n# Get the basic information of the dataset\ndf.info(memory_usage=False)\n```", additional_kwargs={'parent_id': 'some-parent-id1', 'thought': '我已经收到您的数据文件，我需要查看文件内容以对数据集有一个初步的了解。首先我会读取数据到 `df` 变量中，并通过 `df.info` 查看 NaN 情况和数据类型。', 'action': {'tool': 'python', 'tool_input': "# Load the data into a DataFrame\ndf = read_df('titanic.csv')\n\n# Remove leading and trailing whitespaces in column names\ndf.columns = df.columns.str.strip()\n\n# Remove rows and columns that contain only empty values\ndf = df.dropna(how='all').dropna(axis=1, how='all')\n\n# Get the basic information of the dataset\ndf.info(memory_usage=False)"}, 'model_type': None}, response_metadata={}, id='add6691d-d7ea-411d-9699-e99ae0b7de97', tool_calls=[{'name': 'python', 'args': {'query': "# Load the data into a DataFrame\ndf = read_df('titanic.csv')\n\n# Remove leading and trailing whitespaces in column names\ndf.columns = df.columns.str.strip()\n\n# Remove rows and columns that contain only empty values\ndf = df.dropna(how='all').dropna(axis=1, how='all')\n\n# Get the basic information of the dataset\ndf.info(memory_usage=False)"}, 'id': 'b846aa01-04ef-4669-9a5c-53ddcb9a2dfb', 'type': 'tool_call'}]),
@@ -1331,7 +1345,7 @@ response["messages"]</div>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-4">

@@ -1122,13 +1122,13 @@ mplfonts<span class="w"> </span>init
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0afbab13">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=15aba93a">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-1">
@@ -1142,8 +1142,123 @@ mplfonts<span class="w"> </span>init
 </clipboard-copy>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypedDict</span>
 
-<span class="c1"># Define the human message that asks the model to draw a pie chart based on gender data</span>
+<span class="kn">from</span> <span class="nn">langchain_core.messages</span> <span class="kn">import</span> <span class="n">HumanMessage</span>
+<span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
+<span class="kn">from</span> <span class="nn">langgraph.checkpoint.memory</span> <span class="kn">import</span> <span class="n">MemorySaver</span>
+<span class="kn">from</span> <span class="nn">pybox</span> <span class="kn">import</span> <span class="n">LocalPyBoxManager</span>
+<span class="kn">from</span> <span class="nn">tablegpt</span> <span class="kn">import</span> <span class="n">DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR</span>
+<span class="kn">from</span> <span class="nn">tablegpt.agent</span> <span class="kn">import</span> <span class="n">create_tablegpt_graph</span>
+<span class="kn">from</span> <span class="nn">tablegpt.agent.file_reading</span> <span class="kn">import</span> <span class="n">Stage</span>
+
+<span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">openai_api_base</span><span class="o">=</span><span class="s2">"YOUR_VLLM_URL"</span><span class="p">,</span> <span class="n">openai_api_key</span><span class="o">=</span><span class="s2">"whatever"</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">"TableGPT2-7B"</span><span class="p">)</span>
+<span class="n">pybox_manager</span> <span class="o">=</span> <span class="n">LocalPyBoxManager</span><span class="p">(</span><span class="n">profile_dir</span><span class="o">=</span><span class="n">DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR</span><span class="p">)</span>
+<span class="n">checkpointer</span> <span class="o">=</span> <span class="n">MemorySaver</span><span class="p">()</span>
+
+<span class="n">agent</span> <span class="o">=</span> <span class="n">create_tablegpt_graph</span><span class="p">(</span>
+    <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span>
+    <span class="n">pybox_manager</span><span class="o">=</span><span class="n">pybox_manager</span><span class="p">,</span>
+    <span class="n">checkpointer</span><span class="o">=</span><span class="n">checkpointer</span><span class="p">,</span>
+    <span class="n">session_id</span><span class="o">=</span><span class="s2">"some-session-id"</span><span class="p">,</span> <span class="c1"># This is required when using file-reading</span>
+<span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Attachment</span><span class="p">(</span><span class="n">TypedDict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Contains at least one dictionary with the key filename."""</span>
+    <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span>
+
+<span class="n">attachment_msg</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span>
+    <span class="n">content</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
+    <span class="c1"># Please make sure your iPython kernel can access your filename.</span>
+    <span class="n">additional_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">"attachments"</span><span class="p">:</span> <span class="p">[</span><span class="n">Attachment</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="s2">"titanic.csv"</span><span class="p">)]},</span>
+<span class="p">)</span>
+
+<span class="c1"># Reading and processing files.</span>
+<span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">ainvoke</span><span class="p">(</span>
+    <span class="nb">input</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">"entry_message"</span><span class="p">:</span> <span class="n">attachment_msg</span><span class="p">,</span>
+        <span class="s2">"processing_stage"</span><span class="p">:</span> <span class="n">Stage</span><span class="o">.</span><span class="n">UPLOADED</span><span class="p">,</span>
+        <span class="s2">"messages"</span><span class="p">:</span> <span class="p">[</span><span class="n">attachment_msg</span><span class="p">],</span>
+        <span class="s2">"parent_id"</span><span class="p">:</span> <span class="s2">"some-parent-id1"</span><span class="p">,</span>
+        <span class="s2">"date"</span><span class="p">:</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">(),</span>
+    <span class="p">},</span>
+    <span class="n">config</span><span class="o">=</span><span class="p">{</span>
+        <span class="c1"># Using checkpointer requires binding thread_id at runtime.</span>
+        <span class="s2">"configurable"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"thread_id"</span><span class="p">:</span> <span class="s2">"some-thread-id"</span><span class="p">},</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-1">from datetime import date
+from typing import TypedDict
+
+from langchain_core.messages import HumanMessage
+from langchain_openai import ChatOpenAI
+from langgraph.checkpoint.memory import MemorySaver
+from pybox import LocalPyBoxManager
+from tablegpt import DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR
+from tablegpt.agent import create_tablegpt_graph
+from tablegpt.agent.file_reading import Stage
+
+llm = ChatOpenAI(openai_api_base="YOUR_VLLM_URL", openai_api_key="whatever", model_name="TableGPT2-7B")
+pybox_manager = LocalPyBoxManager(profile_dir=DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR)
+checkpointer = MemorySaver()
+
+agent = create_tablegpt_graph(
+    llm=llm,
+    pybox_manager=pybox_manager,
+    checkpointer=checkpointer,
+    session_id="some-session-id", # This is required when using file-reading
+)
+
+class Attachment(TypedDict):
+    """Contains at least one dictionary with the key filename."""
+    filename: str
+
+attachment_msg = HumanMessage(
+    content="",
+    # Please make sure your iPython kernel can access your filename.
+    additional_kwargs={"attachments": [Attachment(filename="titanic.csv")]},
+)
+
+# Reading and processing files.
+response = await agent.ainvoke(
+    input={
+        "entry_message": attachment_msg,
+        "processing_stage": Stage.UPLOADED,
+        "messages": [attachment_msg],
+        "parent_id": "some-parent-id1",
+        "date": date.today(),
+    },
+    config={
+        # Using checkpointer requires binding thread_id at runtime.
+        "configurable": {"thread_id": "some-thread-id"},
+    },
+)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=0afbab13">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-2">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Define the human message that asks the model to draw a pie chart based on gender data</span>
 <span class="n">human_message</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">"Draw a pie chart based on gender and the number of people of each gender."</span><span class="p">)</span>
 
 <span class="k">async</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">agent</span><span class="o">.</span><span class="n">astream_events</span><span class="p">(</span>
@@ -1166,9 +1281,7 @@ mplfonts<span class="w"> </span>init
         <span class="c1"># Handle other events here</span>
         <span class="k">pass</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-1">from datetime import date
-
-# Define the human message that asks the model to draw a pie chart based on gender data
+<div class="clipboard-copy-txt" id="cell-2"># Define the human message that asks the model to draw a pie chart based on gender data
 human_message = HumanMessage(content="Draw a pie chart based on gender and the number of people of each gender.")
 
 async for event in agent.astream_events(
@@ -1227,10 +1340,10 @@ content='饼图已经成功生成。' additional_kwargs={} response_metadata={'f
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-2">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-3">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1252,7 +1365,7 @@ content='饼图已经成功生成。' additional_kwargs={} response_metadata={'f
     <span class="n">session_id</span><span class="o">=</span><span class="s2">"some-session-id"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-2"># Initialize the VLM instance
+<div class="clipboard-copy-txt" id="cell-3"># Initialize the VLM instance
 vlm = ChatOpenAI(openai_api_base="YOUR_VLM_URL", openai_api_key="whatever", model_name="YOUR_MODEL_NAME")
 
 # Assume llm, pybox_manager, and memory_saver are defined elsewhere
@@ -1285,10 +1398,10 @@ agent_with_vlm = create_tablegpt_graph(
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-3">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-4">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1305,7 +1418,7 @@ agent_with_vlm = create_tablegpt_graph(
     <span class="k">if</span> <span class="n">state</span><span class="o">.</span><span class="n">next</span> <span class="ow">and</span> <span class="n">state</span><span class="o">.</span><span class="n">next</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"__start__"</span><span class="p">:</span>
         <span class="n">to_replay</span> <span class="o">=</span> <span class="n">state</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-3">state_history = agent.get_state_history(config={"configurable": {"thread_id": "some-thread-id"}})
+<div class="clipboard-copy-txt" id="cell-4">state_history = agent.get_state_history(config={"configurable": {"thread_id": "some-thread-id"}})
 
 to_replay = None
 for state in list(state_history)[::-1]:
@@ -1333,10 +1446,10 @@ for state in list(state_history)[::-1]:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-4">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-5">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1361,7 +1474,7 @@ for state in list(state_history)[::-1]:
         <span class="c1"># Handle other events here</span>
         <span class="k">pass</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-4">async for event in agent_with_vlm.astream_events(
+<div class="clipboard-copy-txt" id="cell-5">async for event in agent_with_vlm.astream_events(
     None,
     to_replay.config,
     version="v2",
