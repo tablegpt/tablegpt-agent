@@ -1274,7 +1274,7 @@ response = await agent.ainvoke(
     <span class="n">evt</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s2">"event"</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">evt</span> <span class="o">==</span> <span class="s2">"on_chat_model_end"</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="s2">"output"</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">event</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"tools"</span> <span class="ow">and</span> <span class="n">evt</span> <span class="o">==</span> <span class="s2">"on_chain_stream"</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"tool_node"</span> <span class="ow">and</span> <span class="n">evt</span> <span class="o">==</span> <span class="s2">"on_chain_stream"</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">lc_msg</span> <span class="ow">in</span> <span class="n">event</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="s2">"chunk"</span><span class="p">][</span><span class="s2">"messages"</span><span class="p">]:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">lc_msg</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1297,7 +1297,7 @@ async for event in agent.astream_events(
     evt = event["event"]
     if evt == "on_chat_model_end":
         print(event["data"]["output"])
-    elif event["name"] == "tools" and evt == "on_chain_stream":
+    elif event["name"] == "tool_node" and evt == "on_chain_stream":
         for lc_msg in event["data"]["chunk"]["messages"]:
             print(lc_msg)
     else:
@@ -1467,7 +1467,7 @@ for state in list(state_history)[::-1]:
     <span class="n">evt</span> <span class="o">=</span> <span class="n">event</span><span class="p">[</span><span class="s2">"event"</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">evt</span> <span class="o">==</span> <span class="s2">"on_chat_model_end"</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="s2">"output"</span><span class="p">])</span>
-    <span class="k">elif</span> <span class="n">event</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"tools"</span> <span class="ow">and</span> <span class="n">evt</span> <span class="o">==</span> <span class="s2">"on_chain_stream"</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">event</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"tool_node"</span> <span class="ow">and</span> <span class="n">evt</span> <span class="o">==</span> <span class="s2">"on_chain_stream"</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">lc_msg</span> <span class="ow">in</span> <span class="n">event</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="s2">"chunk"</span><span class="p">][</span><span class="s2">"messages"</span><span class="p">]:</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">lc_msg</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -1482,7 +1482,7 @@ for state in list(state_history)[::-1]:
     evt = event["event"]
     if evt == "on_chat_model_end":
         print(event["data"]["output"])
-    elif event["name"] == "tools" and evt == "on_chain_stream":
+    elif event["name"] == "tool_node" and evt == "on_chain_stream":
         for lc_msg in event["data"]["chunk"]["messages"]:
             print(lc_msg)
     else:
