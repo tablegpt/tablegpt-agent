@@ -381,9 +381,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#chat-with-tablegpt-agent" class="md-nav__link">
+  <a href="#create-tablegpt-agent" class="md-nav__link">
     <span class="md-ellipsis">
-      Chat with TableGPT Agent
+      Create TableGPT Agent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-chatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Start Chatting
     </span>
   </a>
   
@@ -722,9 +731,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#chat-with-tablegpt-agent" class="md-nav__link">
+  <a href="#create-tablegpt-agent" class="md-nav__link">
     <span class="md-ellipsis">
-      Chat with TableGPT Agent
+      Create TableGPT Agent
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#start-chatting" class="md-nav__link">
+    <span class="md-ellipsis">
+      Start Chatting
     </span>
   </a>
   
@@ -1240,7 +1258,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>This package depends on pybox to manage code execution environment. By default, pybox operates in an in-cluster mode. If you intend to run tablegpt-agent in a local environment, install the optional dependency as follows:</p>
+<p>TableGPT Agent depends on pybox to manage code execution environment. By default, pybox operates in an in-cluster mode. If you intend to run tablegpt-agent in a local environment, install the optional dependency as follows:</p>
 </div>
 </div>
 </div>
@@ -1272,6 +1290,44 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=2a55ff4b">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>This tutorial uses <code>langchain-openai</code> for the chat model instance. Please make sure you have it installed:</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=503a2807">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-3">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="o">%</span><span class="n">pip</span> <span class="n">install</span> <span class="n">langchain</span><span class="o">-</span><span class="n">openai</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-3">%pip install langchain-openai</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=b2d82049">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
@@ -1282,7 +1338,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>vllm.entrypoints.openai.api_server<span class="w"> </span>--served-model-name<span class="w"> </span>TableGPT2-7B<span class="w"> </span>--model<span class="w"> </span>path/to/weights
 </pre></div>
 <blockquote>
-<p><strong>Notes:</strong></p>
+<p><strong>NOTES:</strong></p>
 <ul>
 <li>To analyze tabular data with <code>tablegpt-agent</code>, make sure <code>TableGPT2</code> is served with <code>vllm</code> version 0.5.5 or higher.</li>
 <li>For production environments, it's important to optimize the vllm server configuration. For details, refer to the <a href="https://docs.vllm.ai/en/v0.6.0/serving/openai_compatible_server.html#command-line-arguments-for-the-server">vllm documentation on server configuration</a>.</li>
@@ -1298,28 +1354,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="chat-with-tablegpt-agent">Chat with TableGPT Agent<a class="anchor-link" href="#chat-with-tablegpt-agent">¶</a></h2><p>To create an agent, you'll need at least an <code>LLM</code> instance and a <code>PyBoxManager</code>:</p>
-<blockquote>
-<p><strong>NOTE 1:</strong> This tutorial uses <code>langchain-openai</code> for the llm instance. Please install it first.</p>
-</blockquote>
-<div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>langchain-openai
-</pre></div>
-<blockquote>
-<p><strong>NOTE 2:</strong> TableGPT Agent fully supports aync invocation. To start a Python console that supports asynchronous operations, run the following command:</p>
-</blockquote>
+<h2 id="create-tablegpt-agent">Create TableGPT Agent<a class="anchor-link" href="#create-tablegpt-agent">¶</a></h2><blockquote>
+<p><strong>NOTE:</strong> TableGPT Agent fully supports aync invocation. If you are running this tutorial in a Jupyter Notebook, no additional setup is required. However, if you plan to run the tutorial in a Python console, make sure to use a console that supports asynchronous operations. To get started, execute the following command:</p>
 <div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>asyncio
 </pre></div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ad223b65">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>In the console or notebook, set the proxy as follows:</p>
+</blockquote>
+<p>In the console or notebook, create the agent as follows:</p>
 </div>
 </div>
 </div>
@@ -1329,10 +1369,10 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-3">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-4">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1345,23 +1385,23 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
 <span class="kn">from</span> <span class="nn">pybox</span> <span class="kn">import</span> <span class="n">LocalPyBoxManager</span>
 <span class="kn">from</span> <span class="nn">tablegpt.agent</span> <span class="kn">import</span> <span class="n">create_tablegpt_graph</span>
-<span class="kn">from</span> <span class="nn">tablegpt</span> <span class="kn">import</span> <span class="n">DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR</span>
+
 
 <span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">openai_api_base</span><span class="o">=</span><span class="s2">"YOUR_VLLM_URL"</span><span class="p">,</span> <span class="n">openai_api_key</span><span class="o">=</span><span class="s2">"whatever"</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">"TableGPT2-7B"</span><span class="p">)</span>
-<span class="n">pybox_manager</span> <span class="o">=</span> <span class="n">LocalPyBoxManager</span><span class="p">(</span><span class="n">profile_dir</span><span class="o">=</span><span class="n">DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR</span><span class="p">)</span>
+<span class="n">pybox_manager</span> <span class="o">=</span> <span class="n">LocalPyBoxManager</span><span class="p">()</span>
 
 <span class="n">agent</span> <span class="o">=</span> <span class="n">create_tablegpt_graph</span><span class="p">(</span>
     <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span>
     <span class="n">pybox_manager</span><span class="o">=</span><span class="n">pybox_manager</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-3">from langchain_openai import ChatOpenAI
+<div class="clipboard-copy-txt" id="cell-4">from langchain_openai import ChatOpenAI
 from pybox import LocalPyBoxManager
 from tablegpt.agent import create_tablegpt_graph
-from tablegpt import DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR
+
 
 llm = ChatOpenAI(openai_api_base="YOUR_VLLM_URL", openai_api_key="whatever", model_name="TableGPT2-7B")
-pybox_manager = LocalPyBoxManager(profile_dir=DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR)
+pybox_manager = LocalPyBoxManager()
 
 agent = create_tablegpt_graph(
     llm=llm,
@@ -1379,7 +1419,7 @@ agent = create_tablegpt_graph(
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>To interact with the agent:</p>
+<h2 id="start-chatting">Start Chatting<a class="anchor-link" href="#start-chatting">¶</a></h2>
 </div>
 </div>
 </div>
@@ -1392,7 +1432,7 @@ agent = create_tablegpt_graph(
 <div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-4">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-5">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1413,10 +1453,10 @@ agent = create_tablegpt_graph(
     <span class="s2">"date"</span><span class="p">:</span> <span class="n">date</span><span class="o">.</span><span class="n">today</span><span class="p">(),</span>
 <span class="p">}</span>
 
-<span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">ainvoke</span><span class="p">(</span><span class="n">_input</span><span class="p">)</span>
-<span class="n">response</span><span class="p">[</span><span class="s2">"messages"</span><span class="p">]</span>
+<span class="n">state</span> <span class="o">=</span> <span class="k">await</span> <span class="n">agent</span><span class="o">.</span><span class="n">ainvoke</span><span class="p">(</span><span class="n">_input</span><span class="p">)</span>
+<span class="n">state</span><span class="p">[</span><span class="s2">"messages"</span><span class="p">]</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-4">from datetime import date
+<div class="clipboard-copy-txt" id="cell-5">from datetime import date
 from langchain_core.messages import HumanMessage
 
 message = HumanMessage(content="Hi")
@@ -1427,8 +1467,8 @@ _input = {
     "date": date.today(),
 }
 
-response = await agent.ainvoke(_input)
-response["messages"]</div>
+state = await agent.ainvoke(_input)
+state["messages"]</div>
 </div>
 </div>
 </div>
@@ -1467,7 +1507,7 @@ response["messages"]</div>
 <div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-5">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-6">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1485,7 +1525,7 @@ response["messages"]</div>
     <span class="k">if</span> <span class="n">event</span><span class="p">[</span><span class="s2">"event"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"on_chat_model_end"</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="s2">"output"</span><span class="p">])</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-5">async for event in agent.astream_events(
+<div class="clipboard-copy-txt" id="cell-6">async for event in agent.astream_events(
     input=_input,
     version="v2",
 ):
