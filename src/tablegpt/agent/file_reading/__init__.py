@@ -88,7 +88,7 @@ def create_file_reading_workflow(
     ipython_tool = IPythonTool(pybox_manager=pybox_manager, cwd=workdir, session_id=session_id)
     tool_executor = ToolNode([ipython_tool])
 
-    async def agent(state: AgentState) -> dict:
+    async def agent_node(state: AgentState) -> dict:
         if state.get("processing_stage", Stage.UPLOADED) == Stage.UPLOADED:
             return await get_df_info(state)
         if state.get("processing_stage", Stage.UPLOADED) == Stage.INFO_READ:
@@ -295,28 +295,24 @@ print(str(inspect_df({var_name})), flush=True)"""
                     part["text"] = markdown_console_template.format(res=part["text"])
         return {"messages": messages}
 
-    def should_continue(state: AgentState) -> Literal["tools", "end"]:
+    # I cannot use `END` as the literal hint, as:
+    #  > Type arguments for "Literal" must be None, a literal value (int, bool, str, or bytes), or an enum value.
+    # As `END` is just an intern string of "__end__" (See `langgraph.constants`), So I use "__end__" here.
+    def should_continue(state: AgentState) -> Literal["tool_node", "__end__"]:
         # Must have at least one message when entering this router
         last_message = state["messages"][-1]
         if last_message.tool_calls:
-            return "tools"
-        return "end"
+            return "tool_node"
+        return END
 
     workflow = StateGraph(AgentState)
 
-    workflow.add_node("agent", agent)
-    workflow.add_node("tools", tool_node)
+    workflow.add_node(agent_node)
+    workflow.add_node(tool_node)
 
-    workflow.add_edge(START, "agent")
-    workflow.add_edge("tools", "agent")
-    workflow.add_conditional_edges(
-        "agent",
-        should_continue,
-        {
-            "tools": "tools",
-            "end": END,
-        },
-    )
+    workflow.add_edge(START, "agent_node")
+    workflow.add_edge("tool_node", "agent_node")
+    workflow.add_conditional_edges("agent_node", should_continue)
 
     return workflow.compile(debug=verbose)
 

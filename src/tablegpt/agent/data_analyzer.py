@@ -138,7 +138,17 @@ def create_data_analyze_workflow(
     if safety_llm is not None:
         hazard_classifier = create_hazard_classifier(safety_llm)
 
-    async def run_input_guard(
+    tools = [
+        IPythonTool(
+            pybox_manager=pybox_manager,
+            cwd=workdir,
+            session_id=session_id,
+            error_trace_cleanup=error_trace_cleanup,
+        )
+    ]
+    tool_executor = ToolNode(tools)
+
+    async def input_guard(
         state: AgentState,
     ) -> dict[str, list[BaseMessage]]:
         if hazard_classifier is not None:
@@ -177,17 +187,7 @@ def create_data_analyze_workflow(
             ]
         }
 
-    tools = [
-        IPythonTool(
-            pybox_manager=pybox_manager,
-            cwd=workdir,
-            session_id=session_id,
-            error_trace_cleanup=error_trace_cleanup,
-        )
-    ]
-    tool_executor = ToolNode(tools)
-
-    async def arun_tablegpt_agent(state: AgentState) -> dict:
+    async def agent_node(state: AgentState) -> dict:
         # Truncate messages based on message count.
 
         token_counter, max_tokens = get_messages_truncation_config(llm, trim_message_method)
@@ -222,7 +222,7 @@ def create_data_analyze_workflow(
             messages.append(message)
         return {"messages": messages}
 
-    async def arun_vlm_agent(state: AgentState) -> dict:
+    async def vlm_agent_node(state: AgentState) -> dict:
         # Truncate messages based on message count.
         token_counter, max_tokens = get_messages_truncation_config(vlm, trim_message_method)
 
@@ -288,56 +288,45 @@ def create_data_analyze_workflow(
                     part["text"] = markdown_console_template.format(res=part["text"])
         return {"messages": messages}
 
-    def should_continue(state: AgentState) -> str:
+    # I cannot use `END` as the literal hint, as:
+    #  > Type arguments for "Literal" must be None, a literal value (int, bool, str, or bytes), or an enum value.
+    # As `END` is just an intern string of "__end__" (See `langgraph.constants`), So I use "__end__" here.
+    def should_continue(state: AgentState) -> Literal["tool_node", "__end__"]:
         # Must have at least one message when entering this router
         last_message = state["messages"][-1]
         if last_message.tool_calls:
-            return "tools"
-        return "end"
+            return "tool_node"
+        return END
 
-    def agent_selector(state: AgentState) -> str:
+    def agent_selector(state: AgentState) -> Literal["agent_node", "vlm_agent_node"]:
         if vlm_agent is None:
-            return "agent"
+            return "agent_node"
 
         # No messages yet. We should start with the default agent
         if len(state["messages"]) < 1:
-            return "agent"
+            return "agent_node"
 
         # If the latest message contains "image/xxx" output,
         # the workflow graph shoud route to "vlm_agent"
         last_message = state["messages"][-1]
         for part in last_message.content:
             if isinstance(part, dict) and part.get("type") == "image_url":
-                return "vlm_agent"
-        return "agent"
+                return "vlm_agent_node"
+        return "agent_node"
 
     workflow = StateGraph(AgentState)
 
-    workflow.add_node("input_guard", run_input_guard)
-    workflow.add_node("retrieve_columns", retrieve_columns)
-    workflow.add_node("agent", arun_tablegpt_agent)
-    workflow.add_node("vlm_agent", arun_vlm_agent)
-    workflow.add_node("tools", tool_node)
+    workflow.add_node(input_guard)
+    workflow.add_node(retrieve_columns)
+    workflow.add_node(agent_node)
+    workflow.add_node(vlm_agent_node)
+    workflow.add_node(tool_node)
 
     workflow.add_edge(START, "input_guard")
     workflow.add_edge(START, "retrieve_columns")
-    workflow.add_edge(["input_guard", "retrieve_columns"], "agent")
+    workflow.add_edge(["input_guard", "retrieve_columns"], "agent_node")
 
-    workflow.add_conditional_edges("tools", agent_selector)
-    workflow.add_conditional_edges(
-        "agent",
-        should_continue,
-        {
-            "tools": "tools",
-            "end": END,
-        },
-    )
-    workflow.add_conditional_edges(
-        "vlm_agent",
-        should_continue,
-        {
-            "tools": "tools",
-            "end": END,
-        },
-    )
+    workflow.add_conditional_edges("tool_node", agent_selector)
+    workflow.add_conditional_edges("agent_node", should_continue)
+    workflow.add_conditional_edges("vlm_agent_node", should_continue)
     return workflow.compile(debug=verbose)
