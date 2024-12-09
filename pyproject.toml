@@ -11,7 +11,12 @@ requires-python = ">=3.9"
 license = {file = "LICENSE"}
 keywords = []
 authors = [
+  { name = "Aofeng Su", email = "saf@zjuici.com" },
+  { name = "Chen Zhou", email = "zc@zjuici.com" },
+  { name = "Junbo Zhao", email = "j.zhao@zju.edu.cn" },
   { name = "Junlin Zhou", email = "jlzhou@zjuici.com" },
+  { name = "Tao Zhang", email = "zt@zjuici.com" },
+  { name = "Xiang Li", email = "xli@zjuici.com" },
 ]
 classifiers = [
   "Development Status :: 4 - Beta",
