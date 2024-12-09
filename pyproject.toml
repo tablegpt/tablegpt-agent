@@ -59,6 +59,15 @@ local = [
   "pppybox[local]>=0.0.16"
 ]
 
+[tool.hatch.build.targets.sdist]
+exclude = [
+  ".devcontainer",
+  ".github",
+  "/docs",
+  "/examples",
+  "/realtabbench",
+  "collect_script.py",
+]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/tablegpt"]
