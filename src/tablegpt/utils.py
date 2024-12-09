@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, NamedTuple, cast
 
 import pandas as pd
-from codeshield.cs import CodeShield, CodeShieldScanResult
 
 from tablegpt.errors import (
     EncodingDetectionError,
@@ -24,6 +23,17 @@ if TYPE_CHECKING:
     from langchain_core.messages import BaseMessage
 
 logger = logging.getLogger(__name__)
+
+
+try:
+    from codeshield.cs import CodeShield
+except ImportError:
+    logger.warning("import `CodeShield` failed, scan llm output code will not work")
+
+    class CodeShield:
+        @classmethod
+        async def scan_code(cls, code: str, language=None) -> None:  # noqa: ARG003
+            return None
 
 
 def path_from_uri(uri: str) -> Path:
@@ -229,8 +239,8 @@ def filter_content(message: BaseMessage, keep: Sequence[str] | None = None) -> B
 
 
 async def scan_llm_output(llm_output_code: str) -> str | None:
-    result: CodeShieldScanResult = await CodeShield.scan_code(llm_output_code)
-    if not result.is_insecure:
+    result = await CodeShield.scan_code(llm_output_code)
+    if result is None or not result.is_insecure:
         return None
 
     logger.debug("codeshield scan result: %s", str(result))
