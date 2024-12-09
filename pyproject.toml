@@ -34,8 +34,8 @@ dependencies = [
 
 [project.urls]
 Documentation = "https://tablegpt.github.io/tablegpt-agent/"
-Issues = "https://github.com/tablegpt/tablegpt/issues"
-Source = "https://github.com/tablegpt/tablegpt"
+Issues = "https://github.com/tablegpt/tablegpt-agent/issues"
+Source = "https://github.com/tablegpt/tablegpt-agent"
 
 [project.optional-dependencies]
 local = [
