@@ -30,7 +30,7 @@ classifiers = [
 ]
 dependencies = [
   "chardet>=5.2.0,<6.0.0",
-  "codeshield>=1.0.1",
+  "codeshield>=1.0.1; sys_platform != 'win32'",
   "langchain-core>=0.3.0,<1.0.0",
   "langgraph>=0.0.68,<1.0.0",
   "pandas>=2.2,<3.0.0",
