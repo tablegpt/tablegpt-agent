@@ -17,8 +17,8 @@ on:
       - "pyproject.toml"
 
 jobs:
-  run:
-    name: "tests & coverage"
+  lint-test:
+    name: "lint & tests"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -48,3 +48,43 @@ jobs:
 
     - name: Tests
       run: make test
+
+  install-ubuntu:
+    name: "install on ubuntu"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        # <https://github.com/actions/setup-python/tree/v5/?tab=readme-ov-file#caching-packages-dependencies>
+        cache: 'pip'
+
+    - name: Install tablegpt-agent
+      run: |
+        pip install -e .
+
+  install-win:
+    name: "install on windows"
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+        # <https://github.com/actions/setup-python/tree/v5/?tab=readme-ov-file#caching-packages-dependencies>
+        cache: 'pip'
+
+    - name: Install tablegpt-agent
+      run: |
+        pip install -e .

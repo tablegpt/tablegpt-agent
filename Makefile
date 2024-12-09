@@ -14,7 +14,8 @@ test:
 wheel:
 	hatch build
 
-doc:  # use 'doc' instead of 'docs', as 'make docs' is a make command
+# 'make docs' is a make command, use 'doc' instead of 'docs' to avoid conflict
+doc:
 	hatch env run -e docs mkdocs build
 
 clean:
