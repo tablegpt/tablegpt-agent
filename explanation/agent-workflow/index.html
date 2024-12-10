@@ -619,6 +619,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Agent Workflow
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -628,6 +639,112 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#workflow-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow Steps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Workflow
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Example Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      User Input
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-assessment-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Assessment (Optional)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-retrieval-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Retrieval (optional)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Generation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Execution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#result-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Result Generation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visual-analysis-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visual Analysis (optional)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -724,6 +841,101 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#workflow-steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workflow Steps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-workflow" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example Workflow
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Example Workflow">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#user-input" class="md-nav__link">
+    <span class="md-ellipsis">
+      User Input
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-assessment-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Security Assessment (Optional)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#data-retrieval-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Data Retrieval (optional)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Generation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#code-execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      Code Execution
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#result-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      Result Generation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#visual-analysis-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visual Analysis (optional)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -756,15 +968,157 @@
 <h1 id="agent-workflow">Agent Workflow<a class="headerlink" href="#agent-workflow" title="Permanent link">#</a></h1>
 <p>The Agent Workflow is the core functionality of the <code>tablegpt-agent</code>. It processes user input and generates appropriate responses. This workflow is similar to those found in most single-agent systems and consists of an agent and various tools. Specifically, the data analysis workflow includes:</p>
 <ul>
-<li><strong>An Agent Powered by TableGPT2</strong>: This agent performs data analysis tasks.</li>
-<li><strong>An IPython tool</strong>: This tool executes the generated code within a sandbox environment.</li>
+<li><strong>An Agent Powered by TableGPT2</strong>: This agent performs data analysis tasks. It is designed to understand and execute complex data analysis queries, providing accurate and insightful results.</li>
+<li><strong>An IPython tool</strong>: This tool executes the generated code within a sandbox environment, ensuring that the code runs safely and efficiently.</li>
 </ul>
 <p>Additionally, TableGPT Agent offers several optional plugins that extend the agent's functionality:</p>
 <ul>
-<li>A Visual Language Model that can be used to enhance summarization for data visualization tasks.</li>
-<li>A retriever that fetches information about the dataset, improving the quality and relevance of the generated code.</li>
-<li>A safety mechanism that protects the system from toxic inputs.</li>
+<li><strong>Visual Language Model</strong>: This plugin can be used to enhance summarization for data visualization tasks.</li>
+<li><strong>Retriever</strong>: This plugin fetches information about the dataset, improving the quality and relevance of the generated code.</li>
+<li><strong>Safety Mechanism</strong>: This plugin protects the system from toxic inputs.</li>
 </ul>
+<h2 id="workflow-steps">Workflow Steps<a class="headerlink" href="#workflow-steps" title="Permanent link">#</a></h2>
+<ol>
+<li><strong>User Input</strong>: The user provides a query or command to the agent.</li>
+<li><strong>Security Assessment (optional)</strong>: The agent evaluates whether the user's query involves sensitive topics. If it does, the agent will prompt the LLM to be cautious in its response.</li>
+<li><strong>Data Retrieval(optional)</strong>: The retriever plugin fetches relevant data and metadata.</li>
+<li><strong>Code Generation</strong>: The agent generates the appropriate code to perform the requested task.</li>
+<li><strong>Code Execution</strong>: The generated code is executed in the IPython sandbox environment.</li>
+<li><strong>Result Generation</strong>: The agent processes the results of the code execution and generates a response.</li>
+<li><strong>Visual analysis (optional)</strong>: Perform visual analysis and summary on the generated pictures to enrich the answers.</li>
+</ol>
+<p><strong>NOTE:</strong> During the operation of <code>tablegpt-agent</code>, the system will repeatedly attempt to resolve any issues that arise during code execution. As a result, Steps <code>4~7</code> may be executed multiple times in an iterative debugging process. This cycle continues until the final solution is reached or the maximum iteration limit is exceeded. The default maximum iteration count is <strong>25</strong>.</p>
+<h2 id="example-workflow">Example Workflow<a class="headerlink" href="#example-workflow" title="Permanent link">#</a></h2>
+<h3 id="user-input">User Input<a class="headerlink" href="#user-input" title="Permanent link">#</a></h3>
+<p>The user inputs a query:</p>
+<blockquote>
+<p>Draw a pie chart of the male-female ratio based on gender.</p>
+</blockquote>
+<h3 id="security-assessment-optional">Security Assessment (Optional)<a class="headerlink" href="#security-assessment-optional" title="Permanent link">#</a></h3>
+<p>When creating a <code>tablegpt-agent</code>, you can specify a dedicated safety evaluation model using the <code>safety_llm</code> parameter. For example:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">tablegpt.agent</span> <span class="kn">import</span> <span class="n">create_tablegpt_graph</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">safety_llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">openai_api_base</span><span class="o">=</span><span class="s2">&quot;LLM_URL&quot;</span><span class="p">,</span> <span class="n">openai_api_key</span><span class="o">=</span><span class="s2">&quot;whatever&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;LLM_MODEL_NAME&quot;</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">create_tablegpt_graph</span><span class="p">(</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="o">...</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">safety_llm</span><span class="o">=</span><span class="n">safety_llm</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="o">...</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>If <code>safety_llm</code> is configured, it will evaluate user inputs to identify if they fall under any of the following <code>14</code> hazard categories. If a question is flagged as belonging to one of these categories, <code>tablegpt-agent</code> will respond with caution.</p>
+<table>
+<thead>
+<tr>
+<th>Hazard Category</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>S1: Violent Crimes</td>
+<td>Violent criminal activities</td>
+</tr>
+<tr>
+<td>S2: Non-Violent Crimes</td>
+<td>Non-violent criminal activities</td>
+</tr>
+<tr>
+<td>S3: Sex-Related Crimes</td>
+<td>Crimes related to sexual misconduct</td>
+</tr>
+<tr>
+<td>S4: Child Sexual Exploitation</td>
+<td>Exploitation of children</td>
+</tr>
+<tr>
+<td>S5: Defamation</td>
+<td>Defamatory content</td>
+</tr>
+<tr>
+<td>S6: Specialized Advice</td>
+<td>Professional advice (e.g., medical, legal)</td>
+</tr>
+<tr>
+<td>S7: Privacy</td>
+<td>Privacy violations</td>
+</tr>
+<tr>
+<td>S8: Intellectual Property</td>
+<td>Intellectual property issues</td>
+</tr>
+<tr>
+<td>S9: Indiscriminate Weapons</td>
+<td>Use or production of indiscriminate weapons</td>
+</tr>
+<tr>
+<td>S10: Hate</td>
+<td>Hateful or discriminatory content</td>
+</tr>
+<tr>
+<td>S11: Suicide &amp; Self-Harm</td>
+<td>Suicide or self-harm-related content</td>
+</tr>
+<tr>
+<td>S12: Sexual Content</td>
+<td>Explicit sexual content</td>
+</tr>
+<tr>
+<td>S13: Elections</td>
+<td>Content related to elections</td>
+</tr>
+<tr>
+<td>S14: Code Interpreter Abuse</td>
+<td>Misuse of code interpretation features</td>
+</tr>
+</tbody>
+</table>
+<p>This feature enhances the safety of the <code>tablegpt-agent</code>, helping to mitigate ethical and legal risks associated with generated content.</p>
+<h3 id="data-retrieval-optional">Data Retrieval (optional)<a class="headerlink" href="#data-retrieval-optional" title="Permanent link">#</a></h3>
+<p>The retriever plugin recalls columns and values related to the query, enhancing the LLM's understanding of the dataset. This improves the accuracy of the code generated by the LLM. For detailed usage instructions, refer to <a href="../../howto/retrieval">Enhance TableGPT Agent with RAG</a>.</p>
+<p>For this example, based on the user’s input, the retrieved results are as follows:</p>
+<div class="language-pycon highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="go">Here are some extra column information that might help you understand the dataset:\n- titanic.csv:\n  - {&quot;column&quot;: Sex, &quot;dtype&quot;: &quot;string&quot;, &quot;values&quot;: [&quot;male&quot;, &quot;female&quot;, ...]}</span>
+</span></code></pre></div>
+<h3 id="code-generation">Code Generation<a class="headerlink" href="#code-generation" title="Permanent link">#</a></h3>
+<p>The agent generates the following Python code:
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1"># Count the number of males and females</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">gender_counts</span> <span class="o">=</span> <span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Sex&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1"># Create a pie chart</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="n">plt</span><span class="o">.</span><span class="n">pie</span><span class="p">(</span><span class="n">gender_counts</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="n">gender_counts</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">autopct</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%1.1f%%</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">startangle</span><span class="o">=</span><span class="mi">140</span><span class="p">)</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Gender Distribution&#39;</span><span class="p">)</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</span></code></pre></div></p>
+<h3 id="code-execution">Code Execution<a class="headerlink" href="#code-execution" title="Permanent link">#</a></h3>
+<p>The generated code is automatically executed in the IPython sandbox environment.</p>
+<h3 id="result-generation">Result Generation<a class="headerlink" href="#result-generation" title="Permanent link">#</a></h3>
+<p>After the execution is complete, the results are generated as follows:</p>
+<p><img alt="result image" src="../../static/result.png" /></p>
+<h3 id="visual-analysis-optional">Visual Analysis (optional)<a class="headerlink" href="#visual-analysis-optional" title="Permanent link">#</a></h3>
+<p>The visual analysis plugin allows you to enhance generated results with visualizations, making the output more intuitive and informative.</p>
+<p>To enable this feature, you can pass the <code>vlm</code> parameter when creating a <code>tablegpt-agent</code>. Here’s an example:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span> <span class="nn">tablegpt.agent</span> <span class="kn">import</span> <span class="n">create_tablegpt_graph</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">vlm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">openai_api_base</span><span class="o">=</span><span class="s2">&quot;VLM_URL&quot;</span><span class="p">,</span> <span class="n">openai_api_key</span><span class="o">=</span><span class="s2">&quot;whatever&quot;</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">&quot;VLM_MODEL_NAME&quot;</span><span class="p">)</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">agent</span> <span class="o">=</span> <span class="n">create_tablegpt_graph</span><span class="p">(</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>    <span class="o">...</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>    <span class="n">vlm</span><span class="o">=</span><span class="n">vlm</span><span class="p">,</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>    <span class="o">...</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">)</span>
+</span></code></pre></div>
+<p>Once enabled, the <code>tablegpt-agent</code> will use the <code>vlm</code> model to generate visual representations of the data.  </p>
+<p>For instance, in response to the query mentioned earlier, the <code>tablegpt-agent</code> generates the following visualization:</p>
+<blockquote>
+<p><em>I have drawn a pie chart illustrating the ratio of men to women. From the chart, you can see that men constitute 64.4% while women make up 35.6%. If you need any further analysis or visualizations, feel free to let me know.</em>  </p>
+</blockquote>
+<p>This feature adds a layer of clarity and insight, helping users interpret the results more effectively. On some complex graphs, this function is more effective.</p>
 
 
 
