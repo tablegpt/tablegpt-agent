@@ -473,17 +473,6 @@
         
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Incluster Code Execution
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -493,34 +482,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -763,23 +724,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    <span class="md-ellipsis">
-      Usage
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -811,20 +755,6 @@
 
 <h1 id="incluster-code-execution">Incluster Code Execution<a class="headerlink" href="#incluster-code-execution" title="Permanent link">#</a></h1>
 <p>The <code>tablegpt-agent</code> directs <code>tablegpt</code> to generate Python code for data analysis. This code is then executed within a sandbox environment to ensure system security. The execution is managed by the <a href="https://github.com/edwardzjl/pybox">pybox</a> library, which provides a simple way to run Python code outside the main process.</p>
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">#</a></h2>
-<p>If you're using the local executor (pybox.LocalPyBoxManager), follow these steps to configure the environment:</p>
-<ol>
-<li>
-<p>Install the dependencies required for the <code>IPython Kernel</code> using the following command:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>ipython/requirements.txt
-</span></code></pre></div>
-</li>
-<li>
-<p>Copy the code from the <code>ipython/ipython-startup-scripts</code> folder to the <code>$HOME/.ipython/profile_default/startup/</code> directory.</p>
-<p>This folder contains the functions and configurations needed to perform data analysis with <code>tablegpt-agent</code>.</p>
-<p>Note: The <code>~/.ipython</code> directory must be writable for the process launching the kernel, otherwise there will be a warning message: <code>UserWarning: IPython dir '/home/jovyan/.ipython' is not a writable location, using a temp directory.</code> and the startup scripts won't take effects.</p>
-</li>
-</ol>
 
 
 
