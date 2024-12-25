@@ -137,15 +137,13 @@ def _read_df(uri: str, encoding: str = "utf-8", **kwargs) -> pd.DataFrame:
     """
     ext = file_extension(uri).lower()
     if ext == ".csv":
-        df = pd.read_csv(uri, encoding=encoding, **kwargs)
-    elif ext == ".tsv":
-        df = pd.read_csv(uri, sep="\t", encoding=encoding, **kwargs)
-    elif ext in [".xls", ".xlsx", ".xlsm", ".xlsb", ".odf", ".ods", ".odt"]:
+        return pd.read_csv(uri, encoding=encoding, **kwargs)
+    if ext == ".tsv":
+        return pd.read_csv(uri, sep="\t", encoding=encoding, **kwargs)
+    if ext in {".xls", ".xlsx", ".xlsm", ".xlsb", ".odf", ".ods", ".odt"}:
         # read_excel does not support 'encoding' arg, also it seems that it does not need it.
-        df = pd.read_excel(uri, **kwargs)
-    else:
-        raise UnsupportedFileFormatError(ext)
-    return df
+        return pd.read_excel(uri, **kwargs)
+    raise UnsupportedFileFormatError(ext)
 
 
 class FileEncoding(NamedTuple):
