@@ -24,10 +24,17 @@ if TYPE_CHECKING:
 
 def path_from_uri(uri: str) -> Path:
     """Return a new path from the given 'file' URI.
-    This is implemented in Python 3.13.
-    See <https://github.com/python/cpython/pull/107640>
-    and <https://github.com/python/cpython/pull/107640/files#diff-fa525485738fc33d05b06c159172ff1f319c26e88d8c6bb39f7dbaae4dc4105c>
-    TODO: remove when we migrate to Python 3.13"""
+
+    This helper function is designed for use with Python versions earlier than 3.13.
+    For Python 3.13 and later, this functionality is built-in and you should use `pathlib.Path.from_uri()` instead.
+
+    References:
+    - Pull Request: <https://github.com/python/cpython/pull/107640>
+    - Relevant Code Changes: <https://github.com/python/cpython/pull/107640/files#diff-fa525485738fc33d05b06c159172ff1f319c26e88d8c6bb39f7dbaae4dc4105c>
+
+    Returns:
+        pathlib.Path: A path object representing the given 'file' URI.
+    """
     if not uri.startswith("file:"):
         raise InvalidFileURIError(uri)
     path = uri[5:]
@@ -65,7 +72,28 @@ def file_extension(file: str) -> str:
 
 
 def read_df(uri: str, *, autodetect_encoding: bool = True, **kwargs) -> pd.DataFrame:
-    """A simple wrapper to read different file formats into DataFrame."""
+    """Reads a file into a Pandas DataFrame, supporting multiple file formats and optional automatic encoding detection.
+
+    Args:
+        uri (str): The URI or file path of the file to be read. Supported formats depend on the underlying `_read_df` function.
+        autodetect_encoding (bool, optional): Whether to attempt automatic detection of the file's encoding in case
+            of a UnicodeDecodeError. Defaults to True.
+        **kwargs: Additional keyword arguments passed to the `_read_df` function.
+
+    Returns:
+        pd.DataFrame: The loaded DataFrame containing the data from the specified file.
+
+    Raises:
+        UnsupportedEncodingError: If encoding detection fails or all detected encodings result in decoding errors.
+        UnicodeDecodeError: If `autodetect_encoding` is set to False and the file cannot be read with the provided or default encoding.
+
+    Notes:
+        - The `_read_df` function is expected to handle the actual file parsing and support various formats,
+          such as CSV, Excel, JSON, etc.
+        - If `autodetect_encoding` is True, the function uses `detect_file_encodings` to detect potential encodings
+          and retries reading the file using these encodings. If all attempts fail, an `UnsupportedEncodingError` is raised.
+        - The `detect_file_encodings` function uses a 30-second timeout for encoding detection.
+    """
     try:
         return _read_df(uri, **kwargs)
     except UnicodeDecodeError as e:
@@ -82,7 +110,31 @@ def read_df(uri: str, *, autodetect_encoding: bool = True, **kwargs) -> pd.DataF
 
 
 def _read_df(uri: str, encoding: str = "utf-8", **kwargs) -> pd.DataFrame:
-    """A simple wrapper to read different file formats into DataFrame."""
+    """Reads a file into a pandas DataFrame, supporting various file formats.
+
+    Supported formats:
+    - CSV files (detected by .csv extension).
+    - TSV files (detected by .tsv extension).
+    - Excel files (detected by extensions: .xls, .xlsx, .xlsm, .xlsb, .odf, .ods, .odt).
+
+    Parameters:
+    - uri (str): Path to the file.
+    - encoding (str): Encoding of the file (default is "utf-8"). Ignored for Excel files.
+    - **kwargs: Additional arguments to pass to pandas' read functions.
+
+    Returns:
+    - pd.DataFrame: The loaded data as a DataFrame.
+
+    Raises:
+    - UnsupportedFileFormatError: If the file format is not supported.
+
+    Note:
+    - Files without an extension or unsupported extensions will raise an error.
+    - The `read_excel` method does not require an `encoding` parameter.
+
+    Example:
+        df = _read_df("data.csv", encoding="utf-8", delimiter=";")
+    """
     ext = file_extension(uri).lower()
     if ext == ".csv":
         df = pd.read_csv(uri, encoding=encoding, **kwargs)
@@ -108,14 +160,20 @@ class FileEncoding(NamedTuple):
 
 
 def detect_file_encodings(file_path: str | Path, timeout: int = 5) -> list[FileEncoding]:
-    """Try to detect the file encoding.
+    """Detect the encoding(s) of a file.
 
-    Returns a list of `FileEncoding` tuples with the detected encodings ordered
-    by confidence.
+    Attempts to detect the encoding of a given file by analyzing its raw byte content.
+    Returns a list of detected encodings, ordered by confidence.
 
     Args:
-        file_path: The path to the file to detect the encoding for.
-        timeout: The timeout in seconds for the encoding detection.
+        file_path (str | Path): The path to the file whose encoding is to be detected.
+        timeout (int): The maximum number of seconds to wait for the encoding detection to complete. Default is 5 seconds.
+
+    Returns:
+        List[FileEncoding]: A list of `FileEncoding` objects, ordered by the confidence of the detected encoding.
+
+    Raises:
+        EncodingDetectionError: If no encoding can be detected or if an error occurs during the file reading process.
     """
     from chardet import detect_all
 
