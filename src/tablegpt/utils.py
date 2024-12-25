@@ -117,14 +117,14 @@ def detect_file_encodings(file_path: str | Path, timeout: int = 5) -> list[FileE
         file_path: The path to the file to detect the encoding for.
         timeout: The timeout in seconds for the encoding detection.
     """
-    import chardet
+    from chardet import detect_all
 
     file_path = str(file_path)
 
     def read_and_detect(file_path: str) -> list[dict]:
         with open(file_path, "rb") as f:
             rawdata = f.read()
-        return cast(list[dict], chardet.detect_all(rawdata))
+        return cast(list[dict], detect_all(rawdata))
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         future = executor.submit(read_and_detect, file_path)
