@@ -162,13 +162,6 @@ def filter_contents(messages: list[BaseMessage], keep: Sequence[str] | None = No
     - If the content of a message is a string or a list of strings, it is returned as-is without filtering.
     - If the content of a message is a list of dictionaries, only those with a 'type' in the `keep` set are retained.
     """
-    # Make sure 'text' parts are always keeped.
-    if not keep:
-        keep = {"text"}
-    else:
-        keep: set = set(keep)
-        keep.add("text")
-
     return [filter_content(msg, keep) for msg in messages]
 
 
@@ -200,25 +193,21 @@ def filter_content(message: BaseMessage, keep: Sequence[str] | None = None) -> B
     - If the content is a list of dictionaries, only those with a 'type' in the `keep` set are retained.
     """
     # Make sure 'text' parts are always keeped.
-    if not keep:
-        keep = {"text"}
-    else:
-        keep: set = set(keep)
-        keep.add("text")
+    keep = set(keep or ["text"])
 
-    if isinstance(message.content, str):
-        # Content is str, return directly
+    # If content is a string or a list of all strings, no filtering is necessary.
+    if isinstance(message.content, str) or all(isinstance(part, str) for part in message.content):
         return message
 
-    if all(isinstance(part, str) for part in message.content):
-        # Content is a list of str, return directly
+    # Otherwise, perform filtering.
+    filtered_content = [part for part in message.content if not isinstance(part, dict) or part.get("type") in keep]
+
+    # If the filtered content is the same as the original, return the message as-is.
+    if filtered_content == message.content:
         return message
 
-    # Content is a list of dict, perform filtering.
-    # We don't want to modify on the original message, as it will be persisted in agent state.
-    cloned = deepcopy(message)
-    cloned.content = []
-    for part in message.content:
-        if not isinstance(part, dict) or part.get("type") in keep:
-            cloned.content.append(part)
-    return cloned
+    # Clone and update the message only if changes are necessary.
+    cloned_message = deepcopy(message)
+    cloned_message.content = filtered_content
+
+    return cloned_message
