@@ -4,11 +4,13 @@ import os
 import signal
 import sys
 
-from agent_eval.config import load_config
-from agent_eval.evaluator import Evaluator
 from dotenv import find_dotenv, load_dotenv
 from langchain.globals import set_debug
 from traitlets.log import get_logger
+
+from .config import load_config
+from .runner import Runner
+
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +33,7 @@ async def main() -> None:
         loop.add_signal_handler(signal.SIGTERM, stop_event.set)
 
     config = load_config()
-    evaluator = Evaluator(config)
+    evaluator = Runner(config)
     try:
         await evaluator.run(stop_event)
     except asyncio.exceptions.CancelledError:

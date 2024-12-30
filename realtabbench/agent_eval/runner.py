@@ -31,8 +31,8 @@ logger = logging.getLogger(__name__)
 eval_run_output_file = f"eval_run_{datetime.datetime.now(tz=datetime.UTC).strftime('%Y%m%d_%H%M%S')}.jsonl"
 
 
-class Evaluator:
-    """TableGPT Evaluator.
+class Runner:
+    """Evaluation task runner.
 
     config(config.EvalSettings): evaluation configuration.
     client(langfuse.Langfuse): Langfuse client.
