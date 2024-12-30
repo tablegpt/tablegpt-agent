@@ -8,16 +8,17 @@ import traceback
 from typing import TYPE_CHECKING, Any
 
 import aiofiles
-from agent_eval.grader import grader_chain
-from agent_eval.grader.prompt import (
-    DEFAULT_CRITERIA_WITH_REFERENCE_ANSWER,
-    DEFAULT_CRITERIA_WITHOUT_REFERENCE_ANSWER,
-)
-from agent_eval.student import create_student_graph, student_context
-from agent_eval.workflow import create_eval_workflow
 from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from tqdm.asyncio import tqdm
+
+from .grader import grader_chain
+from .grader.prompt import (
+    DEFAULT_CRITERIA_WITH_REFERENCE_ANSWER,
+    DEFAULT_CRITERIA_WITHOUT_REFERENCE_ANSWER,
+)
+from .evaluatee import create_evaluatee_runnable, evaluatee_context
+from .workflow import create_eval_workflow
 
 if TYPE_CHECKING:
     from agent_eval.config import EvalSettings
@@ -67,7 +68,7 @@ class Evaluator:
             student_context = {}
 
         checkpointer = MemorySaver()
-        student = await create_student_graph(
+        student = await create_evaluatee_runnable(
             datasets=payload.get("datasets"),
             checkpointer=checkpointer,
             **student_context,
@@ -143,7 +144,7 @@ class Evaluator:
             pbar (tqdm | None, optional): Progress bar to update task progress. Defaults to None.
         """
         logger.info("Worker started")
-        async with student_context() as context:
+        async with evaluatee_context() as context:
             while True:
                 if stop_event.is_set():
                     logger.warning("Worker received stop event, cancelling...")

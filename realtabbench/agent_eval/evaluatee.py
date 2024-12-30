@@ -7,13 +7,14 @@ from pathlib import Path
 from typing import TYPE_CHECKING, TypedDict
 from uuid import uuid4
 
-from agent_eval.student_config import Settings
 from langchain_core.messages import HumanMessage
 from langchain_openai import ChatOpenAI
 from pybox import LocalPyBoxManager
 from pybox.kube import KubePyBoxManager
 from tablegpt.agent import create_tablegpt_graph
 from tablegpt.agent.file_reading import Stage
+
+from .evaluatee_config import Settings
 
 if TYPE_CHECKING:
     from langchain_core.runnables import Runnable
@@ -54,8 +55,8 @@ class Attachment(TypedDict):
 
 
 @asynccontextmanager
-async def student_context():
-    """Make a context for TableGPT students.
+async def evaluatee_context():
+    """Make a context for TableGPT evaluatee.
 
     Yields:
         dict[str, Any]: kwargs to be passed to the workflow.
@@ -84,13 +85,13 @@ async def student_context():
         logger.debug("Worker resources cleaned up")
 
 
-async def create_student_graph(
+async def create_evaluatee_runnable(
     datasets: list[str],
     workdir: Path,
     session_id: str | None = None,
     checkpointer: BaseCheckpointSaver | None = None,
 ) -> Runnable:
-    """Create a student graph for getting prediction answers.
+    """Create a evaluatee runnable.
 
     Args:
         datasets (list[str]): Evaluation datasets.
@@ -98,7 +99,7 @@ async def create_student_graph(
         session_id (str | None, optional): Session ID. Defaults to None.
 
     Returns:
-        Runnable: Student workflow.
+        Runnable: Evaluatee runnable.
     """
     wf: CompiledGraph = create_tablegpt_graph(
         llm=llm,
