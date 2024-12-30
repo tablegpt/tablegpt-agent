@@ -2,19 +2,10 @@ from __future__ import annotations
 
 from typing import Any
 
-from langchain.evaluation.criteria.eval_chain import Criteria
 from langchain.evaluation.scoring.eval_chain import (
     _FIND_DOUBLE_BRACKETS,
     ScoreStringResultOutputParser,
 )
-
-DEFAULT_CRITERIA = [
-    Criteria.HELPFULNESS,
-    Criteria.RELEVANCE,
-    Criteria.CORRECTNESS,
-    Criteria.DEPTH,
-    Criteria.DETAIL,
-]
 
 
 class FloatScoreOutputParser(ScoreStringResultOutputParser):
