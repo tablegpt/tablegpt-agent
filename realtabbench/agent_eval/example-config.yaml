@@ -10,7 +10,7 @@ metadata:
 datasets:
   - name: /datasets/tablegpt-eval-normal.json
 
-grader:
+evaluator:
   openai_api_base: http://localhost:8080/v1
   openai_api_key: nothing
   model_name: qwen2.5-72b-instruct

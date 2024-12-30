@@ -1,15 +1,16 @@
 from operator import itemgetter
 
-from agent_eval.grader.output_parser import FloatScoreOutputParser
-from agent_eval.grader.prompt import (
+from langchain_core.language_models import BaseLanguageModel
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnableParallel
+
+from .output_parser import FloatScoreOutputParser
+from .prompt import (
     INSTRUCTION,
     format_criteria,
     format_redlines,
     format_reference_answer,
 )
-from langchain_core.language_models import BaseLanguageModel
-from langchain_core.prompts import ChatPromptTemplate
-from langchain_core.runnables import RunnableParallel
 
 PROMPT = ChatPromptTemplate.from_messages([("user", INSTRUCTION)])
 
@@ -25,5 +26,5 @@ formatter = RunnableParallel(
 )
 
 
-def grader_chain(llm: BaseLanguageModel):
+def create_evaluator_runnable(llm: BaseLanguageModel):
     return formatter | PROMPT | llm | output_parser

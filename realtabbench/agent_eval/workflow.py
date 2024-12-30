@@ -16,58 +16,55 @@ class AgentState(TypedDict):
     reference_answer: str | None = None
     criteria: list[str] | None = None
     redlines: list[str] | None = None
-    student_answer: str | None = None
-    grader_result: dict | None = None
+    evaluatee_answer: str | None = None
+    evaluation: dict | None = None
 
 
-def create_eval_workflow(
-    student: Runnable,
-    grader: Runnable,
-) -> Runnable:
-    """Create a runnable that evaluates the student's answer using the grader.
+def create_eval_workflow(evaluatee: Runnable, evaluator: Runnable) -> Runnable:
+    """Create a runnable that evaluates the evaluatee's answer using the evaluator.
 
     Args:
-        student (Runnable): Runnable used to predict the student's answer.
-        grader (Runnable): Runnable used to grade the student's answer.
+        evaluatee (Runnable): Runnable used to predict the evaluatee's answer.
+        evaluator (Runnable): Runnable used to evaluate the evaluatee's answer.
 
     Returns:
         Runnable: Evaluation workflow
     """
 
-    async def arun_student_graph(data: AgentState) -> dict[str, str]:
-        student_state = await student.ainvoke(
+    async def run_evaluatee(data: AgentState) -> dict[str, str]:
+        evaluatee_state = await evaluatee.ainvoke(
             input={
                 "parent_id": str(uuid4()),
                 "messages": [HumanMessage(content=data["input"])],
                 "date": date.today(),  # noqa: DTZ011
             },
         )
-        student_answer = student_state["messages"][-1]
-        return {"student_answer": student_answer.content}
+        evaluatee_answer = evaluatee_state["messages"][-1]
+        return {"evaluatee_answer": evaluatee_answer.content}
 
-    async def arun_grader_chain(data: AgentState) -> dict[str, dict]:
-        result = await grader.ainvoke(
+    async def run_evaluator(data: AgentState) -> dict[str, dict]:
+        result = await evaluator.ainvoke(
             {
                 "criteria": data["criteria"],
                 "redlines": data["redlines"],
                 "question": data["input"],
                 "reference_answer": data["reference_answer"],
-                "answer": data["student_answer"],
+                "answer": data["evaluatee_answer"],
             },
         )
-        grader_result = {
+        evaluation = {
             "score": result["score"],
             "explaination": result["reason"],
         }
-        return {"grader_result": grader_result}
+        return {"evaluation": evaluation}
 
     workflow = StateGraph(AgentState)
 
-    workflow.add_node("arun_student_graph", arun_student_graph)
-    workflow.add_node("arun_grader_chain", arun_grader_chain)
+    workflow.add_node(run_evaluatee)
+    workflow.add_node(run_evaluator)
 
-    workflow.add_edge(START, "arun_student_graph")
-    workflow.add_edge("arun_student_graph", "arun_grader_chain")
-    workflow.add_edge("arun_grader_chain", END)
+    workflow.add_edge(START, "run_evaluatee")
+    workflow.add_edge("run_evaluatee", "run_evaluator")
+    workflow.add_edge("run_evaluator", END)
 
     return workflow.compile()

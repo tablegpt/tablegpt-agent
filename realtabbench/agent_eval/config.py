@@ -26,7 +26,7 @@ class EvalSettings(BaseSettings):
     max_concurrency: PositiveInt = 1
     num_repetitions: PositiveInt = 1
 
-    grader: dict[str, Any]
+    evaluator: dict[str, Any]
 
 
 def load_config() -> dict[str, Any]:

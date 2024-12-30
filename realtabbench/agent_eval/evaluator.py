@@ -12,8 +12,8 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from tqdm.asyncio import tqdm
 
-from .grader import grader_chain
-from .grader.prompt import (
+from .evaluator import create_evaluator_runnable
+from .evaluator.prompt import (
     DEFAULT_CRITERIA_WITH_REFERENCE_ANSWER,
     DEFAULT_CRITERIA_WITHOUT_REFERENCE_ANSWER,
 )
@@ -34,9 +34,9 @@ eval_run_output_file = f"eval_run_{datetime.datetime.now(tz=datetime.UTC).strfti
 class Evaluator:
     """TableGPT Evaluator.
 
-    config(config.EvalSettings): evaluator configuration.
+    config(config.EvalSettings): evaluation configuration.
     client(langfuse.Langfuse): Langfuse client.
-    grader(langchain_core.runnables.Runnable): Grader used to grade the student's answer.
+    evaluator(langchain_core.runnables.Runnable): Evaluator used to evaluate the evaluatee's answer.
     """
 
     def __init__(self, config: EvalSettings) -> None:
@@ -48,33 +48,33 @@ class Evaluator:
 
         logger.info("Initializing evaluator with config: %s}", config)
         self.config = config
-        self.grader = grader_chain(ChatOpenAI(**config.grader))
+        self.evaluator = create_evaluator_runnable(ChatOpenAI(**config.evaluator))
         logger.info("Evaluator initialized")
 
     async def run_eval(
         self,
         payload: dict[str, Any],
-        student_context: dict[str, Any] | None = None,
+        evaluatee_context: dict[str, Any] | None = None,
     ) -> None:
         """Run the evaluation workflow.
-        Usually a student runnable will be executed, followed by a grader runnable.
+        Usually a evaluatee runnable will be executed, followed by a evaluator runnable.
 
         Args:
             payload (dict[str, Any]): Evaluation payload.
-            student_context (dict[str, Any] | None, optional): Context to be passed to the student. Defaults to None.
+            evaluatee_context (dict[str, Any] | None, optional): Context to be passed to the evaluatee. Defaults to None.
         """
 
-        if student_context is None:
-            student_context = {}
+        if evaluatee_context is None:
+            evaluatee_context = {}
 
         checkpointer = MemorySaver()
-        student = await create_evaluatee_runnable(
+        evaluatee = await create_evaluatee_runnable(
             datasets=payload.get("datasets"),
             checkpointer=checkpointer,
-            **student_context,
+            **evaluatee_context,
         )
 
-        eval_wf = create_eval_workflow(student=student, grader=self.grader)
+        eval_wf = create_eval_workflow(evaluatee=evaluatee, evaluator=self.evaluator)
 
         item: dict[str, Any] = payload["item"]
         criteria = payload.get("criteria")
@@ -93,25 +93,26 @@ class Evaluator:
                     "redlines": payload.get("redlines", []),
                 },
             )
-            grader_result = res["grader_result"]
-            student_answer = res["student_answer"]
+            evaluation = res["evaluation"]
+            evaluatee_answer = res["evaluatee_answer"]
         except Exception:
             logger.exception(
-                "Student Workflow failed, item: %s, context: %s",
+                "Evaluatee Workflow failed, item: %s, context: %s",
                 item["input"],
-                student_context,
+                evaluatee_context,
             )
             # We treat any exception in agent invocation as a bad case
             err_info = traceback.format_exc()
-            grader_result = {
+            evaluation = {
                 "score": 0,
                 "explaination": err_info,
             }
-            student_answer = ""
+            evaluatee_answer = ""
 
+        # TODO: get rid of the 'session_id'. It's a evaluatee thing.
         checkpoint: Checkpoint = checkpointer.get(
             config={
-                "configurable": {"thread_id": student_context["session_id"]},
+                "configurable": {"thread_id": evaluatee_context["session_id"]},
             }
         )
         messages = checkpoint["channel_values"].get("messages", [])
@@ -119,9 +120,9 @@ class Evaluator:
 
         eval_result = {
             "input": item["input"],
-            "score": grader_result,
+            "evaluation": evaluation,
             "reference_answer": item["expected_output"],
-            "student_answer": student_answer,
+            "evaluatee_answer": evaluatee_answer,
             "criteria": criteria,
             "redlines": payload.get("redlines", []),
             "messages": messages,
@@ -151,7 +152,7 @@ class Evaluator:
                     break
                 try:
                     payload = queue.get_nowait()
-                    await self.run_eval(payload=payload, student_context=context)
+                    await self.run_eval(payload=payload, evaluatee_context=context)
                     if pbar is not None:
                         pbar.update(1)
                 except asyncio.QueueEmpty:

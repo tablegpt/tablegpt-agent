@@ -61,7 +61,7 @@ async def evaluatee_context():
     Yields:
         dict[str, Any]: kwargs to be passed to the workflow.
     """
-    # A unique session id for this context. All student workflow under this context will share one Ipython kernel.
+    # A unique session id for this context. All evaluatee workflow under this context will share one Ipython kernel.
     session_id = f"eval-session-{uuid4().hex}"
 
     workdir = Path(settings.data_vol, session_id)
