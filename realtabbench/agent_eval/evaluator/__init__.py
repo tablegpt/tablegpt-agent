@@ -25,5 +25,5 @@ def create_evaluator_runnable(llm: BaseLanguageModel):
         }
         | PROMPT
         | llm
-        | FloatScoreOutputParser
+        | FloatScoreOutputParser()
     )
