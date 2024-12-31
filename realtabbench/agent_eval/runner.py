@@ -162,22 +162,8 @@ class Runner:
         """Gather evaluation samples and run the evaluation process, in parallel."""
         logger.info("Gathering evaluation samples...")
         queue = asyncio.Queue()
-        for dataset_config in self.config.datasets:
-            logger.debug("Gathering samples from dataset: %s...", dataset_config.name)
-
-            # TODO: open with aiofiles
-            with open(dataset_config.name) as f:  # noqa: ASYNC101
-                dataset = json.load(f)
-            _samples = gather_samples(dataset)
-            logger.debug(
-                "Gathered %d samples from dataset %s",
-                len(_samples),
-                dataset_config.name,
-            )
-            for sample in _samples:
-                for _ in range(self.config.num_repetitions):
-                    await queue.put(sample)
-            total_samples = queue.qsize()
+        await enqueue_samples(queue, self.config.datasets, self.config.num_repetitions)
+        total_samples = queue.qsize()
         logger.info("Gathered %s samples for evaluation", total_samples)
 
         with tqdm(total=total_samples, desc="Evaluation samples") as pbar:
@@ -189,11 +175,33 @@ class Runner:
                     )
                     for i in range(self.config.max_concurrency)
                 ]
-                await asyncio.gather(*eval_tasks, return_exceptions=True)  # Ensure all consumers exit
+                # Ensure all consumers exit
+                await asyncio.gather(*eval_tasks, return_exceptions=True)
             except Exception:
                 logger.exception("Error in evaluator")
             finally:
                 logger.info("Shutting down evaluator...")
+
+
+async def enqueue_samples(queue: asyncio.Queue, datasets: list[dict], num_repetitions: int = 1) -> None:
+    for dataset_config in datasets:
+        logger.debug("Gathering samples from dataset: %s...",
+                     dataset_config.name
+                     )
+
+        async with aiofiles.open(dataset_config.name) as f:
+            content = await f.read()
+            dataset = json.loads(content)
+        _samples = gather_samples(dataset)
+        logger.debug(
+            "Gathered %d samples from dataset %s",
+            len(_samples),
+            dataset_config.name,
+        )
+        for sample in _samples:
+            # Repeat each sample for `num_repetitions` times.
+            for _ in range(num_repetitions):
+                await queue.put(sample)
 
 
 def gather_samples(dataset: list[dict[str, Any]]) -> list[dict[str, Any]]:
