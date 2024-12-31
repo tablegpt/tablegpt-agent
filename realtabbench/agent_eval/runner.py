@@ -78,12 +78,6 @@ class Runner:
 
         item: dict[str, Any] = payload["item"]
         criteria = payload.get("criteria")
-        if not criteria:
-            criteria = (
-                DEFAULT_CRITERIA_WITH_REFERENCE_ANSWER
-                if item["expected_output"]
-                else DEFAULT_CRITERIA_WITHOUT_REFERENCE_ANSWER
-            )
         try:
             res = await eval_wf.ainvoke(
                 input={
@@ -204,11 +198,11 @@ class Runner:
 
 def gather_samples(dataset: list[dict[str, Any]]) -> list[dict[str, Any]]:
     active_samples = [item for item in dataset if item["status"] != "ARCHIVED"]
-
     return [
         {
             "item": item,
             "datasets": item.get("attachments", []),
+            "criteria": DEFAULT_CRITERIA_WITH_REFERENCE_ANSWER if item["expected_output"] else DEFAULT_CRITERIA_WITHOUT_REFERENCE_ANSWER
         }
         for item in active_samples
     ]
