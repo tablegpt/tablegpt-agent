@@ -51,6 +51,60 @@ class Runner:
         self.evaluator = create_evaluator_runnable(ChatOpenAI(**config.evaluator))
         logger.info("Evaluator initialized")
 
+    async def run(self, stop_event: asyncio.Event) -> None:
+        """Gather evaluation samples and run the evaluation process, in parallel."""
+        logger.info("Gathering evaluation samples...")
+        queue = asyncio.Queue()
+        await enqueue_samples(queue, self.config.datasets, self.config.num_repetitions)
+        total_samples = queue.qsize()
+        logger.info("Gathered %s samples for evaluation", total_samples)
+
+        with tqdm(total=total_samples, desc="Evaluation samples") as pbar:
+            try:
+                eval_tasks = [
+                    asyncio.create_task(
+                        self.worker(queue, stop_event, pbar),
+                        name=f"worker-{i}",
+                    )
+                    for i in range(self.config.max_concurrency)
+                ]
+                # Ensure all consumers exit
+                await asyncio.gather(*eval_tasks, return_exceptions=True)
+            except Exception:
+                logger.exception("Error in evaluator")
+            finally:
+                logger.info("Shutting down evaluator...")
+
+    async def worker(
+        self,
+        queue: asyncio.Queue,
+        stop_event: asyncio.Event,
+        pbar: tqdm | None = None,
+    ) -> None:
+        """Worker to process tasks from the task queue.
+
+        Args:
+            queue (asyncio.Queue): Task queue.
+            stop_event (asyncio.Event): Stop events to signal the worker to stop.
+            pbar (tqdm | None, optional): Progress bar to update task progress. Defaults to None.
+        """
+        logger.info("Worker started")
+        async with evaluatee_context() as context:
+            while not stop_event.is_set():
+                try:
+                    payload = queue.get_nowait()
+                    await self.run_eval(payload=payload, evaluatee_context=context)
+                    if pbar is not None:
+                        pbar.update(1)
+                except asyncio.QueueEmpty:
+                    # No more tasks in the queue, quit current worker
+                    logger.info("Worker finished")
+                    break
+                except Exception:
+                    logger.exception("Worker encountered an error")
+                    stop_event.set()  # Set the stop event to cancel other workers
+                    break
+
     async def run_eval(
         self,
         payload: dict[str, Any],
@@ -91,7 +145,7 @@ class Runner:
             evaluatee_answer = res["evaluatee_answer"]
         except Exception:
             logger.exception(
-                "Evaluatee Workflow failed, item: %s, context: %s",
+                "Evaluation Workflow failed, item: %s, context: %s",
                 item["input"],
                 evaluatee_context,
             )
@@ -124,63 +178,6 @@ class Runner:
 
         async with aiofiles.open(eval_run_output_file, mode="a") as f:
             await f.write(json.dumps(eval_result, ensure_ascii=False) + "\n")
-
-    async def worker(
-        self,
-        queue: asyncio.Queue,
-        stop_event: asyncio.Event,
-        pbar: tqdm | None = None,
-    ) -> None:
-        """Worker to process tasks from the task queue.
-
-        Args:
-            queue (asyncio.Queue): Task queue.
-            stop_event (asyncio.Event): Stop events to signal the worker to stop.
-            pbar (tqdm | None, optional): Progress bar to update task progress. Defaults to None.
-        """
-        logger.info("Worker started")
-        async with evaluatee_context() as context:
-            while True:
-                if stop_event.is_set():
-                    logger.warning("Worker received stop event, cancelling...")
-                    break
-                try:
-                    payload = queue.get_nowait()
-                    await self.run_eval(payload=payload, evaluatee_context=context)
-                    if pbar is not None:
-                        pbar.update(1)
-                except asyncio.QueueEmpty:
-                    # No more tasks in the queue, quit current worker
-                    logger.info("Worker finished")
-                    break
-                except Exception:
-                    logger.exception("Worker encountered an error")
-                    stop_event.set()  # Set the stop event to cancel other workers
-                    break
-
-    async def run(self, stop_event: asyncio.Event) -> None:
-        """Gather evaluation samples and run the evaluation process, in parallel."""
-        logger.info("Gathering evaluation samples...")
-        queue = asyncio.Queue()
-        await enqueue_samples(queue, self.config.datasets, self.config.num_repetitions)
-        total_samples = queue.qsize()
-        logger.info("Gathered %s samples for evaluation", total_samples)
-
-        with tqdm(total=total_samples, desc="Evaluation samples") as pbar:
-            try:
-                eval_tasks = [
-                    asyncio.create_task(
-                        self.worker(queue, stop_event, pbar),
-                        name=f"worker-{i}",
-                    )
-                    for i in range(self.config.max_concurrency)
-                ]
-                # Ensure all consumers exit
-                await asyncio.gather(*eval_tasks, return_exceptions=True)
-            except Exception:
-                logger.exception("Error in evaluator")
-            finally:
-                logger.info("Shutting down evaluator...")
 
 
 async def enqueue_samples(queue: asyncio.Queue, dataset_configs: list[dict], num_repetitions: int = 1) -> None:
