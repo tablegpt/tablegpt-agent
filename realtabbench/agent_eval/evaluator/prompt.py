@@ -28,18 +28,22 @@ DEFAULT_CRITERIA_WITHOUT_REFERENCE_ANSWER = [
 def format_criteria(criteria: list[str]) -> str:
     if not criteria:
         return ""
+    # I cannot manage to format it in one f-string
+    # Python complains about 'SyntaxError: f-string expression part cannot include a backslash'
+    criteria_str = "\n".join([f"- {x}" for x in criteria])
     return f"""## Evaluation Criteria
 Consider the following criteria when assigning the rating:
-{"\n".join(["- " + x for x in criteria])}
+{criteria_str}
 """
 
 
 def format_redlines(attentions: list[str]) -> str:
     if not attentions:
         return ""
+    attentions_str = "\n".join([f"- {x}" for x in attentions])
     return f"""## Redlines
 If the answer touches one of the redlines listed below, assign a score of [[0.0]] directly.
-{"\n".join(["- " + x for x in attentions])}
+{attentions_str}
 """
 
 
