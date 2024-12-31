@@ -183,8 +183,15 @@ class Runner:
                 logger.info("Shutting down evaluator...")
 
 
-async def enqueue_samples(queue: asyncio.Queue, datasets: list[dict], num_repetitions: int = 1) -> None:
-    for dataset_config in datasets:
+async def enqueue_samples(queue: asyncio.Queue, dataset_configs: list[dict], num_repetitions: int = 1) -> None:
+    """Reads datasets from the provided configurations, constructs samples, and enqueues them for processing.
+
+    Args:
+        queue (asyncio.Queue): The queue to which the samples will be added.
+        dataset_configs (list[dict]): A list of dataset configurations, each containing a 'name' key pointing to the dataset file.
+        num_repetitions (int, optional): The number of times each sample should be repeated in the queue. Defaults to 1.
+    """
+    for dataset_config in dataset_configs:
         logger.debug("Gathering samples from dataset: %s...",
                      dataset_config.name
                      )
@@ -192,7 +199,7 @@ async def enqueue_samples(queue: asyncio.Queue, datasets: list[dict], num_repeti
         async with aiofiles.open(dataset_config.name) as f:
             content = await f.read()
             dataset = json.loads(content)
-        _samples = gather_samples(dataset)
+        _samples = construct_samples(dataset)
         logger.debug(
             "Gathered %d samples from dataset %s",
             len(_samples),
@@ -204,13 +211,24 @@ async def enqueue_samples(queue: asyncio.Queue, datasets: list[dict], num_repeti
                 await queue.put(sample)
 
 
-def gather_samples(dataset: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    active_samples = [item for item in dataset if item["status"] != "ARCHIVED"]
+def construct_samples(dataset: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Constructs a list of samples from the dataset, filtering out archived items and adding metadata.
+
+    Args:
+        dataset (list[dict[str, Any]]): The dataset containing items with 'status', 'attachments', and 'expected_output' keys.
+
+    Returns:
+        list[dict[str, Any]]: A list of samples, each containing the item, its attachments, and evaluation criteria.
+    """
+    # Filter out archived samples
+    active_samples = [sample for sample in dataset if sample["status"] != "ARCHIVED"]
+
+    # Construct samples with additional metadata
     return [
         {
-            "item": item,
-            "datasets": item.get("attachments", []),
-            "criteria": DEFAULT_CRITERIA_WITH_REFERENCE_ANSWER if item["expected_output"] else DEFAULT_CRITERIA_WITHOUT_REFERENCE_ANSWER
+            "item": sample,
+            "datasets": sample.get("attachments", []),
+            "criteria": DEFAULT_CRITERIA_WITH_REFERENCE_ANSWER if sample["expected_output"] else DEFAULT_CRITERIA_WITHOUT_REFERENCE_ANSWER
         }
-        for item in active_samples
+        for sample in active_samples
     ]
