@@ -12,12 +12,12 @@ from langchain_openai import ChatOpenAI
 from langgraph.checkpoint.memory import MemorySaver
 from tqdm.asyncio import tqdm
 
+from .evaluatee import create_evaluatee_runnable, evaluatee_context
 from .evaluator import create_evaluator_runnable
 from .evaluator.prompt import (
     DEFAULT_CRITERIA_WITH_REFERENCE_ANSWER,
     DEFAULT_CRITERIA_WITHOUT_REFERENCE_ANSWER,
 )
-from .evaluatee import create_evaluatee_runnable, evaluatee_context
 from .workflow import create_eval_workflow
 
 if TYPE_CHECKING:
@@ -189,9 +189,7 @@ async def enqueue_samples(queue: asyncio.Queue, dataset_configs: list[dict], num
         num_repetitions (int, optional): The number of times each sample should be repeated in the queue. Defaults to 1.
     """
     for dataset_config in dataset_configs:
-        logger.debug("Gathering samples from dataset: %s...",
-                     dataset_config.name
-                     )
+        logger.debug("Gathering samples from dataset: %s...", dataset_config.name)
 
         async with aiofiles.open(dataset_config.name) as f:
             content = await f.read()
@@ -225,7 +223,9 @@ def construct_samples(dataset: list[dict[str, Any]]) -> list[dict[str, Any]]:
         {
             "item": sample,
             "datasets": sample.get("attachments", []),
-            "criteria": DEFAULT_CRITERIA_WITH_REFERENCE_ANSWER if sample["expected_output"] else DEFAULT_CRITERIA_WITHOUT_REFERENCE_ANSWER
+            "criteria": DEFAULT_CRITERIA_WITH_REFERENCE_ANSWER
+            if sample["expected_output"]
+            else DEFAULT_CRITERIA_WITHOUT_REFERENCE_ANSWER,
         }
         for sample in active_samples
     ]

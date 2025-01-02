@@ -19,7 +19,9 @@ def create_evaluator_runnable(llm: BaseLanguageModel):
         {
             "criteria": lambda x: (format_criteria(x["criteria"]) if x.get("criteria") else ""),
             "redlines": lambda x: (format_redlines(x["redlines"]) if x.get("redlines") else ""),
-            "reference_answer": lambda x: (format_reference_answer(x["reference_answer"]) if x.get("reference_answer") else ""),
+            "reference_answer": lambda x: (
+                format_reference_answer(x["reference_answer"]) if x.get("reference_answer") else ""
+            ),
             "question": itemgetter("question"),
             "answer": itemgetter("answer"),
         }
