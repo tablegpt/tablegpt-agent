@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import mimetypes
 import re
+from pathlib import Path
 from re import Pattern
 from sys import version_info
 from typing import TYPE_CHECKING, Literal
@@ -10,7 +11,6 @@ from langchain_core.callbacks.manager import CallbackManagerForToolRun  # noqa: 
 from langchain_core.tools import BaseTool
 from pybox.base import BasePyBoxManager  # noqa: TCH002
 from pydantic import BaseModel, DirectoryPath, field_validator, model_validator
-from typing_extensions import Self
 
 if version_info >= (3, 12):
     from typing import override
@@ -21,9 +21,8 @@ else:
 
 
 if TYPE_CHECKING:
-    from pathlib import Path
-
     from pybox.schema import ErrorContent, PyBoxOut
+    from typing_extensions import Self
 
 
 class Artifact(BaseModel):

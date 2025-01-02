@@ -118,3 +118,7 @@ exclude = [
 ]
 # Allow lines to be as long as 120.
 line-length = 120
+
+[tool.ruff.lint.flake8-type-checking]
+runtime-evaluated-base-classes = ["pydantic.BaseModel", "sqlalchemy.orm.DeclarativeBase"]
+runtime-evaluated-decorators = ["pydantic.validate_call", "attrs.define"]
