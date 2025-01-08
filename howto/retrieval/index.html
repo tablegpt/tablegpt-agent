@@ -1170,6 +1170,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
                     processEnvironments: true
                 },
                 displayAlign: 'center',
+                messageStyle: 'none',
                 CommonHTML: {
                     linebreaks: {
                     automatic: true
@@ -1422,8 +1423,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">langchain_core.vectorstores</span> <span class="kn">import</span> <span class="n">InMemoryVectorStore</span>
-<span class="kn">from</span> <span class="nn">tablegpt.retriever</span> <span class="kn">import</span> <span class="n">CSVLoader</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.vectorstores</span><span class="w"> </span><span class="kn">import</span> <span class="n">InMemoryVectorStore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tablegpt.retriever</span><span class="w"> </span><span class="kn">import</span> <span class="n">CSVLoader</span>
 
 <span class="n">loader</span> <span class="o">=</span> <span class="n">CSVLoader</span><span class="p">(</span><span class="s2">"产品销量表.csv"</span><span class="p">,</span> <span class="n">autodetect_encoding</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -1487,9 +1488,9 @@ dataset_base_retriever = vector_store.as_retriever()</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">langchain.retrievers</span> <span class="kn">import</span> <span class="n">ContextualCompressionRetriever</span>
-<span class="kn">from</span> <span class="nn">langchain.retrievers.document_compressors</span> <span class="kn">import</span> <span class="n">DocumentCompressorPipeline</span>
-<span class="kn">from</span> <span class="nn">tablegpt.retriever</span> <span class="kn">import</span> <span class="n">ColumnDocCompressor</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langchain.retrievers</span><span class="w"> </span><span class="kn">import</span> <span class="n">ContextualCompressionRetriever</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain.retrievers.document_compressors</span><span class="w"> </span><span class="kn">import</span> <span class="n">DocumentCompressorPipeline</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tablegpt.retriever</span><span class="w"> </span><span class="kn">import</span> <span class="n">ColumnDocCompressor</span>
 
 <span class="n">dataset_compressor</span> <span class="o">=</span> <span class="n">DocumentCompressorPipeline</span><span class="p">(</span>
     <span class="n">transformers</span><span class="o">=</span><span class="p">[</span><span class="n">ColumnDocCompressor</span><span class="p">()]</span>
@@ -1548,13 +1549,13 @@ dataset_retriever = ContextualCompressionRetriever(
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
-<span class="kn">from</span> <span class="nn">pybox</span> <span class="kn">import</span> <span class="n">LocalPyBoxManager</span>
-<span class="kn">from</span> <span class="nn">tablegpt.agent</span> <span class="kn">import</span> <span class="n">create_tablegpt_graph</span>
-<span class="kn">from</span> <span class="nn">tablegpt</span> <span class="kn">import</span> <span class="n">DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOpenAI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pybox</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncLocalPyBoxManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tablegpt.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_tablegpt_graph</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tablegpt</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR</span>
 
 <span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">openai_api_base</span><span class="o">=</span><span class="s2">"YOUR_VLLM_URL"</span><span class="p">,</span> <span class="n">openai_api_key</span><span class="o">=</span><span class="s2">"whatever"</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">"TableGPT2-7B"</span><span class="p">)</span>
-<span class="n">pybox_manager</span> <span class="o">=</span> <span class="n">LocalPyBoxManager</span><span class="p">(</span><span class="n">profile_dir</span><span class="o">=</span><span class="n">DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR</span><span class="p">)</span>
+<span class="n">pybox_manager</span> <span class="o">=</span> <span class="n">AsyncLocalPyBoxManager</span><span class="p">(</span><span class="n">profile_dir</span><span class="o">=</span><span class="n">DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR</span><span class="p">)</span>
 
 <span class="n">agent</span> <span class="o">=</span> <span class="n">create_tablegpt_graph</span><span class="p">(</span>
     <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span>
@@ -1563,12 +1564,12 @@ dataset_retriever = ContextualCompressionRetriever(
 <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-3">from langchain_openai import ChatOpenAI
-from pybox import LocalPyBoxManager
+from pybox import AsyncLocalPyBoxManager
 from tablegpt.agent import create_tablegpt_graph
 from tablegpt import DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR
 
 llm = ChatOpenAI(openai_api_base="YOUR_VLLM_URL", openai_api_key="whatever", model_name="TableGPT2-7B")
-pybox_manager = LocalPyBoxManager(profile_dir=DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR)
+pybox_manager = AsyncLocalPyBoxManager(profile_dir=DEFAULT_TABLEGPT_IPYKERNEL_PROFILE_DIR)
 
 agent = create_tablegpt_graph(
     llm=llm,
@@ -1612,8 +1613,8 @@ agent = create_tablegpt_graph(
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
-<span class="kn">from</span> <span class="nn">langchain_core.messages</span> <span class="kn">import</span> <span class="n">HumanMessage</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">HumanMessage</span>
 
 <span class="n">message</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">"桃酥的销售量是多少?"</span><span class="p">)</span>
 

@@ -1122,6 +1122,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
                     processEnvironments: true
                 },
                 displayAlign: 'center',
+                messageStyle: 'none',
                 CommonHTML: {
                     linebreaks: {
                     automatic: true
@@ -1487,13 +1488,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">langchain_openai</span> <span class="kn">import</span> <span class="n">ChatOpenAI</span>
-<span class="kn">from</span> <span class="nn">pybox</span> <span class="kn">import</span> <span class="n">LocalPyBoxManager</span>
-<span class="kn">from</span> <span class="nn">tablegpt.agent</span> <span class="kn">import</span> <span class="n">create_tablegpt_graph</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">langchain_openai</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatOpenAI</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pybox</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncLocalPyBoxManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tablegpt.agent</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_tablegpt_graph</span>
 
 
 <span class="n">llm</span> <span class="o">=</span> <span class="n">ChatOpenAI</span><span class="p">(</span><span class="n">openai_api_base</span><span class="o">=</span><span class="s2">"YOUR_VLLM_URL"</span><span class="p">,</span> <span class="n">openai_api_key</span><span class="o">=</span><span class="s2">"whatever"</span><span class="p">,</span> <span class="n">model_name</span><span class="o">=</span><span class="s2">"TableGPT2-7B"</span><span class="p">)</span>
-<span class="n">pybox_manager</span> <span class="o">=</span> <span class="n">LocalPyBoxManager</span><span class="p">()</span>
+<span class="n">pybox_manager</span> <span class="o">=</span> <span class="n">AsyncLocalPyBoxManager</span><span class="p">()</span>
 
 <span class="n">agent</span> <span class="o">=</span> <span class="n">create_tablegpt_graph</span><span class="p">(</span>
     <span class="n">llm</span><span class="o">=</span><span class="n">llm</span><span class="p">,</span>
@@ -1501,12 +1502,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-4">from langchain_openai import ChatOpenAI
-from pybox import LocalPyBoxManager
+from pybox import AsyncLocalPyBoxManager
 from tablegpt.agent import create_tablegpt_graph
 
 
 llm = ChatOpenAI(openai_api_base="YOUR_VLLM_URL", openai_api_key="whatever", model_name="TableGPT2-7B")
-pybox_manager = LocalPyBoxManager()
+pybox_manager = AsyncLocalPyBoxManager()
 
 agent = create_tablegpt_graph(
     llm=llm,
@@ -1547,8 +1548,8 @@ agent = create_tablegpt_graph(
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
-<span class="kn">from</span> <span class="nn">langchain_core.messages</span> <span class="kn">import</span> <span class="n">HumanMessage</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">langchain_core.messages</span><span class="w"> </span><span class="kn">import</span> <span class="n">HumanMessage</span>
 
 <span class="n">message</span> <span class="o">=</span> <span class="n">HumanMessage</span><span class="p">(</span><span class="n">content</span><span class="o">=</span><span class="s2">"Hi"</span><span class="p">)</span>
 
