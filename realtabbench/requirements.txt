@@ -1,4 +1,4 @@
-vllm==0.6.3
+vllm>=0.7.2
 defog_data==0.1.1
 func_timeout==4.3.5
 langchain==0.2.5
