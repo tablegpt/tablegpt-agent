@@ -112,7 +112,7 @@ def create_tablegpt_graph(
     workflow.add_node("data_analyze_graph", data_analyze_graph)
 
     workflow.add_conditional_edges(START, router)
-    workflow.add_edge("file_reading_graph", END)
+    workflow.add_edge("file_reading_graph", "data_analyze_graph")
     workflow.add_edge("data_analyze_graph", END)
 
     return workflow.compile(checkpointer=checkpointer, debug=verbose)
