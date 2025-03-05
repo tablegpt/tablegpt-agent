@@ -192,10 +192,11 @@ def create_data_analyze_workflow(
     ) -> dict[str, list[BaseMessage]]:
         if hazard_classifier is not None:
             last_message = state["messages"][-1]
-            flag, category = await hazard_classifier.ainvoke(input={"messages": [last_message]})
-            if flag == "unsafe" and category is not None:
-                last_message.additional_kwargs["hazard"] = category
-                return {"messages": [last_message]}
+            if isinstance(last_message, HumanMessage):
+                flag, category = await hazard_classifier.ainvoke(input={"messages": [last_message]})
+                if flag == "unsafe" and category is not None:
+                    last_message.additional_kwargs["hazard"] = category
+                    return {"messages": [last_message]}
         return {"messages": []}
 
     async def retrieve_columns(state: AgentState) -> dict:
@@ -219,6 +220,8 @@ def create_data_analyze_workflow(
 
     async def agent_node(state: AgentState) -> dict:
         messages = state["messages"][:]
+        # TODO: For questions with attachments, the last message type is tool,
+        # I haven't figured out how to handle it yet.
         last_message = messages[-1]
         if (
             isinstance(last_message, HumanMessage)
@@ -247,8 +250,8 @@ Please respond with care and professionalism. Avoid engaging with harmful or une
         temp_messages = deepcopy(filtered_messages)
         for message in temp_messages:
             if attachments := message.additional_kwargs.get("attachments"):
-                # TODO: We only support one attachment for now.
-                message.content = f"文件名称: {attachments[0]['filename']}"
+                filenames = ", ".join(att.get("filename") for att in attachments)
+                message.content = f"{message.content}\nattachments: [{filenames}]"
 
         agent_outcome: AgentAction | AgentFinish = await agent.ainvoke(
             {
@@ -297,8 +300,8 @@ Please respond with care and professionalism. Avoid engaging with harmful or une
         temp_messages = deepcopy(filtered_messages)
         for message in temp_messages:
             if attachments := message.additional_kwargs.get("attachments"):
-                # TODO: We only support one attachment for now.
-                message.content = f"文件名称: {attachments[0]['filename']}"
+                filenames = ", ".join(attachment["filename"] for attachment in attachments)
+                message.content = f"{message.content}\nattachments: [{filenames}]"
 
         agent_outcome: AgentAction | AgentFinish = await vlm_agent.ainvoke(
             {
