@@ -2,7 +2,7 @@ vllm>=0.7.2
 defog_data==0.1.1
 func_timeout==4.3.5
 langchain==0.2.5
-langchain_core==0.2.7
+langchain_core==0.2.43
 langchain_experimental==0.0.61
 langchain_openai==0.1.8
 numpy
