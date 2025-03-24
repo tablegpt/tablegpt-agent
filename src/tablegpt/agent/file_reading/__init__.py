@@ -3,6 +3,7 @@ from __future__ import annotations
 import ast
 import logging
 from ast import literal_eval
+from datetime import date  # noqa: TCH003
 from enum import Enum
 from typing import TYPE_CHECKING, Literal
 from uuid import uuid4
@@ -37,6 +38,9 @@ class Stage(Enum):
 
 
 class AgentState(MessagesState):
+    # Current Date
+    date: date
+
     # The message that we received from the user, act as an entry point
     entry_message: BaseMessage
     processing_stage: Stage
@@ -89,12 +93,26 @@ def create_file_reading_workflow(
     tool_executor = ToolNode([ipython_tool])
 
     async def agent_node(state: AgentState) -> dict:
-        if state.get("processing_stage", Stage.UPLOADED) == Stage.UPLOADED:
-            return await get_df_info(state)
-        if state.get("processing_stage", Stage.UPLOADED) == Stage.INFO_READ:
-            return get_df_head(state)
+        processing_stage = state.get("processing_stage", Stage.UPLOADED)
 
-        return get_final_answer(state)
+        if processing_stage == Stage.UPLOADED:
+            return await get_df_info(state)
+        if processing_stage == Stage.INFO_READ:
+            return get_df_head(state)
+        if processing_stage == Stage.HEAD_READ:
+            # Remove the completed attachments.
+            attachments = state["entry_message"].additional_kwargs.get("attachments", [])
+            if attachments:
+                attachments.pop(0)
+
+            var_names = state["entry_message"].additional_kwargs.get("var_names", [])
+            if var_names:
+                var_names.pop(0)
+
+            if state["entry_message"].additional_kwargs.get("attachments"):
+                return {"messages": [], "processing_stage": Stage.UPLOADED}
+
+        return {"messages": [], "processing_stage": Stage.UPLOADED}
 
     async def generate_normalization_code(state: AgentState) -> str:
         if attachments := state["entry_message"].additional_kwargs.get("attachments"):
@@ -103,7 +121,7 @@ def create_file_reading_workflow(
         else:
             raise NoAttachmentsError
 
-        var_name = state["entry_message"].additional_kwargs.get("var_name", "df")
+        var_name = state["entry_message"].additional_kwargs.get("var_names", ["df"])[0]
 
         # TODO: refactor the data normalization to langgraph
         content = await ipython_tool.ainvoke(
@@ -128,15 +146,15 @@ def create_file_reading_workflow(
         return wrap_normalize_code(var_name, normalization_code)
 
     async def get_df_info(state: AgentState) -> dict:
-        if attachments := state["entry_message"].additional_kwargs.get("attachments"):
-            # TODO: we only support one file for now
-            filename = attachments[0]["filename"]
+        attachment = state["entry_message"].additional_kwargs.get("attachments")[0]
+        filename = attachment["filename"]
+        var_name = state["entry_message"].additional_kwargs.get("var_names", "df")
+        var_name = var_name[0] if isinstance(var_name, list) and var_name else var_name
+
+        if state.get("processing_stage", Stage.UPLOADED) == Stage.UPLOADED:
+            thought = f"我会先检查您的数据文件，并查看文件内容以对数据集有一个初步的了解。\n读取数据 {filename} 到 {var_name} 变量中，并通过 {var_name}.info 查看 NaN 情况和数据类型。"  # noqa: RUF001
         else:
-            raise NoAttachmentsError
-
-        var_name = state["entry_message"].additional_kwargs.get("var_name", "df")
-
-        thought = f"我已经收到您的数据文件，我需要查看文件内容以对数据集有一个初步的了解。首先我会读取数据到 `{var_name}` 变量中，并通过 `{var_name}.info` 查看 NaN 情况和数据类型。"  # noqa: RUF001
+            thought = f"读取数据 {filename} 到 {var_name} 变量中，并通过 {var_name}.info 查看 NaN 情况和数据类型。"  # noqa: RUF001
         if translation_chain is not None:
             thought = await translation_chain.ainvoke(input={"locale": locale, "input": thought})
 
@@ -146,7 +164,7 @@ def create_file_reading_workflow(
         normalization_code = ""
         if normalize_llm is not None:
             try:
-                normalization_code = await generate_normalization_code(state)
+                normalization_code = await generate_normalization_code(filename, var_name)
             except Exception as e:  # noqa: BLE001
                 logger.warning("Failed to generate normalization code: %s", str(e))
 
@@ -190,9 +208,12 @@ def create_file_reading_workflow(
         }
 
     def get_df_head(state: AgentState) -> dict:
-        var_name = state["entry_message"].additional_kwargs.get("var_name", "df")
+        attachment = state["entry_message"].additional_kwargs.get("attachments")[0]
+        filename = attachment["filename"]
+        var_name = state["entry_message"].additional_kwargs.get("var_names", "df")
+        var_name = var_name[0] if isinstance(var_name, list) and var_name else var_name
 
-        thought = f"""接下来我将用 `{var_name}.head({nlines})` 来查看数据集的前 {nlines} 行。"""
+        thought = f"""使用 `{var_name}.head({nlines})` 来查看 {filename} 的前 {nlines} 行。"""
         if translation_chain is not None:
             thought = translation_chain.invoke(input={"locale": locale, "input": thought})
 
@@ -243,31 +264,9 @@ print(str(inspect_df({var_name})), flush=True)"""
             "processing_stage": Stage.HEAD_READ,
         }
 
-    def get_final_answer(state: AgentState) -> dict:
-        if attachments := state["entry_message"].additional_kwargs.get("attachments"):
-            # TODO: we only support one file for now
-            filename = attachments[0]["filename"]
-        else:
-            raise NoAttachmentsError
-
-        text = f"我已经了解了数据集 {filename} 的基本信息。请问我可以帮您做些什么？"  # noqa: RUF001
-
-        if translation_chain is not None:
-            text = translation_chain.invoke(input={"locale": locale, "input": text})
-
-        return {
-            "messages": [
-                AIMessage(
-                    id=str(uuid4()),
-                    content=text,
-                    additional_kwargs={
-                        "parent_id": state["parent_id"],
-                    },
-                )
-            ]
-        }
-
     async def tool_node(state: AgentState) -> dict:
+        if not isinstance(state["messages"][-1], AIMessage):
+            return {"messages": []}
         messages: list[ToolMessage] = await tool_executor.ainvoke(state["messages"])
         for message in messages:
             message.additional_kwargs = message.additional_kwargs | {
@@ -298,11 +297,10 @@ print(str(inspect_df({var_name})), flush=True)"""
     # I cannot use `END` as the literal hint, as:
     #  > Type arguments for "Literal" must be None, a literal value (int, bool, str, or bytes), or an enum value.
     # As `END` is just an intern string of "__end__" (See `langgraph.constants`), So I use "__end__" here.
-    def should_continue(state: AgentState) -> Literal["tool_node", "__end__"]:
-        # Must have at least one message when entering this router
-        last_message = state["messages"][-1]
-        if last_message.tool_calls:
-            return "tool_node"
+    def should_continue(state: AgentState) -> Literal["agent_node", "__end__"]:
+        # If there are still attachments to be processed, continue using the agent node.
+        if state["entry_message"].additional_kwargs.get("attachments"):
+            return "agent_node"
         return END
 
     workflow = StateGraph(AgentState)
@@ -311,8 +309,8 @@ print(str(inspect_df({var_name})), flush=True)"""
     workflow.add_node(tool_node)
 
     workflow.add_edge(START, "agent_node")
-    workflow.add_edge("tool_node", "agent_node")
-    workflow.add_conditional_edges("agent_node", should_continue)
+    workflow.add_edge("agent_node", "tool_node")
+    workflow.add_conditional_edges("tool_node", should_continue)
 
     return workflow.compile(debug=verbose)
 
