@@ -7,7 +7,7 @@ langchain_experimental==0.0.61
 langchain_openai==0.1.8
 numpy
 pandas
-Requests==2.32.3
+Requests==2.32.4
 scikit_learn==1.3.2
 sentence_transformers==3.0.1
 spacy==3.7.5
