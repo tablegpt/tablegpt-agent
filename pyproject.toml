@@ -31,7 +31,7 @@ classifiers = [
 dependencies = [
   "chardet>=5.2.0,<6.0.0",
   "langchain-core>=0.3.0,<1.0.0",
-  "langgraph>=0.0.68,<1.0.0",
+  "langgraph>=0.6.11,<1.0.0",
   "pandas>=2.2,<3.0.0",
   "pppybox>=0.0.17"
 ]
